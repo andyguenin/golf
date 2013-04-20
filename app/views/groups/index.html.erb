@@ -1,0 +1,4 @@
+All groups<br />
+<% current_user.groups.each do |g| %>
+  <%= link_to g.name, group_path(g) %>
+<% end %>

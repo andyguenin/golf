@@ -1,0 +1,32 @@
+<h1><%= @tournament.name %></h1>
+<h2><%= @tournament.location %></h2>
+<h3><%= "#{@tournament.starttime} to #{@tournament.endtime}" %></h3>
+
+<table border=1>
+   <% (1..2).each do |r| %>
+    <tr><td><%= r == 1 ? "Hole" : "Par" %></td>
+      <% (1..18).each do |h| %>
+        <td><%= r == 1 ? h : @holes[h-1].par %></td>
+      <% end %>
+      <td><%= r == 1 ? "Score" : "" %></td>
+    </tr>
+  <% end %>
+  <% (@tournament.players.includes(:scores).where("tournament_id = ?", @tournament.id).all.sort_by {|t| [t.score_by_tournament(@tournament), t.scores.length] }).each do |p| %>
+    <tr><td><%= p.name %></td>
+      <% ps = p.scores_by_tournament_round(@tournament, @tournament.round) %>
+      <% (1..18).each do |h| %>
+        <td
+          <% if ps.length < h %>
+            > -
+          <% else %>
+            <% score = ps[h-1].strokes %>
+            <% par = @holes[h-1].par %>
+            <%= score < par ? raw("style=\"background-color: green;\">") : (score > par ? raw("style =\"background-color: red;\">") : raw(">")) %>
+            <%= ps[h-1].strokes %>
+          <% end %>
+        </td>
+      <% end %>
+      <td><%= p.score_by_tournament(@tournament) %></td>
+    </tr>
+  <% end %>
+</table>

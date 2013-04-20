@@ -1,0 +1,12 @@
+<h1><%= @group.name %></h1>
+
+<h2>Upcoming Pools</h2>
+<% (@group.pools.select {|pool| pool.tournament.endtime > Time.now}).each do |p| %>
+  <%= render :partial => "pools/pool_summary", :locals => {:pool => p} %>
+<% end %>
+
+<h2>Past Pools</h2>
+<% (@group.pools.select {|pool| pool.tournament.endtime < Time.now}).each do |p| %>
+  <%= render :partial => "pools/pool_summary", :locals => {:pool => p} %>
+<% end %>
+

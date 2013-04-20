@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  user_id: 1
+  pick1: 1
+  pick2: 1
+  pick3: 1
+  pick4: 1
+  pick5: 1
+  q1: false
+  q2: false
+  q3: false
+  q4: false
+  q5: false
+  tiebreak: 1
+
+two:
+  user_id: 1
+  pick1: 1
+  pick2: 1
+  pick3: 1
+  pick4: 1
+  pick5: 1
+  q1: false
+  q2: false
+  q3: false
+  q4: false
+  q5: false
+  tiebreak: 1

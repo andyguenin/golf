@@ -1,0 +1,8 @@
+<strong><%= @user.name %></strong> belongs to the following <%= @user.groups.count %> groups.<br />
+<% @user.groups.each do |g| %>
+  <%= link_to g.name, g %> 
+  <% if g.admins.include? @user %> 
+    (<%= link_to "admin", edit_group_path(g)%>)  
+  <% end %>
+  <br />
+<% end %>

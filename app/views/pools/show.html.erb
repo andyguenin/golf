@@ -1,0 +1,30 @@
+<h1><%= link_to @pool.group.name, @pool.group %> in <%= link_to "#{@pool.tournament.name} at #{@pool.tournament.location}", tournament_path(@pool.tournament) %></h1>
+
+<table border=1>
+  <tr>
+    <td> </td>
+    <td>Score</td>
+    <% (1..5).each do |p| %>
+      <td>Pick <%= p %></td>
+    <% end %>
+    <td>Bonus</td>
+    <td>1st round par</td>
+    <% (1..5).each do |q| %>
+      <td>Q<%= q %></td>
+    <% end %>
+  </tr>
+  <% @pool.golfpicks.order("score asc").each do |u| %>
+    <tr>
+      <td><%= u.user.name %></td>
+      <td><%= u.score %>
+      <% (1..5).each do |pick| %>
+        <td><%= u.send("pick#{pick}").name %></td>
+      <% end %>
+      <td><%= u.bonus %></td>
+      <td><%= u.tiebreak %></td>
+      <% (1..5).each do |q| %>
+        <td><%= u.send("q#{q}") ? "yes" : "no" %></td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
