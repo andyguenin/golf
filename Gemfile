@@ -23,7 +23,7 @@ end
 gem 'cancan'
 gem 'jquery-rails'
 gem 'bcrypt-ruby', :require => "bcrypt"
-gem 'resque', "~> 1.22.0"
+gem 'resque', "~> 1.22.0", :require => "resque/server"
 
 
 # To use ActiveModel has_secure_password
