@@ -1,6 +1,7 @@
 class Pool < ActiveRecord::Base
   belongs_to :group
   belongs_to :tournament
+  has_many :q_answers
   has_many :golfpicks
 
   validates_presence_of :group_id
