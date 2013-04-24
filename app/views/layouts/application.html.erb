@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Spool</title>
+    <title>rSpool</title>
     <%= stylesheet_link_tag    "application", :media => "all" %>
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
   </head>
   <body>
+      <%= link_to "home", root_path %>
     <div id="user_nav">
       <% if current_user %>
         Logged in as <%= current_user.email %>.

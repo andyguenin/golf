@@ -1,8 +1,9 @@
 <h1><%= @tournament.name %></h1>
 <h2><%= @tournament.location %></h2>
-<h3><%= "#{@tournament.starttime} to #{@tournament.endtime}" %></h3>
+<h3><%= "#{@tournament.starttime.strftime('%B %e, %Y')} to 
+#{@tournament.endtime.strftime('%B %e, %Y')}" %></h3>
 
-<table border=1>
+<table class="table table-condensed">
    <% (1..2).each do |r| %>
     <tr><td><%= r == 1 ? "Hole" : "Par" %></td>
       <% (1..18).each do |h| %>
@@ -12,7 +13,7 @@
     </tr>
   <% end %>
   <% (@tournament.players.includes(:scores).where("tournament_id = ?", @tournament.id).all.sort_by {|t| [t.score_by_tournament(@tournament), t.scores.length] }).each do |p| %>
-    <tr><td><%= p.name %></td>
+    <tr><td><%= link_to p.name, t_player_path(@tournament, p) %></td>
       <% ps = p.scores_by_tournament_round(@tournament, @tournament.round) %>
       <% (1..18).each do |h| %>
         <td

@@ -1,0 +1,4 @@
+<h1><%= @player.name %></h1>
+<p /><p />
+A recent tournament score: 
+<%= @player.score_by_tournament(@player.tournaments.last) %>

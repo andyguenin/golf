@@ -40,9 +40,18 @@ class TournamentsController < ApplicationController
   end
 
   def destroy
-    @tournament = Tournament.find(params[:id])
+    @tournament = Tournament.find_by_slug(params[:id])
     authorize! :destroy, @tournament
     @tournament.destroy
     redirect_to tournament_url
   end
+
+  def player
+    @tournament = Tournament.find_by_slug(params[:id])
+    @player = Player.find_by_slug(params[:player])
+    unless @tournament.players.include? @player
+      render :text => "player is not in tournament"
+    end
+  end
+
 end

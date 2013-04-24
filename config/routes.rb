@@ -10,5 +10,7 @@ Spool::Application.routes.draw do
   resources :golf
   resources :groups
   resources :tournaments
+  get "tournaments/:id/:player" => "tournaments#player", :as => "t_player"
   resources :pools, :except => :index
+  resources :players, :except => :index
 end

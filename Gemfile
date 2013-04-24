@@ -16,7 +16,7 @@ group :assets do
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', :platform => :ruby
-
+  gem 'bootstrap-sass'
   gem 'uglifier', '>= 1.0.3'
 end
 
@@ -24,6 +24,7 @@ gem 'cancan'
 gem 'jquery-rails'
 gem 'bcrypt-ruby', :require => "bcrypt"
 gem 'delayed_job_active_record'
+gem 'daemons'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

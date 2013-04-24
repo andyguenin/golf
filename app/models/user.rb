@@ -32,4 +32,12 @@ class User < ActiveRecord::Base
       self.password_hash = BCrypt::Engine.hash_secret(password, password_salt)
     end
   end
+
+  def update_name
+
+    self.update_attribute(:name, "a" + self.name)
+  end
+  
+  handle_asynchronously :update_name, :run_at => Proc.new { 5.seconds.from_now }
+
 end

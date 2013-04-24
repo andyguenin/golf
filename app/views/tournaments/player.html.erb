@@ -1,0 +1,26 @@
+<h1><%= @player.name %> - <%= link_to @tournament.name, @tournament %></h1>
+
+<% tscores = @player.scores_by_tournament(@tournament) %>
+
+<table class="table table-condensed table-bordered">
+  <thead>
+    <% 2.times do |s| %>
+      <tr><th><%= s==0 ? "Hole" : "Par" %></th>
+        <% @tournament.course.holes.order("hole_number asc").each do |h| %>
+          <td><%= h.send("#{s==0 ? "hole_number" : "par"}") %></td>
+        <% end %>  
+        <th><%= s==0 ? "Score" : "" %></th>
+      </tr>
+    <% end %>
+  </thead>
+  <tbody>
+    <% 4.times do |round| %>
+      <tr><td><%= round+1 %></td>
+        <% (1..18).each do |hole| %>
+          <td><%= tscores[round][hole] || "-" %></td>
+        <% end %>
+        <td><%= tscores[round].empty? ? "" :  @player.score_by_tournament_round(@tournament, round+1)%></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

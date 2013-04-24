@@ -1,6 +1,6 @@
 <h1><%= link_to @pool.group.name, @pool.group %> in <%= link_to "#{@pool.tournament.name} at #{@pool.tournament.location}", tournament_path(@pool.tournament) %></h1>
 
-<table border=1>
+<table class="table table-condensed">
   <tr>
     <td> </td>
     <td>Score</td>
@@ -14,11 +14,13 @@
     <% end %>
   </tr>
   <% @pool.golfpicks.order("score asc").each do |u| %>
+    <% u.update_score %>
     <tr>
       <td><%= u.user.name %></td>
       <td><%= u.score %>
-      <% (1..5).each do |pick| %>
-        <td><%= u.send("pick#{pick}").name %></td>
+        <% (1..5).each do |pick| %>
+          <% player = u.send("pick#{pick}") %>
+        <td><%= link_to player.name, t_player_path(@pool.tournament, player.slug) %></td>
       <% end %>
       <td><%= u.bonus %></td>
       <td><%= u.tiebreak %></td>

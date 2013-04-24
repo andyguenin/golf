@@ -9,4 +9,5 @@ class Score < ActiveRecord::Base
   belongs_to :player
   belongs_to :tournament
   belongs_to :hole
+
 end
