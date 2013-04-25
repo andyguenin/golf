@@ -1,5 +1,5 @@
 <h1><%= @group.name %></h1>
-
+<%= link_to "New Pool", new_group_pool_path(@group) %>
 <h2>Upcoming Pools</h2>
 <% (@group.pools.select {|pool| pool.tournament.endtime > Time.now}).each do |p| %>
   <%= render :partial => "pools/pool_summary", :locals => {:pool => p} %>

@@ -10,10 +10,6 @@ class Golfpick < ActiveRecord::Base
 
   attr_accessible :pick1, :pick2, :pick3, :pick4, :pick5, :q1, :q2, :q3, :q4, :q5, :tiebreak, :user_id
 
-  def initialize
-    @players = [1,2]
-  end
- 
   def player_subscore
     players.inject(0) do |sum, p|
       sum = sum + p.score_by_tournament(pool.tournament)
@@ -23,10 +19,12 @@ class Golfpick < ActiveRecord::Base
 
   def update_score
     s = player_subscore
-    (1..5).each do |n|
-      s += self.send("q#{n}") ? -1 : 0
+    as = pool.q_answers.order("number asc")
+    5.times do |t|
+      s -= as.all[t].answer.nil? ? 0 : (self.send("q#{t+1}") == as.all[t].answer ? 1 : 0)
     end
-    self.score = s
+    s += bonus
+    self.update_attribute(:score, s)
   end
 
 

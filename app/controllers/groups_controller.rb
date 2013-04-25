@@ -7,17 +7,17 @@ class GroupsController < ApplicationController
 
   def show
     @group = Group.find_by_slug(params[:id])
-    authorize! :view, @group
+    authorize! :read, @group
   end
 
   def edit
     @group = Group.find_by_slug(params[:id])
-    authorize! :edit, @group
+    authorize! :update, @group
   end
 
   def update
     @group = Group.find_by_slug(params[:id])
-    authorize! :edit, @group
+    authorize! :update, @group
     if(@group.update_attributes(params[:group]))
       redirect_to @group
     else

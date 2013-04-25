@@ -1,31 +1,43 @@
-<h1><%= link_to @pool.group.name, @pool.group %> in <%= link_to "#{@pool.tournament.name} at #{@pool.tournament.location}", tournament_path(@pool.tournament) %></h1>
+<h1><%= link_to @pool.group.name, @pool.group %> in 
+  <%= link_to "#{@tournament.name} at #{@tournament.location}", tournament_path(@tournament) %></h1>
+<%= link_to "(edit)", edit_group_pool_path(@pool.group, @pool) if can? :update, @pool %>
 
+<table class="table table-condensed">
+  <% @questions.each do |q| %>
+    <tr><td class="<%= y_or_n(q.answer) %>">
+        <%= q.question %></td><td><%= y_or_n(q.answer).capitalize %></td></tr>
+  <% end %>
+  <tr><td>1st round par</td><td><%= @tournament.low_score %></td></tr>
+</table>
 <table class="table table-condensed">
   <tr>
     <td> </td>
     <td>Score</td>
+    <td>Players Subscore</td>
+    <td>Bonus</td>
     <% (1..5).each do |p| %>
       <td>Pick <%= p %></td>
     <% end %>
-    <td>Bonus</td>
     <td>1st round par</td>
     <% (1..5).each do |q| %>
       <td>Q<%= q %></td>
     <% end %>
   </tr>
-  <% @pool.golfpicks.order("score asc").each do |u| %>
+  <% @golfpicks.each do |u| %>
     <% u.update_score %>
     <tr>
       <td><%= u.user.name %></td>
-      <td><%= u.score %>
-        <% (1..5).each do |pick| %>
-          <% player = u.send("pick#{pick}") %>
-        <td><%= link_to player.name, t_player_path(@pool.tournament, player.slug) %></td>
-      <% end %>
+      <td><%= u.score %></td>
+      <td><%= u.player_subscore %></td>
       <td><%= u.bonus %></td>
+      <% (1..5).each do |pick| %>
+        <% player = u.send("pick#{pick}") %>
+        <td><%= link_to player.name, t_player_path(@tournament, player.slug) %></td>
+      <% end %>
       <td><%= u.tiebreak %></td>
       <% (1..5).each do |q| %>
-        <td><%= u.send("q#{q}") ? "yes" : "no" %></td>
+        <% answer = @questions[q-1].answer if @questions[q-1]%>
+        <td class="<%= "#{y_or_n(!(answer ^ u.send("q#{q}")))}-background" unless answer.nil? %>" ><%= y_or_n(u.send("q#{q}")) %></td>
       <% end %>
     </tr>
   <% end %>

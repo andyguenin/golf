@@ -1,7 +1,22 @@
 @import "bootstrap";
 
 body {
-  padding-left: 20px;
-  padding-top: 20px;
+  padding: 20px;
+}
+
+.yes {
+  color: green;
+}
+
+.no {
+  color: red;
+}
+
+.yes-background {
+  background-color: green;
+}
+
+.no-background {
+  background-color: red;
 }
 @import "bootstrap-responsive";
