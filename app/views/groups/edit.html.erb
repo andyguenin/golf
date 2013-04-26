@@ -1,2 +1,9 @@
-<h1>Group#edit</h1>
-<p>Find me in app/views/group/edit.html.erb</p>
+<h1><%= link_to @group.name, @group %></h1>
+url: /<%= @group.slug %>
+<h3>Users</h3>
+<table class="table">
+  <tr><td>Name</td><td>email</td><td>remove</td><td>make admin</td></tr>
+  <% @users.each do |u| %>
+    <tr><td><%= u.name %></td><td><%= link_to u.email, "mailto:#{u.email}" %></td><td> </td><td> </td></tr>
+  <% end %>
+</table>

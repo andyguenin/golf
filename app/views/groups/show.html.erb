@@ -1,5 +1,8 @@
 <h1><%= @group.name %></h1>
-<%= link_to "New Pool", new_group_pool_path(@group) %>
+<% if can? :edit, @group %>
+  <%= link_to "New Pool", new_group_pool_path(@group) %>
+  <%= link_to "Group Administration", edit_group_path(@group) %>
+<% end %>
 <h2>Upcoming Pools</h2>
 <% (@group.pools.select {|pool| pool.tournament.endtime > Time.now}).each do |p| %>
   <%= render :partial => "pools/pool_summary", :locals => {:pool => p} %>

@@ -13,6 +13,7 @@ class GroupsController < ApplicationController
   def edit
     @group = Group.find_by_slug(params[:id])
     authorize! :update, @group
+    @users = @group.users
   end
 
   def update
