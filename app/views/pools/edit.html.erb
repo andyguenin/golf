@@ -1,2 +1,33 @@
-<h1>Pools#edit</h1>
-<p>Find me in app/views/pools/edit.html.erb</p>
+<%= form_for(@pool, :url => group_pool_path(@pool.group, @pool)) do |f| %>
+  <% if @pool.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@pool.errors.count, "error") %> prohibited this pool from being saved:</h2>
+
+      <ul>
+        <% @pool.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :tournament_id %><br />
+    <%= f.number_field :tournament_id %>
+  </div>
+  <% (1..5).each do |t| %>
+    <div class="field">
+      <%= f.label "q#{t}" %><br />
+      <%= f.text_area "q#{t}" %><br />
+    </div>
+    <div class="field">
+      <%= f.label "q#{t}a" %><br />
+      <%= f.text_field "q#{t}a" %><br />
+    </div>
+  <% end %>
+
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

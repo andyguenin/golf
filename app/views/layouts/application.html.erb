@@ -7,6 +7,7 @@
     <%= csrf_meta_tags %>
   </head>
   <body>
+<<<<<<< HEAD
   <div class="row">
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
@@ -47,6 +48,9 @@
         </div>
     </div>
       <%= link_to "home", root_path %>
+=======
+    <%= link_to "home", root_path %>
+>>>>>>> 2cce9b4adb77ca236cba04a9feac1afd1e17f3ab
     <div id="user_nav">
       <% if current_user %>
         Logged in as <%= current_user.email %>.
@@ -57,8 +61,12 @@
       <% end %>
     </div>
 
+    <br />
     <% flash.each do |name, msg| %>
-      <%= content_tag :div, msg, :id => "flash_#{name}" %>
+      <div id=<%= "flash_#{name}" %> class=<%= "alert alert-#{name}" %>>
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <%= msg %>
+      </div>
     <% end %>
     <%= yield %>
 

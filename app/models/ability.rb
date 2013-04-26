@@ -4,21 +4,24 @@ class Ability
   def initialize(user)
 
     user ||= User.new
-    user.role = 0
-    can :manage, :all if user.role == ADMIN
+
+    can :manage, :all if user.admin 
     
-    can :update, Group do |group|
-      user.role >= MODERATOR && group.admin.include?(user)
+    can :manage, Group do |group|
+      group.admins.include?(user)
     end
 
-    can :create, Group if user.role >= MODERATOR
+    can :manage, Pool do |pool|
+      can? :manage, pool.group
+    end
 
-    can :view, Group do |group|
+    can :read, Group do |group|
       group.users.include? user
     end
 
-    can :view, Pool do |pool|
-      pool.group.users.include? user
+    can :read, Pool do |pool|
+      can? :read, pool.group
     end
+
   end
 end
