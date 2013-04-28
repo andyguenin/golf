@@ -1,5 +1,6 @@
 Spool::Application.routes.draw do
-  get "testytesttest" => "scores#new"
+#  get "testytesttest" => "scores#new"
+  #
   get "logout" => "sessions#destroy", :as => "logout"
   get "login" => "sessions#new", :as => "login"
   get "signup" => "users#new", :as => "signup"
@@ -9,11 +10,11 @@ Spool::Application.routes.draw do
 
   resources :tournaments
   get "tournaments/:id/:player" => "tournaments#player", :as => "t_player"
-
   resources :users, :except => :index
   resources :sessions
   resources :golf
-  resources :groups, :path => '' do
+  resources :groups, :only => [:new, :create]
+  resources :groups, :path => '', :except => [:new, :create]  do
     resources :pools, :except => [:index]
   end
 

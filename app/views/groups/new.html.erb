@@ -1,2 +1,15 @@
-<h1>Group#new</h1>
-<p>Find me in app/views/group/new.html.erb</p>
+<h1>Create new group</h1>
+
+<%= form_for @group do |f| %>
+  <%= render :partial => 'errors/form_field_error', :locals => {:f => @group} %>
+
+  <p>
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+  </p>
+  <p>
+  <%= f.label :slug, "Group URL" %>
+  / <%= f.text_field :slug %>
+  </p>
+  <p class="button"><%= f.submit %></p>
+<% end %>

@@ -6,10 +6,6 @@ class TournamentsController < ApplicationController
   def show
     @tournament = Tournament.find_by_slug(params[:id], :include => :players)
     @holes = @tournament.course.holes.order("hole_number asc")
-    @groups = nil
-    if current_user
-      @groups = current_user.groups.collect do |g|
-    current_user.nil? ? nil : current_user.pools.collect { |p| 
   end
 
   def edit

@@ -50,7 +50,6 @@ class Player < ActiveRecord::Base
 
   private
     def update_score(tournament, pss)
-      puts "in upload"
       score = self.scores.includes(:hole).where("tournament_id = ?", \
             tournament.id).inject(0) {|sum, n| sum + (n.strokes - n.hole.par)}
       pss.update_attribute(:score, score)
