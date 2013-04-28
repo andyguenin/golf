@@ -1,11 +1,15 @@
 <h1>Create a new pool</h1>
 <h2>Pool for <%= @group.name %>
-<%= form_for @pool do |f| %>
+  <%= form_for @pool, :url => group_pools_path(@group, @pool) do |f| %>
   <%= render :partial => 'errors/form_field_error', :locals => {:f => @pool} %>
 
   <p>
   <%= f.label :tournament_id, "Tournament" %>
-  <%= select_tag(:tournament_id, options_for_select(@tournament_options)) %>
+  <%= select_tag("pool[tournament_id]", options_for_select(@tournament_options)) %>
+  </p>
+  <p>
+  <%= f.label :name, "Name (optional)" %>
+  <%= f.text_field :name %>
   </p>
   <p class="button"><%= f.submit %></p>
 <% end %>

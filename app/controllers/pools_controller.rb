@@ -1,4 +1,5 @@
 class PoolsController < ApplicationController
+  helper_method :get_pools_attributes
 
   def index
     redirect_to groups_path
@@ -30,16 +31,27 @@ class PoolsController < ApplicationController
   def new
     @pool = Pool.new
     authorize! :create, @pool
+    get_pools_attributes(params[:group_id])
   end
 
   def create
     @pool = Pool.new(params[:pool])
-    @pool.slug = params[:pool][:slug]
-    autorize! :create, @pool
+    authorize! :create, @pool
+    get_pools_attributes(params[:group_id])
+    @pool.group = @group
+    @pool.tournament = @tournament
     if(@pool.save)
       redirect_to [@pool.group, @pool]
     else
       render 'new'
     end
   end
+
+  private
+  def get_pools_attributes(slug)
+    @group = Group.find_by_slug(slug)
+    @tournament_options = Tournament.where("starttime > ?", Time.now).map { |t| ["#{t.name}#{@group.pools.map{|p| p.tournament}.include?(t) ? " (pool exists for group)" : ""}" , t.slug] }
+  end
+
+
 end

@@ -1,6 +1,6 @@
 class Pool < ActiveRecord::Base
   attr_accessor :q1, :q1a, :q2, :q2a, :q3, :q3a, :q4, :q4a, :q5, :q5a, :t_id
-  attr_accessible :tournament_id, :q1, :q1a, :q2, :q2a, :q3, :q3a, :q4, :q4a, :q5, :q5a
+  attr_accessible :tournament_id, :q1, :q1a, :q2, :q2a, :q3, :q3a, :q4, :q4a, :q5, :q5a, :name
 
   belongs_to :group
   belongs_to :tournament
@@ -9,13 +9,6 @@ class Pool < ActiveRecord::Base
 
   validates_presence_of :group_id
   validates_presence_of :tournament_id
-
-  def q6
-    ans = q_answers.find_by_number(1)
-    unless ans.nil?
-      ans.question
-    end
-  end
 
   (1..5).each do |t|
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130425020731) do
+ActiveRecord::Schema.define(:version => 20130428031750) do
 
   create_table "courses", :force => true do |t|
     t.integer  "tournament_id"
@@ -115,6 +115,7 @@ ActiveRecord::Schema.define(:version => 20130425020731) do
     t.integer  "group_id"
     t.integer  "tournament_id"
     t.integer  "min_units"
+    t.string   "name"
   end
 
   create_table "q_answers", :force => true do |t|
