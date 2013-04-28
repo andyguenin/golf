@@ -11,8 +11,8 @@ body {
 }
 
 .main-cont {
-  border-left: outset 1px black;
-  border-right: outset 1px black;
+  padding:30px;
+  background-color:#efefef;
 }
 
 .yes {
@@ -31,9 +31,14 @@ body {
   background-color: red;
 }
 
-.full{
-  background-color: #efefef;
-  height: 100%;
+.title{
+  
+  
+  
 }
-@import "bootstrap-responsive";
 
+.isaac{
+  width:80%; 
+  margin-left:auto;
+  margin-right:auto;
+}
