@@ -1,4 +1,4 @@
-<h1><%= link_to @pool.group.name, @pool.group %> in 
+<h1 class="title"><%= link_to @pool.group.name, @pool.group %> in 
   <%= link_to "#{@tournament.name} at #{@tournament.location}", tournament_path(@tournament) %></h1>
 <%= link_to "(edit)", edit_group_pool_path(@pool.group, @pool) if can? :update, @pool %>
 
@@ -9,7 +9,7 @@
   <% end %>
   <tr><td>1st round par</td><td><%= @tournament.low_score %></td></tr>
 </table>
-<table class="table table-condensed">
+<table class="table table-condensed table-hover table-striped">
   <tr>
     <td> </td>
     <td>Score</td>
