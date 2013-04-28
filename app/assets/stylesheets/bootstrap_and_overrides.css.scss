@@ -1,22 +1,18 @@
-<<<<<<< HEAD
-@import "bootstrap";
-
-body {
-  padding-left: 20px;
-  padding-top: 20px;
-}
-
-
-
-
-
-
-@import "bootstrap-responsive";
-=======
 @import "bootstrap";
 
 body {
   padding: 20px;
+  background-color: #243729;
+  margin-top:21px;
+}
+
+.right{
+  float:right;
+}
+
+.main-cont {
+  border-left: outset 1px black;
+  border-right: outset 1px black;
 }
 
 .yes {
@@ -34,5 +30,10 @@ body {
 .no-background {
   background-color: red;
 }
+
+.full{
+  background-color: #efefef;
+  height: 100%;
+}
 @import "bootstrap-responsive";
->>>>>>> 2cce9b4adb77ca236cba04a9feac1afd1e17f3ab
+
