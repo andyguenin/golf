@@ -1,4 +1,5 @@
 <strong><%= @user.name %></strong> belongs to the following <%= @user.groups.count %> groups.<br />
+<%= link_to "Create Group", new_group_path if(can? :create, Group) %><br />
 <% @user.groups.each do |g| %>
   <%= link_to g.name, g %> 
   <% if g.admins.include? @user %> 

@@ -32,10 +32,12 @@ class GroupsController < ApplicationController
   end
 
   def create
-    @group = Group.new(params[:group])
+    @group = Group.new(params[:group].slice(:name))
     @group.slug = params[:group][:slug]
-    autorize! :create, @group
+    authorize! :create, @group
     if(@group.save)
+      @group.users << current_user
+      @group.admins << current_user
       redirect_to @group
     else
       render 'new'

@@ -1,0 +1,10 @@
+<% if f.errors.any? %>
+  <div class="error_messages">
+    <h2>There was an error</h2>
+    <ul>
+      <% for message in f.errors.full_messages %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
