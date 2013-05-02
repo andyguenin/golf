@@ -2,7 +2,6 @@ class GroupsController < ApplicationController
   def index
     authorize! :index, :group
     @groups = current_user.groups
-
   end
 
   def show

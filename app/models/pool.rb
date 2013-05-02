@@ -10,6 +10,8 @@ class Pool < ActiveRecord::Base
   validates_presence_of :group_id
   validates_presence_of :tournament_id
 
+  before_save :default_values
+
   (1..5).each do |t|
 
     define_method("q#{t}") do 
@@ -22,7 +24,7 @@ class Pool < ActiveRecord::Base
     define_method("q#{t}=") do |q|
       ans = q_answers.find_by_number(t)
       if ans.nil?
-        q_answers.create({:question => q})
+        q_answers.create({:question => q, :number => t})
       else
         ans.update_attribute(:question, q)
       end
@@ -41,6 +43,10 @@ class Pool < ActiveRecord::Base
         ans.update_attribute(:answer, q)
       end
     end
+  end
+
+  def default_values
+    self.name ||= tournament.name
   end
 
 end

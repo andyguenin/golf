@@ -4,7 +4,7 @@
   <%= link_to "Group Administration", edit_group_path(@group) %>
 <% end %>
 <h2>Upcoming Pools</h2>
-<% (@group.pools.select {|pool| pool.tournament.endtime > Time.now}).each do |p| %>
+<% (@group.pools.order("name asc").select {|pool| pool.tournament.endtime > Time.now}).each do |p| %>
   <%= render :partial => "pools/pool_summary", :locals => {:pool => p} %>
 <% end %>
 

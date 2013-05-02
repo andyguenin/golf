@@ -16,11 +16,13 @@ class PoolsController < ApplicationController
   def edit
     @pool = Pool.find(params[:id])
     authorize! :update, @pool
+    get_pools_attributes(params[:group_id])
   end
 
   def update
     @pool = Pool.find(params[:id])
     authorize! :update, @pool
+    get_pools_attributes(params[:group_id])
     if(@pool.update_attributes(params[:pool]))
       redirect_to [@pool.group, @pool]
     else
@@ -32,15 +34,16 @@ class PoolsController < ApplicationController
     @pool = Pool.new
     authorize! :create, @pool
     get_pools_attributes(params[:group_id])
+    @pool.group = @group
   end
 
   def create
-    @pool = Pool.new(params[:pool])
+    @pool = Pool.new(params[:pool].slice("name"))
     authorize! :create, @pool
     get_pools_attributes(params[:group_id])
     @pool.group = @group
-    @pool.tournament = @tournament
-    if(@pool.save)
+    @pool.tournament = Tournament.find_by_slug(params[:pool]["tournament_id"]) 
+    if(@pool.save and @pool.update_attributes(params[:pool]))
       redirect_to [@pool.group, @pool]
     else
       render 'new'

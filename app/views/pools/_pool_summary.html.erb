@@ -1,1 +1,1 @@
-<%= link_to (raw("<h3 style=\"display: inline\">") + (pool.name || pool.tournament.name) + raw("</h3> - ") + pool.tournament.location), group_pool_path(pool.group, pool) %><br />
+<%= link_to (raw("<h3 style=\"display: inline\">") + pool.name + raw("</h3> - ") + pool.tournament.location), group_pool_path(pool.group, pool) %><br />

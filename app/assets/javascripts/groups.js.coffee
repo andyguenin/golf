@@ -2,5 +2,15 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
+window.GroupCtrl = ($scope) ->
+  $scope.group = {text:'', url:''}
+
+  $scope.we = ->
+    'lllll'
+
+  $scope.newGroup = ->
+    alert('hello')
+
+
 $(document).ready ->
-  create_slug = (input) ->
+  $scope.we();

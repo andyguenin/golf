@@ -1,32 +1,16 @@
 <%= form_for(@pool, :url => group_pool_path(@pool.group, @pool)) do |f| %>
-  <% if @pool.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@pool.errors.count, "error") %> prohibited this pool from being saved:</h2>
+  <%= render :partial => 'errors/form_field_error', :locals => {:f => @pool} %>
 
-      <ul>
-        <% @pool.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-      </ul>
-    </div>
+  <% unless @pool.published %>
+    <p>
+    <%= f.label "pool[tournament_id]", "Tournament" %>
+    <%= select_tag("pool[tournament_id]", options_for_select(@tournament_options)) %>
+    </p>
+  <% else %>
+    <%= @pool.tournament.name %>
   <% end %>
 
-  <div class="field">
-    <%= f.label :tournament_id %><br />
-    <%= f.number_field :tournament_id %>
-  </div>
-  <% (1..5).each do |t| %>
-    <div class="field">
-      <%= f.label "q#{t}" %><br />
-      <%= f.text_area "q#{t}" %><br />
-    </div>
-    <div class="field">
-      <%= f.label "q#{t}a" %><br />
-      <%= f.text_field "q#{t}a" %><br />
-    </div>
-  <% end %>
-
-
+  <%= render :partial => "editable_pool", :locals => {:pool => @pool, :f => f} %>
   <div class="actions">
     <%= f.submit %>
   </div>

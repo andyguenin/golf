@@ -1,7 +1,6 @@
 class Tournament < ActiveRecord::Base
   attr_accessible :endtime, :location, :name, :starttime
 
-  before_save :default_values
   
   def to_param
     self.slug
@@ -14,7 +13,4 @@ class Tournament < ActiveRecord::Base
   has_many :tplayers
   has_many :players, :through => :tplayers
 
-  def default_values
-    self.low_score ||= 0
-  end
 end

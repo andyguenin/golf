@@ -1,0 +1,10 @@
+<p>
+<%= f.label :name, "Name (optional)" %>
+<%= f.text_field :name %>
+</p>
+<% (1..5).each do |t| %>
+  <p>
+  <%= f.label "q#{t}", "Question #{t}" %>
+  <%= f.text_field "q#{t}" %>
+  </p>
+<% end %>

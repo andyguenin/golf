@@ -2,7 +2,6 @@ class PagesController < ApplicationController
   def index
     if current_user
      @user = current_user
-     render 'users/show'
     else
       render 'anon'
     end
