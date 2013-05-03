@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap
+//= require preload
 //= require angular
 //= require angular-bootstrap
 //= require angular-resource

@@ -1,8 +1,18 @@
-<h1><%= @group.name %></h1>
+<div class="page-title"><%= @group.name %></div>
 <% if can? :edit, @group %>
   <%= link_to "New Pool", new_group_pool_path(@group) %>
   <%= link_to "Group Administration", edit_group_path(@group) %>
 <% end %>
+<div ng-appi="grouppools">
+  <div ng-controller="GroupPoolsCtrl">
+    <%= render :partial => "layouts/error_spinner" %>
+    <ul class="unstyled">
+      <li class="pool-summary-li" ng-repeats="pool in grouppools">
+      {{pool.pname}}
+      </li>
+    </ul>
+  </div>
+</div>
 <h2>Upcoming Pools</h2>
 <% (@group.pools.order("name asc").select {|pool| pool.tournament.endtime > Time.now}).each do |p| %>
   <%= render :partial => "pools/pool_summary", :locals => {:pool => p} %>

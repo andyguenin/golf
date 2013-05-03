@@ -1,4 +1,16 @@
-All groups<br />
-<% current_user.groups.each do |g| %>
-  <%= link_to g.name, group_path(g) %>
-<% end %>
+<div class="page-title">My groups</div>
+<hr />
+<div ng-app>
+  <div ng-controller="GroupCtrl">
+    <%= render :partial => "layouts/error_spinner" %>
+    <ul class="unstyled">
+      <li class="group-display" ng-repeat="group in groups">
+      <a href="/{{group.slug}}">
+        <div class="group-display-name">
+          {{group.name}}
+        </div>
+      </a>
+      </li>
+    </ul>
+  </div>
+</div>

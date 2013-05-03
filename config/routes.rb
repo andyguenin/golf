@@ -1,6 +1,4 @@
 Spool::Application.routes.draw do
-#  get "testytesttest" => "scores#new"
-  #
   get "logout" => "sessions#destroy", :as => "logout"
   get "login" => "sessions#new", :as => "login"
   get "signup" => "users#new", :as => "signup"
@@ -19,4 +17,6 @@ Spool::Application.routes.draw do
     resources :pools, :except => [:index]
   end
 
+  get "api/:action" => "api#:action"
+  get "api/:action/:id" => "api#:action"
 end

@@ -2,15 +2,32 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
-window.GroupCtrl = ($scope) ->
-  $scope.group = {text:'', url:''}
-
-  $scope.we = ->
-    'lllll'
-
-  $scope.newGroup = ->
-    alert('hello')
+window.angular.module('grouppools', []).
+  run ($rootScope, $location)->
+    $rootScope.location = $location
 
 
-$(document).ready ->
-  $scope.we();
+window.GroupCtrl = ($scope, $http) ->
+  $scope.groups = []
+
+  $scope.loading = true
+
+  $http.get('/api/groups.json').success (data)->
+    $scope.groups = data
+    $scope.loading = false
+
+window.GroupPoolsCtrl = ($scope, $http, $route, $routeParams) ->
+  $scope.grouppools = []
+
+  $scope.loading = true
+
+  $scope.$route = $route
+
+
+  $http.get('/api/group_pools/' + $route.current + '.json').success (data)->
+    $scope.grouppools = data
+    $scope.loading = false
+
+  alert(location)
+  
+
