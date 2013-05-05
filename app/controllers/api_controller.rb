@@ -1,5 +1,6 @@
 class ApiController < ApplicationController
   def groups
+    sleep 5
     authorize! :index, :group
     respond_to do |format|
       format.json { render :json => current_user.groups.select([:name, :slug]).order("name")}

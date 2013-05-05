@@ -1,6 +1,5 @@
-<h1><%= @pool.name %>: <%= link_to @pool.group.name, @pool.group %></h1>
-<h2> 
-  <%= link_to "#{@tournament.name} at #{@tournament.location}", tournament_path(@tournament) %></h2>
+<h1 class="title"><%= link_to @pool.group.name, @pool.group %> in 
+  <%= link_to "#{@tournament.name} at #{@tournament.location}", tournament_path(@tournament) %></h1>
 <%= link_to "(edit)", edit_group_pool_path(@pool.group, @pool) if can? :update, @pool %>
 
 <table class="table table-condensed">
@@ -20,9 +19,6 @@
       <td>Pick <%= p %></td>
     <% end %>
     <td>1st round par</td>
-    <% (1..5).each do |q| %>
-      <td>Q<%= q %></td>
-    <% end %>
   </tr>
   <% @golfpicks.each do |u| %>
     <% u.update_score %>
@@ -36,10 +32,7 @@
         <td><%= link_to player.name, t_player_path(@tournament, player.slug) %></td>
       <% end %>
       <td><%= u.tiebreak %></td>
-      <% (1..5).each do |q| %>
-        <% answer = @questions[q-1].answer if @questions[q-1]%>
-        <td class="<%= "#{y_or_n(!(answer ^ u.send("q#{q}")))}-background" unless answer.nil? %>" ><%= y_or_n(u.send("q#{q}")) %></td>
-      <% end %>
+
     </tr>
   <% end %>
 </table>

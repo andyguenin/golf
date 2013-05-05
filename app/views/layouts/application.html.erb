@@ -34,7 +34,7 @@
                 Logged in as: <%= current_user.email %>
                 <%= link_to "Log out", logout_path %>
                 <% else %>
-                <%= link_to "Sign up", signup_path %> or
+                <%= link_to "Sign up", '#myModal', "data-toggle"=>"modal" %> or
                 <%= link_to "log in", login_path %>
                 <% end %>
               </div>
@@ -61,6 +61,35 @@
     </div>
   </div>
 </div>
-
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                ×</button>
+            <h3 id="myModalLabel">
+                Create Account</h3>
+        </div>
+        <div class="modal-body">
+            <form>
+            <fieldset>
+                <label>
+                    Username</label>
+                <input type="text" placeholder="Create username…">
+                <label>
+                    Password</label>
+                <input type="text" placeholder="Create password…">
+                <label>
+                    Email</label>
+                <input type="text" placeholder="Type email…">
+            </fieldset>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">
+                Close</button>
+            <button class="btn btn-primary">
+                Submit</button>
+        </div>
+    </div>
   </body>
 </html>
