@@ -3,23 +3,16 @@
   <%= link_to "New Pool", new_group_pool_path(@group) %>
   <%= link_to "Group Administration", edit_group_path(@group) %>
 <% end %>
-<div ng-appi="grouppools">
+<div ng-app>
   <div ng-controller="GroupPoolsCtrl">
     <%= render :partial => "layouts/error_spinner" %>
     <ul class="unstyled">
-      <li class="pool-summary-li" ng-repeats="pool in grouppools">
-      {{pool.pname}}
-      </li>
+      <a href="{{host}}/{{id}}/pools/{{pool.s_pool_id}}" ng-repeat="pool in grouppools" class="box-link">
+        <li class="box-repeater">
+        <span class="box-text">From {{pool.starttime}} to {{pool.endtime}}</span>
+        <span class="box-title">{{pool.pname}}</span>
+        </li>
+      </a>
     </ul>
   </div>
 </div>
-<h2>Upcoming Pools</h2>
-<% (@group.pools.order("name asc").select {|pool| pool.tournament.endtime > Time.now}).each do |p| %>
-  <%= render :partial => "pools/pool_summary", :locals => {:pool => p} %>
-<% end %>
-
-<h2>Past Pools</h2>
-<% (@group.pools.select {|pool| pool.tournament.endtime < Time.now}).each do |p| %>
-  <%= render :partial => "pools/pool_summary", :locals => {:pool => p} %>
-<% end %>
-

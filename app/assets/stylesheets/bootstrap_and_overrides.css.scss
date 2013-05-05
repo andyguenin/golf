@@ -1,13 +1,14 @@
 @import "bootstrap";
 
+
 body {
   padding: 20px;
-  background-color: #243729;
+  background-color: #243729; 
   margin-top:21px;
 }
 
 .page-title {
-  color: #606060;
+  color: $dark-grey;
   font-size: 50px;
   margin-bottom: 30px;
 }
@@ -18,7 +19,7 @@ body {
 
 .main-cont {
   padding:30px;
-  background-color:#efefef;
+  background-color:#F7F7F7;
 }
 
 .yes {

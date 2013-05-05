@@ -2,11 +2,6 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
-window.angular.module('grouppools', []).
-  run ($rootScope, $location)->
-    $rootScope.location = $location
-
-
 window.GroupCtrl = ($scope, $http) ->
   $scope.groups = []
 
@@ -16,18 +11,18 @@ window.GroupCtrl = ($scope, $http) ->
     $scope.groups = data
     $scope.loading = false
 
-window.GroupPoolsCtrl = ($scope, $http, $route, $routeParams) ->
+window.GroupPoolsCtrl = ($scope, $http) ->
   $scope.grouppools = []
 
   $scope.loading = true
 
-  $scope.$route = $route
+  $scope.id = location.pathname.match(/\/(.*)/)[1]
 
-
-  $http.get('/api/group_pools/' + $route.current + '.json').success (data)->
+  $scope.host = location.protocol + "//" + location.host
+  
+  $http.get('/api/group_pools/' + $scope.id + '.json').success (data)->
     $scope.grouppools = data
     $scope.loading = false
 
-  alert(location)
   
 

@@ -4,13 +4,13 @@
   <div ng-controller="GroupCtrl">
     <%= render :partial => "layouts/error_spinner" %>
     <ul class="unstyled">
-      <li class="group-display" ng-repeat="group in groups">
-      <a href="/{{group.slug}}">
-        <div class="group-display-name">
+      <a href="/{{group.slug}}" ng-repeat="group in groups" class="box-link">
+        <li class="box-repeater"> 
+        <div class="box-title">
           {{group.name}}
         </div>
+        </li>
       </a>
-      </li>
     </ul>
   </div>
 </div>
