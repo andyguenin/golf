@@ -15,6 +15,6 @@ class SessionsController < ApplicationController
 
   def destroy
     session[:user_id] = nil
-    redirect_to request.referer, :flash => {:success => "Logged out!"}
+    redirect_to root_url
   end
 end
