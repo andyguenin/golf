@@ -1,5 +1,6 @@
 @import "bootstrap";
 
+$dark-grey: #606060;
 
 body {
   padding: 20px;
@@ -7,8 +8,21 @@ body {
   margin-top:21px;
 }
 
+.no-bottom {
+  
+  margin-bottom:0px;
+  
+}
+
+.lighten {
+  
+  margin-top:0px;
+  font-weight:normal;
+  
+}
+
 .page-title {
-  color: $dark-grey;
+  color: #606060;
   font-size: 50px;
   margin-bottom: 30px;
 }

@@ -1,9 +1,8 @@
-<h1><%= @tournament.name %></h1>
-<h2><%= @tournament.location %></h2>
-<h3><%= "#{@tournament.starttime.strftime('%B %e, %Y')} to 
-#{@tournament.endtime.strftime('%B %e, %Y')}" %></h3>
-<br />
+<h1 class="no-bottom"><%= @tournament.name %></h1>
+<h2 class="lighten"><em><%= @tournament.location %></em></h2>
 
+<hr>
+<br />
 
 <table class="table table-condensed">
    <% (1..2).each do |r| %>
