@@ -3,7 +3,7 @@
   <%= link_to "New Pool", new_group_pool_path(@group) %>
   <%= link_to "Group Administration", edit_group_path(@group) %>
 <% end %>
-<div ng-app>
+<div ng-app="golf">
   <div ng-controller="GroupPoolsCtrl">
     <%= render :partial => "layouts/error_spinner" %>
     <ul class="unstyled">

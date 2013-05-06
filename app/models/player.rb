@@ -19,7 +19,7 @@ class Player < ActiveRecord::Base
     scores = self.scores.includes(:hole).where("tournament_id = ?", tournament.id). \
       order("round asc, holes.hole_number asc")
     scores.each do |score|
-      hm[score.round-1][score.hole.hole_number] = score.strokes
+      hm[score.round-1][score.hole.hole_number - 1] = score.strokes
     end
     hm
   end

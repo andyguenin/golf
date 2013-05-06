@@ -1,14 +1,15 @@
 <div class="page-title">My groups</div>
 <hr />
-<div ng-app>
+<div ng-app="golf">
   <div ng-controller="GroupCtrl">
     <%= render :partial => "layouts/error_spinner" %>
     <ul class="unstyled">
       <a href="/{{group.slug}}" ng-repeat="group in groups" class="box-link">
         <li class="box-repeater"> 
-        <div class="box-title">
+        <span class="box-title">
           {{group.name}}
-        </div>
+        </span>
+        <span class="box-title"> </div>
         </li>
       </a>
     </ul>

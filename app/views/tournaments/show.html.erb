@@ -1,12 +1,34 @@
-<h1><%= @tournament.name %></h1>
-<h2><%= @tournament.location %></h2>
-<h3><%= "#{@tournament.starttime.strftime('%B %e, %Y')} to 
-#{@tournament.endtime.strftime('%B %e, %Y')}" %></h3>
-<br />
+<div ng-app="golf">
+  <div ng-controller="TournamentCtrl">
+    <h1 class="page-title">{{tournament.tournament_name}}</h1>
+    <h2 class="page=subtitle"><strong>{{tournament.course_name}}</strong> at <strong>{{tournament.location}}</strong></h2>
 
+    <table class="table table-condensed">
+      <tr>
+        <td>Hole</td>
+        <td ng-repeat="hole in holes">
+          {{hole.hole_number}}
+        </td>
+        <td>Score</td>
+      </tr>
+      <tr>
+        <td>Par</td>
+        <td ng-repeat="hole in holes">
+          {{hole.par}}
+        </td>
+        <td> </td>
+      </tr>
+      <tr ng-repeat="player in players">
+        <td ng-repeat="n in [] | range:18">
+          alert({{$index}})
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
 
 <table class="table table-condensed">
-   <% (1..2).each do |r| %>
+  <% (1..2).each do |r| %>
     <tr><td><%= r == 1 ? "Hole" : "Par" %></td>
       <% (1..18).each do |h| %>
         <td><%= r == 1 ? h : @holes[h-1].par %></td>
