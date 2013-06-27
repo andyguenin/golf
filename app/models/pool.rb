@@ -46,7 +46,7 @@ class Pool < ActiveRecord::Base
   end
 
   def default_values
-    self.name ||= tournament.name
+    self.name = self.tournament.name
   end
 
 end

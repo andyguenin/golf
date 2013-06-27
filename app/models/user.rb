@@ -37,7 +37,4 @@ class User < ActiveRecord::Base
 
     self.update_attribute(:name, "a" + self.name)
   end
-  
-  handle_asynchronously :update_name, :run_at => Proc.new { 5.seconds.from_now }
-
 end

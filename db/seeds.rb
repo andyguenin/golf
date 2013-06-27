@@ -68,10 +68,6 @@ PlayerPremium.create([
 ], :without_protection => true )
 
 
-Pool.create([
-  { :created_at => "2013-04-17 04:25:35", :updated_at => "2013-04-20 03:07:23", :group_id => 1, :tournament_id => 1, :min_units => nil }
-], :without_protection => true )
-
 
 
 QAnswer.create([
@@ -135,3 +131,9 @@ Golfpick.create([
   { :user_id => 1, :pick1 => p[0], :pick2 => p[1], :pick3 => p[2], :pick4 => p[3], :pick5 => p[4], :q1 => true, :q2 => true, :q3 => true, :q4 => true, :q5 => true, :tiebreak => -5, :created_at => "2013-04-20 21:36:06", :updated_at => "2013-04-25 04:49:59", :pool_id => 1, :score => -7, :bonus => -3 },
   { :user_id => 2, :pick1 => p[0], :pick2 => p[1], :pick3 => p[2], :pick4 => p[3], :pick5 => p[4], :q1 => true, :q2 => true, :q3 => true, :q4 => true, :q5 => true, :tiebreak => -3, :created_at => "2013-04-24 01:24:01", :updated_at => "2013-04-25 04:49:59", :pool_id => 1, :score => -7, :bonus => -3 }
 ], :without_protection => true )
+
+
+Pool.create([
+  { :created_at => "2013-04-17 04:25:35", :updated_at => "2013-04-20 03:07:23", :group_id => 1, :tournament_id => 1, :min_units => nil }
+], :without_protection => true )
+
