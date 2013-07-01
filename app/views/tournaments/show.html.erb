@@ -1,31 +1,7 @@
-<div ng-app="golf">
-  <div ng-controller="TournamentCtrl">
-    <h1 class="page-title">{{tournament.tournament_name}}</h1>
-    <h2 class="page=subtitle"><strong>{{tournament.course_name}}</strong> at <strong>{{tournament.location}}</strong></h2>
 
-    <table class="table table-condensed">
-      <tr>
-        <td>Hole</td>
-        <td ng-repeat="hole in holes">
-          {{hole.hole_number}}
-        </td>
-        <td>Score</td>
-      </tr>
-      <tr>
-        <td>Par</td>
-        <td ng-repeat="hole in holes">
-          {{hole.par}}
-        </td>
-        <td> </td>
-      </tr>
-      <tr ng-repeat="player in players">
-        <td ng-repeat="n in [] | range:18">
-          alert({{$index}})
-        </td>
-      </tr>
-    </table>
-  </div>
-</div>
+    <h1 class="page-title">@tournament.name</h1>
+    <h2 class="page=subtitle"><strong>@tournament.course.name</strong> at <strong>@tournament.course.location</strong></h2>
+
 
 <table class="table table-condensed">
   <% (1..2).each do |r| %>

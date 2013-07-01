@@ -1,3 +1,27 @@
+# == Schema Information
+#
+# Table name: golfpicks
+#
+#  id         :integer          not null, primary key
+#  user_id    :integer
+#  pick1      :integer
+#  pick2      :integer
+#  pick3      :integer
+#  pick4      :integer
+#  pick5      :integer
+#  q1         :boolean
+#  q2         :boolean
+#  q3         :boolean
+#  q4         :boolean
+#  q5         :boolean
+#  tiebreak   :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  pool_id    :integer
+#  score      :integer
+#  bonus      :integer
+#
+
 class Golfpick < ActiveRecord::Base
   belongs_to :user
   belongs_to :pool

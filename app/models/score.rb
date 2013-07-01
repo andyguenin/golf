@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: scores
+#
+#  id            :integer          not null, primary key
+#  tournament_id :integer
+#  player_id     :integer
+#  strokes       :integer
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  hole_id       :integer
+#  round         :integer
+#
+
 class Score < ActiveRecord::Base
   attr_accessible :hole_id, :player_id, :strokes, :tournament_id
 

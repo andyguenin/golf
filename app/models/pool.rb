@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: pools
+#
+#  id            :integer          not null, primary key
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  tournament_id :integer
+#  min_units     :integer
+#  name          :string(255)
+#  published     :boolean
+#
+
 class Pool < ActiveRecord::Base
   attr_accessor :q1, :q1a, :q2, :q2a, :q3, :q3a, :q4, :q4a, :q5, :q5a, :t_id
   attr_accessible :tournament_id, :q1, :q1a, :q2, :q2a, :q3, :q3a, :q4, :q4a, :q5, :q5a, :name

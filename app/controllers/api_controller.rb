@@ -1,4 +1,6 @@
-class ApiController < ApplicationController
+#this file is just for reference until we fold all methods here back into their correct controller.
+
+notaclass ApiController < ApplicationController
   def groups
     authorize! :index, :group
     respond_to do |format|

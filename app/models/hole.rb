@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: holes
+#
+#  id          :integer          not null, primary key
+#  course_id   :integer
+#  hole_number :integer
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  par         :integer
+#
+
 class Hole < ActiveRecord::Base
   attr_accessible :course_id, :hole_number, :par
 
