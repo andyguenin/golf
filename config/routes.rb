@@ -11,12 +11,7 @@ Spool::Application.routes.draw do
   resources :users, :except => :index
   resources :sessions
   resources :golf
-  resources :groups, :only => [:new, :create, :index]
   resources :players, :except => :index
-  resources :groups, :path => '', :except => [:new, :create]  do
-    resources :pools, :except => [:index]
-  end
+  resources :pools
 
-  get "api/:action" => "api#:action"
-  get "api/:action/:id" => "api#:action"
 end

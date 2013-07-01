@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130428044807) do
+ActiveRecord::Schema.define(:version => 20130701025114) do
 
   create_table "courses", :force => true do |t|
     t.integer  "tournament_id"
@@ -19,22 +19,6 @@ ActiveRecord::Schema.define(:version => 20130428044807) do
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
   end
-
-  create_table "delayed_jobs", :force => true do |t|
-    t.integer  "priority",   :default => 0
-    t.integer  "attempts",   :default => 0
-    t.text     "handler"
-    t.text     "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
-    t.string   "locked_by"
-    t.string   "queue"
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
-  end
-
-  add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
   create_table "golfpicks", :force => true do |t|
     t.integer  "user_id"
@@ -54,20 +38,6 @@ ActiveRecord::Schema.define(:version => 20130428044807) do
     t.integer  "pool_id"
     t.integer  "score"
     t.integer  "bonus"
-  end
-
-  create_table "group_admins", :force => true do |t|
-    t.integer  "group_id"
-    t.integer  "user_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  create_table "groups", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.string   "slug"
   end
 
   create_table "holes", :force => true do |t|
@@ -112,7 +82,6 @@ ActiveRecord::Schema.define(:version => 20130428044807) do
   create_table "pools", :force => true do |t|
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
-    t.integer  "group_id"
     t.integer  "tournament_id"
     t.integer  "min_units"
     t.string   "name"
@@ -157,13 +126,6 @@ ActiveRecord::Schema.define(:version => 20130428044807) do
     t.integer  "bucket"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
-  end
-
-  create_table "user_group_members", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "group_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
   end
 
   create_table "users", :force => true do |t|

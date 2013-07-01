@@ -1,4 +1,4 @@
-<%= form_for(@pool, :url => group_pool_path(@pool.group, @pool)) do |f| %>
+<%= form_for @pool do |f| %>
   <%= render :partial => 'errors/form_field_error', :locals => {:f => @pool} %>
 
   <% unless @pool.published %>

@@ -1,6 +1,5 @@
-<h1 class="title"><%= link_to @pool.group.name, @pool.group %> in 
+<h1 class="title">Name in 
   <%= link_to "#{@tournament.name} at #{@tournament.location}", tournament_path(@tournament) %></h1>
-<%= link_to "(edit)", edit_group_pool_path(@pool.group, @pool) if can? :update, @pool %>
 
 <table class="table table-condensed">
   <% @questions.each do |q| %>

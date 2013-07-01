@@ -7,23 +7,6 @@ User.create([
   { :name => "Isaac Wittman", :email => "iw@bleich.com", :created_at => "2013-04-17 04:11:09", :updated_at => "2013-04-26 02:20:28", :admin => true, :role => 10, :password => "isaac", :password_confirmation => "isaac" },
 ], :without_protection => true )
 
-Group.create([
-  { :name => "Blackrock", :created_at => "2013-04-17 04:09:13", :updated_at => "2013-04-20 03:00:50", :slug => "blackrock" },
-  { :name => "NBR", :created_at => "2013-04-20 02:51:06", :updated_at => "2013-04-20 03:01:23", :slug => "nbr" }
-], :without_protection => true )
-
-
-UserGroupMember.create([
-  { :user_id => 1, :group_id => 1, :created_at => "2013-04-20 02:54:23", :updated_at => "2013-04-20 02:54:23" },
-  { :user_id => 2, :group_id => 1, :created_at => "2013-04-24 01:22:59", :updated_at => "2013-04-24 01:22:59" }
-], :without_protection => true )
-
-
-GroupAdmin.create([
-  { :group_id => 1, :user_id => 1, :created_at => "2013-04-26 02:11:33", :updated_at => "2013-04-26 02:11:33" }
-], :without_protection => true )
-
-
 
 Course.create([
   { :tournament_id => 1, :name => "Augusta National Golf Club", :created_at => "2013-04-20 17:49:26", :updated_at => "2013-04-20 17:49:26" }
@@ -134,6 +117,6 @@ Golfpick.create([
 
 
 Pool.create([
-  { :created_at => "2013-04-17 04:25:35", :updated_at => "2013-04-20 03:07:23", :group_id => 1, :tournament_id => 1, :min_units => nil }
+  { :created_at => "2013-04-17 04:25:35", :updated_at => "2013-04-20 03:07:23", :tournament_id => 1, :min_units => nil }
 ], :without_protection => true )
 

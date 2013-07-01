@@ -2,12 +2,10 @@ class Pool < ActiveRecord::Base
   attr_accessor :q1, :q1a, :q2, :q2a, :q3, :q3a, :q4, :q4a, :q5, :q5a, :t_id
   attr_accessible :tournament_id, :q1, :q1a, :q2, :q2a, :q3, :q3a, :q4, :q4a, :q5, :q5a, :name
 
-  belongs_to :group
   belongs_to :tournament
   has_many :q_answers
   has_many :golfpicks
 
-  validates_presence_of :group_id
   validates_presence_of :tournament_id
 
   before_save :default_values

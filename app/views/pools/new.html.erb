@@ -1,5 +1,4 @@
 <h1>Create a new pool</h1>
-<h2>Pool for <%= @group.name %></h2>
 <%= form_for @pool, :url => group_pools_path(@group, @pool) do |f| %>
   <%= render :partial => 'errors/form_field_error', :locals => {:f => @pool} %>
 
