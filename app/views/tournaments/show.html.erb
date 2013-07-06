@@ -1,33 +1,75 @@
+<h1 class="no-bottom"><%= @tournament.name %></h1>
+<h2 class="lighten"><em><%= @tournament.location %></em></h2>
 
-    <h1 class="page-title">@tournament.name</h1>
-    <h2 class="page=subtitle"><strong>@tournament.course.name</strong> at <strong>@tournament.course.location</strong></h2>
+<table class="table table-condensed" style="border-collapse:collapse;">
+    <thead>
+      <tr>
+      <% (1..20).each do |i| %>
+        <th><%= i == 20 ? 'Score' : '' %></th>
+      <% end %>  
+      </tr>
+    </thead>
+    <tbody>
 
+        <% (1..2).each do |r| %>
+          <tr>
+            <td><%= r == 1 ? "Hole" : "Par" %></td>
+            <% (1..18).each do |h| %>
+            <td><%= r == 1 ? h : @holes[h-1].par %></td>
+            <% end %>
+            <td><%= r == 1 ? "Score" : "" %></td>
+          </tr>
+        <% end %>
 
-<table class="table table-condensed">
-  <% (1..2).each do |r| %>
-    <tr><td><%= r == 1 ? "Hole" : "Par" %></td>
-      <% (1..18).each do |h| %>
-        <td><%= r == 1 ? h : @holes[h-1].par %></td>
-      <% end %>
-      <td><%= r == 1 ? "Score" : "" %></td>
-    </tr>
-  <% end %>
-  <% (@tournament.players.includes(:scores).where("tournament_id = ?", @tournament.id).all.sort_by {|t| [t.score_by_tournament(@tournament), t.scores.length] }).each do |p| %>
-    <tr><td><%= link_to p.name, t_player_path(@tournament, p) %></td>
-      <% ps = p.scores_by_tournament_round(@tournament, @tournament.round) %>
-      <% (1..18).each do |h| %>
-        <td
+        <% counter = 1 %>
+        <% (@tournament.players.includes(:scores).where("tournament_id = ?", @tournament.id).all.sort_by {|t| [t.score_by_tournament(@tournament), t.scores.length] }).each do |p| %>
+        <tr data-toggle="collapse" data-target="#demo<%= counter %>" class="accordion-toggle">
+          <td><%= link_to p.name, t_player_path(@tournament, p) %></td>
+          <% ps = p.scores_by_tournament_round(@tournament, @tournament.round) %>
+          <% (1..18).each do |h| %>
+          <td
           <% if ps.length < h %>
-            > -
+          > -
           <% else %>
-            <% score = ps[h-1].strokes %>
-            <% par = @holes[h-1].par %>
-            <%= score < par ? raw("style=\"background-color: green;\">") : (score > par ? raw("style =\"background-color: red;\">") : raw(">")) %>
-            <%= ps[h-1].strokes %>
+          <% score = ps[h-1].strokes %>
+          <% par = @holes[h-1].par %>
+          <%= score < par ? raw("style=\"background-color: green;\">") : (score > par ? raw("style =\"background-color: red;\">") : raw(">")) %>
+          <%= ps[h-1].strokes %>
+          <% end %>
           <% end %>
         </td>
+        <td><%= p.score_by_tournament(@tournament) %></td>
+      <tr >
+            <td colspan="20" class="hiddenRow"><div class="accordian-body collapse" id="demo<%= counter %>">
+
+              <% tscores = p.scores_by_tournament(@tournament) %>
+
+              <table class="table table-condensed table-bordered">
+                <thead>
+                  <% 2.times do |s| %>
+                  <tr><th><%= s==0 ? "Hole" : "Par" %></th>
+                    <% @tournament.course.holes.order("hole_number asc").each do |h| %>
+                    <td><%= h.send("#{s==0 ? "hole_number" : "par"}") %></td>
+                    <% end %>  
+                    <th><%= s==0 ? "Score" : "" %></th>
+                  </tr>
+                  <% end %>
+                </thead>
+                <tbody>
+                  <% 4.times do |round| %>
+                  <tr><td><%= round+1 %></td>
+                    <% (1..18).each do |hole| %>
+                    <td><%= tscores[round][hole] || "-" %></td>
+                    <% end %>
+                    <td><%= tscores[round].empty? ? "" :  p.score_by_tournament_round(@tournament, round+1)%></td>
+                  </tr>
+                  <% end %>
+                </tbody>
+              </table>
+
+           </div> </td>
+        </tr>
+      <%= counter = counter + 1 %>  
       <% end %>
-      <td><%= p.score_by_tournament(@tournament) %></td>
-    </tr>
-  <% end %>
+    </tbody>
 </table>
