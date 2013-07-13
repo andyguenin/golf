@@ -29,5 +29,6 @@ class Tournament < ActiveRecord::Base
   has_one :course
   has_many :tplayers
   has_many :players, :through => :tplayers
-
+  
+  
 end

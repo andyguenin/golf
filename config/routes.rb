@@ -13,5 +13,6 @@ Spool::Application.routes.draw do
   resources :golf
   resources :players, :except => :index
   resources :pools
+  get "score" => "api#insert_score"
 
 end
