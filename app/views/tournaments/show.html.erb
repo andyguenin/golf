@@ -58,8 +58,8 @@
                 <tbody>
                   <% 4.times do |round| %>
                   <tr><td><%= round+1 %></td>
-                    <% (1..18).each do |hole| %>
-                    <td><%= tscores[round][hole] || "-" %></td>
+                    <% (1..18).each do |hole|%>
+                    <td><%= tscores[round][hole - 1] || "-" %></td>
                     <% end %>
                     <td><%= tscores[round].empty? ? "" :  p.score_by_tournament_round(@tournament, round+1)%></td>
                   </tr>
