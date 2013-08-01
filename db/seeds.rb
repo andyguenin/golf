@@ -77,11 +77,11 @@ Tournament.create([
 
 
 Tplayer.create([
-  { :player_id => 1, :tournament_id => 1, :bucket => 1, :created_at => "2013-04-20 17:43:42", :updated_at => "2013-04-20 17:43:42" },
-  { :player_id => 2, :tournament_id => 1, :bucket => 2, :created_at => "2013-04-20 17:43:42", :updated_at => "2013-04-20 17:43:42" },
-  { :player_id => 3, :tournament_id => 1, :bucket => 3, :created_at => "2013-04-20 17:43:42", :updated_at => "2013-04-20 17:43:42" },
-  { :player_id => 4, :tournament_id => 1, :bucket => 4, :created_at => "2013-04-20 17:43:42", :updated_at => "2013-04-20 17:43:42" },
-  { :player_id => 5, :tournament_id => 1, :bucket => 5, :created_at => "2013-04-20 17:43:42", :updated_at => "2013-04-20 17:43:42" }
+  { :player_id => 1, :tournament_id => 1, :bucket => 1, :created_at => "2013-04-20 17:43:42", :score => 0},
+  { :player_id => 2, :tournament_id => 1, :bucket => 2, :created_at => "2013-04-20 17:43:42", :score => 0},
+  { :player_id => 3, :tournament_id => 1, :bucket => 3, :created_at => "2013-04-20 17:43:42", :score => 0},
+  { :player_id => 4, :tournament_id => 1, :bucket => 4, :created_at => "2013-04-20 17:43:42", :score => 0},
+  { :player_id => 5, :tournament_id => 1, :bucket => 5, :created_at => "2013-04-20 17:43:42", :score => 0},
 ], :without_protection => true )
 
 
@@ -105,7 +105,11 @@ Score.create([
   { :tournament_id => 1, :player_id => 2, :strokes => 4, :created_at => "2013-04-20 18:57:37", :updated_at => "2013-04-20 19:51:12", :hole_id => 1, :round => 1 },
   { :tournament_id => 1, :player_id => 2, :strokes => 4, :created_at => "2013-04-20 18:58:27", :updated_at => "2013-04-20 19:51:12", :hole_id => 2, :round => 1 },
   { :tournament_id => 1, :player_id => 1, :strokes => 6, :created_at => "2013-04-20 18:19:21", :updated_at => "2013-04-20 20:02:17", :hole_id => 1, :round => 1 },
-  { :tournament_id => 1, :player_id => 1, :strokes => 1, :created_at => "2013-04-20 20:17:15", :updated_at => "2013-04-20 20:17:15", :hole_id => 3, :round => 1 }
+  { :tournament_id => 1, :player_id => 1, :strokes => 1, :created_at => "2013-04-20 20:17:15", :updated_at => "2013-04-20 20:17:15", :hole_id => 3, :round => 1 },
+  { :tournament_id => 1, :player_id => 2, :strokes => 4, :created_at => "2013-04-20 18:58:27", :updated_at => "2013-04-20 19:51:12", :hole_id => 3, :round => 1 },
+  { :tournament_id => 1, :player_id => 2, :strokes => 4, :created_at => "2013-04-20 18:58:27", :updated_at => "2013-04-20 19:51:12", :hole_id => 4, :round => 1 },
+  { :tournament_id => 1, :player_id => 2, :strokes => 4, :created_at => "2013-04-20 18:58:27", :updated_at => "2013-04-20 19:51:12", :hole_id => 5, :round => 1 },
+  { :tournament_id => 1, :player_id => 2, :strokes => 4, :created_at => "2013-04-20 18:58:27", :updated_at => "2013-04-20 19:51:12", :hole_id => 6, :round => 1 }
 ], :without_protection => true )
 
 p = Player.all

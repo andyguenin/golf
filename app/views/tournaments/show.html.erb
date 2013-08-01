@@ -2,13 +2,6 @@
 <h2 class="lighten"><em><%= @tournament.location %></em></h2>
 
 <table class="table table-condensed" style="border-collapse:collapse;">
-    <thead>
-      <tr>
-      <% (1..20).each do |i| %>
-        <th><%= i == 20 ? 'Score' : '' %></th>
-      <% end %>  
-      </tr>
-    </thead>
     <tbody>
 
         <% (1..2).each do |r| %>
@@ -17,7 +10,7 @@
             <% (1..18).each do |h| %>
             <td><%= r == 1 ? h : @holes[h-1].par %></td>
             <% end %>
-            <td><%= r == 1 ? "Score" : "" %></td>
+            <td> </td>
           </tr>
         <% end %>
 
@@ -44,14 +37,14 @@
 
               <% tscores = p.scores_by_tournament(@tournament) %>
 
-              <table class="table table-condensed table-bordered">
+              <table class="table table-condensed table-bordered score-table">
                 <thead>
                   <% 2.times do |s| %>
                   <tr><th><%= s==0 ? "Hole" : "Par" %></th>
                     <% @tournament.course.holes.order("hole_number asc").each do |h| %>
-                    <td><%= h.send("#{s==0 ? "hole_number" : "par"}") %></td>
+                    <td><strong><%= h.send("#{s==0 ? "hole_number" : "par"}") %></strong></td>
                     <% end %>  
-                    <th><%= s==0 ? "Score" : "" %></th>
+                    <th><%= s==0 ? "Total" : @tournament.course.holes.map{|h| h.par}.sum %></th>
                   </tr>
                   <% end %>
                 </thead>
@@ -59,9 +52,9 @@
                   <% 4.times do |round| %>
                   <tr><td><%= round+1 %></td>
                     <% (1..18).each do |hole|%>
-                    <td><%= tscores[round][hole - 1] || "-" %></td>
+                      <td><%= tscores[round][hole-1] || "-" %></td>
                     <% end %>
-                    <td><%= tscores[round].empty? ? "" :  p.score_by_tournament_round(@tournament, round+1)%></td>
+                    <td><%= tscores[round].empty? ? "" :  (tscores[round].count == 18 ? tscores[round].sum : p.score_by_tournament_round(@tournament, round+1))%></td>
                   </tr>
                   <% end %>
                 </tbody>
