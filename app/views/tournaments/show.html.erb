@@ -17,7 +17,7 @@
             <% (1..18).each do |h| %>
             <td><%= r == 1 ? h : @holes[h-1].par %></td>
             <% end %>
-            <td><%= r == 1 ? "Score" : "" %></td>
+            <td><%= r == 1 ? "Score" : @holes.map{|h| h.par}.sum %></td>
           </tr>
         <% end %>
 
