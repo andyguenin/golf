@@ -14,5 +14,5 @@ Spool::Application.routes.draw do
   resources :players, :except => :index
   resources :pools
   get "score" => "api#insert_score"
-
+  post "insert" => "api#is"
 end

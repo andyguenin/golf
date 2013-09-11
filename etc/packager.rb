@@ -2,6 +2,10 @@ require 'sinatra'
 require 'base64'
 require 'json'
 require 'openssl'
+require "net/http"
+require "uri"
+require "aescrypt"
+
 
 set :port, 6001
 
@@ -17,19 +21,11 @@ post '/scores' do
     end
   end
 
-  cipher = OpenSSL::Cipher::Cipher.new("aes-256-cbc")
-  cipher.encrypt
-  
-  key = Digest::SHA1.hexdigest("RLMMKTeFNtPZEBxsbx8g3Ou0HxniC3l5wAmJUcwsGotZHvbImkOwbPQigcddFWgM")
-  iv = cipher.random_iv
-  
-  cipher.key = key
-  cipher.iv = iv
-  
-  encrypted = cipher.update(unenc.to_s)
-  encrypted << cipher.final
-  
-  erb encrypted.to_s
-  #todo: send to server
-  
+  password = "RLMMKTeFNtPZEBxsbx8g3Ou0HxniC3l5wAmJUcwsGotZHvbImkOwbPQigcddFWgM"
+  encrypted_data = AESCrypt.encrypt(unenc.to_s, password)
+  encoded = Base64.encode64(encrypted_data)
+  uri = URI.parse("http://localhost:3000/insert")
+  response = Net::HTTP.post_form(uri, {"scores" => encoded})
+  erb response.body 
+
 end

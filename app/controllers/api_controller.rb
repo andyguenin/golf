@@ -1,6 +1,19 @@
 #this file is just for reference until we fold all methods here back into their correct controller.
 
+
 class ApiController < ApplicationController
+  
+  skip_before_filter :verify_authenticity_token
+  
+  def is    
+    password = "RLMMKTeFNtPZEBxsbx8g3Ou0HxniC3l5wAmJUcwsGotZHvbImkOwbPQigcddFWgM"
+    enc_message = params[:scores]
+    message = AESCrypt.decrypt(Base64.decode64(enc_message), password)
+    
+    
+    render :text => message
+  end
+  
   def groups
     return 0
     authorize! :index, :group
