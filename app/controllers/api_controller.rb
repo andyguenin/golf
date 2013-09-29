@@ -10,7 +10,8 @@ class ApiController < ApplicationController
     enc_message = params[:scores]
     message = AESCrypt.decrypt(Base64.decode64(enc_message), password)
     
-    
+    ds = JSON.parse(message)
+    puts ds    
     render :text => message
   end
   
