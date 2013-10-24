@@ -13,7 +13,7 @@
 #
 
 class Score < ActiveRecord::Base
-  attr_accessible :hole_id, :player, :strokes, :tournament
+  attr_accessible :hole_id, :player, :strokes, :tournament, :round
 
   validates_presence_of :hole_id
   validates_presence_of :player_id

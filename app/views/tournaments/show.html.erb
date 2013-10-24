@@ -52,9 +52,9 @@
                   <% 4.times do |round| %>
                   <tr><td><%= round+1 %></td>
                     <% (1..18).each do |hole|%>
-                      <td><%= tscores[round][hole-1] || "-" %></td>
+                      <td><%= tscores[round][hole-1].nil? ? "-" : tscores[round][hole-1].strokes%></td>
                     <% end %>
-                    <td><%= tscores[round].empty? ? "" :  (tscores[round].count == 18 ? tscores[round].sum : p.score_by_tournament_round(@tournament, round+1))%></td>
+                    <td><%= tscores[round].empty? ? "" :  (tscores[round].count == 18 ? tscores[round].map{|t| t.strokes}.sum : p.score_by_tournament_round(@tournament, round+1))%></td>
                   </tr>
                   <% end %>
                 </tbody>

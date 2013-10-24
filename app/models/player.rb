@@ -26,12 +26,36 @@ class Player < ActiveRecord::Base
     slug
   end
 
+  def self.update_score_from_scraper(score_structure)
+    player = Player.find_by_name(score_structure[0])
+    tourn = Tournament.first
+
+    holes = tourn.course.holes
+    current_scores = player.scores_by_tournament(tourn)
+
+    (score_structure.length-1).times do |t|
+      score_structure[t+1].length.times do |u|
+        actual_strokes = score_structure[t+1][u]
+        current_score = current_scores[t][u]
+        if current_score.nil?
+          current_score = player.scores.new
+          current_score.update_attributes({:tournament => tourn, :strokes => actual_strokes, :hole_id => holes[u].id, :round => t+1})
+        else
+          if current_score.strokes != actual_strokes
+            current_score.update_attribute(:strokes, actual_strokes)
+          end
+        end
+      end
+    end
+    player.update_score(tourn)
+  end
+
   def scores_by_tournament(tournament)
     hm = [[],[],[],[]]
     scores = self.scores.includes(:hole).where("tournament_id = ?", tournament.id). \
       order("round asc, holes.hole_number asc")
     scores.each do |score|
-      hm[score.round-1][score.hole.hole_number - 1] = score.strokes
+      hm[score.round-1][score.hole.hole_number - 1] = score
     end
     hm
   end
@@ -53,18 +77,13 @@ class Player < ActiveRecord::Base
       p = self.player_score_statuses.create({:tournament_id => tournament.id, \
                                         :score => 100})
     end
-    if p.updated_at < 1.minute.ago || (p.created_at > 1.minute.ago and p.score == 100)
-      update_score tournament, p
-    else
-      p.score
-    end
+    p.score
   end
 
-  private
-    def update_score(tournament, pss)
-      score = self.scores.includes(:hole).where("tournament_id = ?", \
+  def update_score(tournament)
+    score = self.scores.includes(:hole).where("tournament_id = ?", \
             tournament.id).inject(0) {|sum, n| sum + (n.strokes - n.hole.par)}
-      pss.update_attribute(:score, score)
-      score
-    end
+    self.player_score_statuses.where("tournament_id = ?", tournament.id)[0].update_attribute(:score, score)
+    score
+  end
 end

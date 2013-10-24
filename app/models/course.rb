@@ -16,5 +16,5 @@ class Course < ActiveRecord::Base
   validates_presence_of :tournament_id
 
   belongs_to :tournament
-  has_many :holes
+  has_many :holes, :order => "hole_number asc"
 end
