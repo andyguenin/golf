@@ -9,6 +9,7 @@
 #  min_units     :integer
 #  name          :string(255)
 #  published     :boolean
+#  private       :boolean
 #
 
 require 'test_helper'

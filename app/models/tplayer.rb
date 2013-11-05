@@ -8,12 +8,13 @@
 #  bucket        :integer
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  score         :integer
 #
 
 class Tplayer< ActiveRecord::Base
-#  attr_accessible :bucket, :player_id, :tournament_id, :score
+  attr_accessible :bucket, :player_id, :tournament, :score
 
-  validates :bucket, :inclusion => 1..5
+  validates :bucket, :inclusion => 0..5
   validates_presence_of :player_id
   validates_presence_of :tournament_id
   validates_presence_of :score

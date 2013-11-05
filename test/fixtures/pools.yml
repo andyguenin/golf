@@ -9,6 +9,7 @@
 #  min_units     :integer
 #  name          :string(255)
 #  published     :boolean
+#  private       :boolean
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html

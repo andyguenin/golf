@@ -9,10 +9,43 @@ class ApiController < ApplicationController
     password = "RLMMKTeFNtPZEBxsbx8g3Ou0HxniC3l5wAmJUcwsGotZHvbImkOwbPQigcddFWgM"
     enc_message = params[:scores]
     message = AESCrypt.decrypt(Base64.decode64(enc_message), password)
-    
+
     ds = JSON.parse(message)
-    puts ds    
-    render :text => message
+    start_time = Time.parse("#{ds[0][1]} #{ds[0][2]} #{ds[0][4]}")
+    end_time = Time.parse("#{ds[0][1]} #{ds[0][3]} #{ds[0][4]}")
+
+    t_name = ds[0][0]
+    t_location = /(.*)\s\|.*/.match(ds[0][5])[1]
+
+    t = Tournament.where("name = ? and starttime = ?", t_name, start_time)[0]
+    if t.nil?
+      t = Tournament.new
+      t.name = t_name
+#      t.location = t_location
+      t.starttime = start_time
+      t.endtime = end_time
+      t.slug = "#{ds[0][0]} #{ds[0][4]}".downcase.gsub(" ", "-")
+      t.round = 1
+      t.locked = false
+      t.save
+      
+      location_info = /(.*)\s-\s(.*)/.match(t_location)
+      course = Course.where("name = ? and location = ?", location_info[1], location_info[2])[0]
+      if course.nil?
+        course = t.create_course({:name => location_info[1], :location => location_info[2]})
+        ds[1][0].length.times do |t|
+          course.holes.create({:hole_number => t+1, :par => ds[1][0][t]})
+        end
+      end
+      t.update_attribute(:course, course)
+    end
+
+    ds[1][1].each do |player|
+      Player.update_score_from_scraper(player, t)
+    end
+#    puts ds    
+
+    render :text => "success"
   end
   
   def groups

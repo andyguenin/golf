@@ -6,20 +6,27 @@ require "net/http"
 require "uri"
 require "aescrypt"
 
-
 set :port, 6001
+
 
 post '/scores' do 
   unenc_str = JSON.parse(Base64.decode64(params[:payload]))
-  unenc = unenc_str.map do |t|
+  unenc_str[1][0] = unenc_str[1][0].map { |u| u.to_i}
+  unenc_str[1][1] = unenc_str[1][1].map do |t|
     t.map do |u|
       if u.kind_of?(Array)
-        u.map {|v| v.to_i}
+        u.map do |v|
+          v.to_i
+        end
       else
         u
       end
     end
   end
+
+  unenc = unenc_str
+
+  puts unenc_str
 
   password = "RLMMKTeFNtPZEBxsbx8g3Ou0HxniC3l5wAmJUcwsGotZHvbImkOwbPQigcddFWgM"
   encrypted_data = AESCrypt.encrypt(unenc.to_s, password)

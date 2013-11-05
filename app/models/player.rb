@@ -26,9 +26,16 @@ class Player < ActiveRecord::Base
     slug
   end
 
-  def self.update_score_from_scraper(score_structure)
+  def self.update_score_from_scraper(score_structure, tourn)
     player = Player.find_by_name(score_structure[0])
-    tourn = Tournament.first
+
+    if player.nil?
+      player = Player.create({:name => score_structure[0], :slug => score_structure[0].downcase.gsub(" ", "-"), :ranking => 0})
+    end
+
+    if player.tplayers.where("tournament_id = ?", tourn.id).empty?
+      player.tplayers.create({:tournament => tourn, :bucket => 0, :score => 0})
+    end
 
     holes = tourn.course.holes
     current_scores = player.scores_by_tournament(tourn)
@@ -48,6 +55,9 @@ class Player < ActiveRecord::Base
       end
     end
     player.update_score(tourn)
+    
+    tourn.update_attribute(:round, [0,((Time.now - tourn.starttime)/60/60/24).floor].max + 1)
+    
   end
 
   def scores_by_tournament(tournament)
@@ -72,18 +82,13 @@ class Player < ActiveRecord::Base
   end
 
   def score_by_tournament(tournament)
-    p = player_score_statuses.find_by_tournament_id tournament.id
-    if(p.nil?)
-      p = self.player_score_statuses.create({:tournament_id => tournament.id, \
-                                        :score => 100})
-    end
-    p.score
+    p = self.tplayers.find_by_tournament_id(tournament.id).score
   end
 
   def update_score(tournament)
     score = self.scores.includes(:hole).where("tournament_id = ?", \
             tournament.id).inject(0) {|sum, n| sum + (n.strokes - n.hole.par)}
-    self.player_score_statuses.where("tournament_id = ?", tournament.id)[0].update_attribute(:score, score)
+    self.tplayers.where("tournament_id = ?", tournament.id)[0].update_attribute(:score, score)
     score
   end
 end
