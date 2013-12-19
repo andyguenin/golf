@@ -48,7 +48,7 @@ var scrape = function(scrape_url, log_scores, send_callback) {
 	    re.push(l);
 	    re.push(scores);
 	    send_callback(btoa(JSON.stringify(re)));
-	}, 50000);
+	}, 10000);
     });
 };
 
@@ -72,6 +72,7 @@ function get_scores() {
 	    var record = []
 	    var playerid = "player-" + record_node[i].parentNode.parentNode.parentNode.parentNode.id.substring(3)
 	    var player_name = document.getElementById(playerid).querySelectorAll(".player")[0].querySelectorAll("a")[0].innerHTML
+	    var thru = document.getElementById(playerid).querySelectorAll(".score")[1].innerHTML
 	    record.push(player_name)
 	    for(var hole_i = 0; hole_i < record_node[i].querySelectorAll(".scorecard-table").length; hole_i++)
 	    {
@@ -89,7 +90,9 @@ function get_scores() {
 		    }
 		}
 		record.push(round_record)
+
 	    }
+	    record.push([thru])
 	    players_scores.push(record)
 	}
 	var ret_arr = [];

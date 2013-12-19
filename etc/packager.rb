@@ -11,6 +11,9 @@ set :port, 6001
 
 post '/scores' do 
   unenc_str = JSON.parse(Base64.decode64(params[:payload]))
+  puts Base64.decode64(params[:payload])
+#  return
+
   unenc_str[1][0] = unenc_str[1][0].map { |u| u.to_i}
   unenc_str[1][1] = unenc_str[1][1].map do |t|
     t.map do |u|
@@ -25,8 +28,6 @@ post '/scores' do
   end
 
   unenc = unenc_str
-
-  puts unenc_str
 
   password = "RLMMKTeFNtPZEBxsbx8g3Ou0HxniC3l5wAmJUcwsGotZHvbImkOwbPQigcddFWgM"
   encrypted_data = AESCrypt.encrypt(unenc.to_s, password)
