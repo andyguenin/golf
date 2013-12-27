@@ -40,9 +40,6 @@ class Player < ActiveRecord::Base
     holes = tourn.course.holes
     current_scores = player.scores_by_tournament(tourn)
 
-    puts "\n\n\n\n\n\n\naaaaaaaaaa\n\n\n\n\n\n\n\n"
-
-
     (score_structure.length-2).times do |t|
       score_structure[t+1].length.times do |u|
         actual_strokes = score_structure[t+1][u]
@@ -60,9 +57,8 @@ class Player < ActiveRecord::Base
 
     player.update_score(tourn)
     
-    tourn.update_attribute(:round, [0,((Time.now - tourn.starttime)/60/60/24).floor].max + 1)
+    tourn.update_attribute(:round, [[0,((Time.now - tourn.starttime)/60/60/24).floor].max + 1,4].max)
     a = score_structure[-1][0]
-    puts "\n\n\n---------------------------------#{a}-----------------------\n\n\n"
     player.tplayers.find_by_tournament_id(tourn.id).update_attribute(:status, a)
     
   end

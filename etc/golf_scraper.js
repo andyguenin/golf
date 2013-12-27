@@ -27,28 +27,28 @@ var scrape = function(scrape_url, log_scores, send_callback) {
 	    var players_scores = "";
 	    for(var player_i = 0; player_i < scores.length; player_i++)
 	    {
-		for(var p_record_i = 0; p_record_i < scores[player_i].length; p_record_i++)
-		{
-		    if(p_record_i == 0)
-		    {
-			players_scores += scores[player_i][p_record_i] + "\n"
-		    }
-		    else
-		    {
-			players_scores += scores[player_i][p_record_i].toString() + "\n"
-		    }
-		}
+			for(var p_record_i = 0; p_record_i < scores[player_i].length; p_record_i++)
+			{
+			    if(p_record_i == 0)
+			    {
+				players_scores += scores[player_i][p_record_i] + "\n"
+			    }
+			    else
+			    {
+				players_scores += scores[player_i][p_record_i].toString() + "\n"
+			    }
+			}
 	    }
 	    if(log_scores)
 	    {
-		console.log(players_scores)
+			console.log(players_scores)
 	    }
 	    page.render('scores.png');
 	    re = [];
 	    re.push(l);
 	    re.push(scores);
 	    send_callback(btoa(JSON.stringify(re)));
-	}, 10000);
+	}, 50000);
     });
 };
 
@@ -72,7 +72,7 @@ function get_scores() {
 	    var record = []
 	    var playerid = "player-" + record_node[i].parentNode.parentNode.parentNode.parentNode.id.substring(3)
 	    var player_name = document.getElementById(playerid).querySelectorAll(".player")[0].querySelectorAll("a")[0].innerHTML
-	    var thru = document.getElementById(playerid).querySelectorAll(".score")[1].innerHTML
+	    var thru = document.getElementById(playerid).querySelectorAll(".score")[0].innerHTML
 	    record.push(player_name)
 	    for(var hole_i = 0; hole_i < record_node[i].querySelectorAll(".scorecard-table").length; hole_i++)
 	    {
@@ -140,6 +140,6 @@ function send_to_ruby(str)
 
 var page = require('webpage').create();
 page.settings.userAgent = "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.2 Safari/537.36"
-scrape('http://espn.go.com/golf/leaderboard', false, send_to_ruby)
-//scrape('http://espn.go.com/golf/leaderboard?tournamentId=1194', true, send_to_ruby)
+//scrape('http://espn.go.com/golf/leaderboard', false, send_to_ruby)
+scrape('http://espn.go.com/golf/leaderboard?tournamentId=1194', true, send_to_ruby)
 

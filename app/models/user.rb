@@ -17,12 +17,8 @@ class User < ActiveRecord::Base
   attr_accessible :name, :email, :password, :password_confirmation
   
   has_many :golfpicks
-  has_many :user_group_members
-  has_many :groups, :through => :user_group_members
-
-  has_many :group_admins
-  has_many :admingroups, :through =>:group_admins, :source => :user
-
+  has_many :pools, :through => :golfpicks
+  
   attr_accessor :password
   before_save :encrypt_password
 

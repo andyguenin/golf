@@ -1,6 +1,21 @@
-<h1 class="title">Name in 
-  <%= link_to "#{@tournament.name} at #{@tournament.location}", tournament_path(@tournament) %></h1>
+<h1 class="title"><%= @pool.name %></h1> 
+<% if @pool.private %>
+(This is a private pool. Players must be invited to play)
+<%end%>
+<h2>for 
+  <%= link_to "#{@tournament.name} at #{@tournament.course.location}", tournament_path(@tournament) %></h2>
+	  
+  <div class="pull-right btn-group">
+  	<%= link_to "Join Pool", root_path, :class => "btn btn-success" if can? :join, @pool%>
+	<%= link_to "Edit", edit_pool_path(@pool), :class => "btn btn-primary" if can? :update, @pool %>
+	<%= link_to "Publish", publish_pool_path(@pool), :class => "btn btn-warning", 
+	  		:confirm => 'Are you sure you want to publish this pool? Once you publish it, you cannot edit any of the fields.' if can? :publish, @pool%>
+	<%= link_to "Leave Pool", root_path, :class => "btn btn-danger" if can? :leave, @pool %>
+	<%= link_to "Invite others to play!", invite_pool_path(@pool), :class => "btn btn-success" if can? :invite, @pool%>
+  </div>
 
+
+    <br /><br />
 <table class="table table-condensed">
   <% @questions.each do |q| %>
     <tr><td class="<%= y_or_n(q.answer) %>">

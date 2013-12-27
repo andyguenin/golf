@@ -9,6 +9,7 @@
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  score         :integer
+#  status        :integer
 #
 
 class Tplayer< ActiveRecord::Base

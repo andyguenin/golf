@@ -3,9 +3,13 @@ class TournamentsController < ApplicationController
     @tournaments = Tournament.all
   end
 
+  def current
+    @tournament = Tournament.last
+    render 'show'
+  end
+  
   def show
     @tournament = Tournament.find_by_slug(params[:id], :include => :players)
-    @holes = @tournament.course.holes.order("hole_number asc")
   end
 
   def edit
@@ -53,5 +57,6 @@ class TournamentsController < ApplicationController
       render :text => "player is not in tournament"
     end
   end
+
 
 end

@@ -12,7 +12,7 @@ class ApiController < ApplicationController
 
     ds = JSON.parse(message)
     start_time = Time.parse("#{ds[0][1]} #{ds[0][2]} #{ds[0][4]}")
-    end_time = Time.parse("#{ds[0][1]} #{ds[0][3]} #{ds[0][4]}")
+    end_time = Time.parse("#{ds[0][1]} #{ds[0][3] + 1} #{ds[0][4]}")
 
     t_name = ds[0][0]
     t_location = /(.*)\s\|.*/.match(ds[0][5])[1]

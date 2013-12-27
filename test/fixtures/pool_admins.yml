@@ -1,0 +1,23 @@
+# == Schema Information
+#
+# Table name: pool_admins
+#
+#  id         :integer          not null, primary key
+#  user_id    :integer
+#  pool_id    :integer
+#  creator    :boolean
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  user_id: 1
+  pool_id: 1
+  creator: false
+
+two:
+  user_id: 1
+  pool_id: 1
+  creator: false

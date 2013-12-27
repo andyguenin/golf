@@ -19,7 +19,7 @@
               <ul class="nav">
                 <li <%= print_menu_active(:home) %>><a href="/"><i class="icon-home icon-white"></i>Home</a></li>
                 <li <%= print_menu_active(:pools) %>><%= link_to "Pools", pools_path %></a></li>
-                <li <%= print_menu_active(:tournament) %>><a href="tournaments/masters-2013">Standings</a></li>
+                <li <%= print_menu_active(:tournament) %>><%= link_to "Standings", tournaments_path %></a></li>
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">About
                   <b class="caret"></b></a>
                 <ul class="dropdown-menu">

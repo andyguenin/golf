@@ -1,11 +1,7 @@
 <h1>Create a new pool</h1>
-<%= form_for @pool, :url => group_pools_path(@group, @pool) do |f| %>
+<%= form_for @pool do |f| %>
   <%= render :partial => 'errors/form_field_error', :locals => {:f => @pool} %>
 
-  <p>
-  <%= f.label :tournament_id, "Tournament" %>
-  <%= select_tag("pool[tournament_id]", options_for_select(@tournament_options)) %>
-  </p>
   <%= render :partial => "editable_pool", :locals => {:pool => @pool, :f => f} %>
   <p class="button"><%= f.submit %></p>
 <% end %>

@@ -2,7 +2,7 @@ class PoolsController < ApplicationController
   helper_method :get_pools_attributes
 
   def index
-    @pools = Pool.all
+    @pools = Pool.where("private = ? or private = ?", false, nil)
   end
 
   def show
@@ -15,6 +15,7 @@ class PoolsController < ApplicationController
 
   def edit
     @pool = Pool.find(params[:id])
+    @tournament_options = Tournament.where("starttime > ?", Time.now)
     authorize! :update, @pool
   end
 
@@ -30,14 +31,30 @@ class PoolsController < ApplicationController
 
   def new
     @pool = Pool.new
+    @tournament_options = Tournament.where("starttime > ?", Time.now)
     authorize! :create, @pool
   end
+  
+  def publish
+    @pool = Pool.find(params[:id])
+    authorize! :update, @pool
+    @pool.update_attribute(:published, true)
+    @pool.save
+    redirect_to pool_path(@pool)
+  end
 
+  def invite
+    @pool = Pool.find(params[:id])
+    authorize! :invite, @pool
+    @emails = params[:emails] ? params[:emails].split("\n").join(" ").split("\r").join(" ").scan(/([a-zA-Z]\S*@[a-zA-Z\.]*)/).map {|t| t[0]} : []
+  end
+  
   def create
-    @pool = Pool.new(params[:pool].slice("name"))
+    @pool = Pool.new(params[:pool])
+    @tournament_options = Tournament.where("starttime > ?", Time.now)
     authorize! :create, @pool
-    @pool.tournament = Tournament.find_by_slug(params[:pool]["tournament_id"]) 
-    if(@pool.save and @pool.update_attributes(params[:pool]))
+    @pool.tournament = Tournament.find(params[:pool]["tournament_id"]) 
+    if(@pool.save)
       redirect_to @pool
     else
       render 'new'

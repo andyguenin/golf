@@ -3,14 +3,14 @@
 
 <table class="table table-condensed" style="border-collapse:collapse;">
     <tbody>
-
+		<% holes = @tournament.course.holes.order("hole_number asc")%>
         <% (1..2).each do |r| %>
           <tr>
             <td><%= r == 1 ? "Hole" : "Par" %></td>
             <% (1..18).each do |h| %>
-            <td><%= r == 1 ? h : @holes[h-1].par %></td>
+            <td><%= r == 1 ? h : holes[h-1].par %></td>
             <% end %>
-            <td><%= r == 1 ? "Score" : @holes.map{|h| h.par}.sum %></td>
+            <td><%= r == 1 ? "Score" : holes.map{|h| h.par}.sum %></td>
           </tr>
         <% end %>
 
@@ -25,7 +25,7 @@
           > -
           <% else %>
           <% score = ps[h-1].strokes %>
-          <% par = @holes[h-1].par %>
+          <% par = holes[h-1].par %>
           <%= score < par ? raw("style=\"background-color: green;\">") : (score > par ? raw("style =\"background-color: red;\">") : raw(">")) %>
           <%= ps[h-1].strokes %>
           <% end %>

@@ -1,15 +1,6 @@
 <%= form_for @pool do |f| %>
   <%= render :partial => 'errors/form_field_error', :locals => {:f => @pool} %>
 
-  <% unless @pool.published %>
-    <p>
-    <%= f.label "pool[tournament_id]", "Tournament" %>
-    <%= select_tag("pool[tournament_id]", options_for_select(@tournament_options)) %>
-    </p>
-  <% else %>
-    <%= @pool.tournament.name %>
-  <% end %>
-
   <%= render :partial => "editable_pool", :locals => {:pool => @pool, :f => f} %>
   <div class="actions">
     <%= f.submit %>

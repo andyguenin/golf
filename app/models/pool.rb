@@ -14,15 +14,16 @@
 
 class Pool < ActiveRecord::Base
   attr_accessor :q1, :q1a, :q2, :q2a, :q3, :q3a, :q4, :q4a, :q5, :q5a, :t_id
-  attr_accessible :tournament_id, :q1, :q1a, :q2, :q2a, :q3, :q3a, :q4, :q4a, :q5, :q5a, :name
+  attr_accessible :tournament_id, :q1, :q1a, :q2, :q2a, :q3, :q3a, :q4, :q4a, :q5, :q5a, :name, :private
 
   belongs_to :tournament
   has_many :q_answers
   has_many :golfpicks
 
   validates_presence_of :tournament_id
+  validates_presence_of :private
 
-  before_save :default_values
+  after_initialize :default_values
 
   (1..5).each do |t|
 
@@ -58,7 +59,11 @@ class Pool < ActiveRecord::Base
   end
 
   def default_values
-    self.name = self.tournament.name
+    self.private ||= false
+    self.name ||= self.tournament.name
   end
+  
+#  def is_user_admin(user)
+    
 
 end

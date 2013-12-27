@@ -1,0 +1,27 @@
+<h1>Invite players</h1>
+
+<div id="confirm_box" <%= raw("class=\"hide\"") unless params[:emails] %>>
+Here is a list of the emails extracted from your text. Please confirm:<br />
+<% @emails.each do |t|%>
+<%= t %><br />
+<%end %>
+<%= form_tag do %>
+<%= hidden_field_tag :emails, @emails.join("\r\n")%>
+<%= hidden_field_tag :confirm, true %>
+<div class="btn-group pull-right">
+	<%= link_to "No, there's a mistake", "#", :class => "btn btn-danger", :id => "email_mistake" %>
+	<%= submit_tag "Confirm", :class => "btn btn-success"%>
+</div>
+<%end%>
+</div>
+<div id="input_email_area" <%= raw("class=\"hide\"") if params[:emails] %>>
+<%= form_tag do%>
+<p>
+	<%= label_tag :emails, "Copy and paste emails here. You can copy from an Outlook email and it should extract the emails"%>
+	<%= text_area_tag(:emails, @emails.join("\r\n"), :rows => "20", :class => "field span12")%>
+</p>
+<div class="pull-right">
+<%= submit_tag "Next", :class =>"btn btn-success"%>
+</div>
+<% end%>
+</div>
