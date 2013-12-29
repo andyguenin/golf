@@ -29,5 +29,13 @@ class Tournament < ActiveRecord::Base
   has_many :tplayers
   has_many :players, :through => :tplayers
   
+  def formatted_start
+    self.starttime.to_formatted_s(:long)
+  end
+  
+  def formatted_end
+    self.endtime.to_formatted_s(:long)
+  end
+  
   
 end

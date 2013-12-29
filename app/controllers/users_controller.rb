@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(params[:user])
+    @user = User.new(params[:user].merge({:active => true}))
     if @user.save
       redirect_to root_url, :notice => "Signed up!"
     else

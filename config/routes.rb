@@ -15,6 +15,8 @@ Spool::Application.routes.draw do
   
   resources :pools
   get "pool/:id/publish" => "pools#publish", :as => "publish_pool"
+  get "pool/:id/unpublish" => "pools#unpublish", :as => "unpublish_pool"
+  get "pool/:id/join" => "pools#join", :as => "join_pool"
   match "pool/:id/invite" => "pools#invite", :as => "invite_pool", :via => [:get, :post] 
   
   get "score" => "api#insert_score"

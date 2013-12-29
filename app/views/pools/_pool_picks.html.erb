@@ -1,0 +1,27 @@
+<table class="table table-condensed table-hover table-striped">
+  <tr>
+    <td> </td>
+    <td>Score</td>
+    <td>Players Subscore</td>
+    <td>Bonus</td>
+    <% (1..5).each do |p| %>
+      <td>Pick <%= p %></td>
+    <% end %>
+    <td>1st round par</td>
+  </tr>
+  <% @golfpicks.each do |u| %>
+    <% u.update_score %>
+    <tr>
+      <td><%= u.user.name %></td>
+      <td><%= u.score %></td>
+      <td><%= u.player_subscore %></td>
+      <td><%= u.bonus %></td>
+      <% (1..5).each do |pick| %>
+        <% player = u.send("pick#{pick}") %>
+        <td><%= link_to player.name, t_player_path(@tournament, player.slug) %></td>
+      <% end %>
+      <td><%= u.tiebreak %></td>
+
+    </tr>
+  <% end %>
+</table>

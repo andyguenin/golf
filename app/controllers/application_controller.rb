@@ -27,4 +27,8 @@ class ApplicationController < ActionController::Base
   def print_menu_active(e)
     "class=\"active\"".html_safe if e==selected_menu
   end
+  
+  def email
+    "andyguenin@gmail.com"
+  end
 end

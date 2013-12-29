@@ -20,6 +20,11 @@ class TournamentsController < ApplicationController
   def update
     @tournament = Tournament.find_by_slug(params[:id])
     authorize! :edit, @tournament
+    updates = JSON.parse(Base64.decode64(params[:bucketing_data]))
+    updates.each do |tp|
+      t = Tplayer.where("id = ? and tournament_id = ?", tp[0], @tournament.id)[0]
+      t.update_attribute(:bucket, tp[1])
+    end
     if @tournament.update_attributes(params[:tournament])
       redirect_to @tournament
     else

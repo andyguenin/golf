@@ -1,2 +1,27 @@
-<h1>Tournament#edit</h1>
-<p>Find me in app/views/tournament/edit.html.erb</p>
+
+<h1>Bucketing for <%= "#{@tournament.name} on #{@tournament.formatted_start}" %></h1>
+
+
+<div class="row">
+	<% 6.times do |d|%>
+		<div class ="col-md-2 player-bucket">
+			<div class="bucket-label"><center>
+				<% if d == 0 %>
+					Uncategorized
+				<%else %>
+					Bucket <%= d %>
+				<%end %></center>
+			</div>
+			<div class="bucket-id hidden"><%= d %></div>
+			<ul id="b<%= "#{d}"%>" class="player-list">
+				<%@tournament.tplayers.where("bucket = ?", d).each do |tp|%>
+					<li class="player-data btn btn-primary full-width"><div class="player-name"><%= tp.player.name %></div><div class="tp-id hidden"><%= tp.id%></div></li>
+				<%end%>
+			</ul>
+		</div>
+		<%end%>
+</div>
+<%= form_tag(tournament_path(@tournament), :method => :put, :id => "tournament-bucket") do%>
+<%= hidden_field_tag "bucketing_data"%>
+<%= submit_tag "Save", :id=>"save-bucketing", :class=> "btn btn-success"%>
+<%end%>

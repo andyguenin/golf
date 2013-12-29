@@ -11,26 +11,30 @@
 #  updated_at    :datetime         not null
 #  admin         :boolean
 #  role          :integer
+#  active        :boolean
 #
 
 class User < ActiveRecord::Base
-  attr_accessible :name, :email, :password, :password_confirmation
+  attr_accessible :name, :email, :password, :password_confirmation, :active
   
-  has_many :golfpicks
-  has_many :pools, :through => :golfpicks
+  has_many :pool_memberships, :conditions => {:active => true}
+  has_many :all_pool_memberships, class_name: "PoolMembership"
+  has_many :pools, :through => :pool_memberships
+  has_many :all_pools, :through => :all_pool_memberships, source: "pool"
+  has_many :golfpicks, :through => :pool_memberships
   
   attr_accessor :password
   before_save :encrypt_password
 
   validates_confirmation_of :password
-  validates_presence_of :password, :on => :create
+  validates_presence_of :password, :on => :create, :if => :active?
   validates_presence_of :email
-  validates_presence_of :name
+  validates_presence_of :name, :if => :active?
   validates_uniqueness_of :email
 
   def self.authenticate(email, password)
     user = find_by_email(email)
-    if user && user.password_hash == BCrypt::Engine.hash_secret(password, user.password_salt)
+    if user && user.password_hash == BCrypt::Engine.hash_secret(password, user.password_salt) && user.active?
       user
     else
       nil
@@ -42,10 +46,5 @@ class User < ActiveRecord::Base
       self.password_salt = BCrypt::Engine.generate_salt
       self.password_hash = BCrypt::Engine.hash_secret(password, password_salt)
     end
-  end
-
-  def update_name
-
-    self.update_attribute(:name, "a" + self.name)
   end
 end

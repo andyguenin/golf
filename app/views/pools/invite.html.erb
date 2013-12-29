@@ -17,7 +17,7 @@ Here is a list of the emails extracted from your text. Please confirm:<br />
 <div id="input_email_area" <%= raw("class=\"hide\"") if params[:emails] %>>
 <%= form_tag do%>
 <p>
-	<%= label_tag :emails, "Copy and paste emails here. You can copy from an Outlook email and it should extract the emails"%>
+	<%= label_tag :emails, "Copy and paste emails here. You can copy from an Outlook email and it should extract the emails. Don't worry about duplicates or emails who are already members of the site: it will ignore duplicates and will not create a new account for existing players."%>
 	<%= text_area_tag(:emails, @emails.join("\r\n"), :rows => "20", :class => "field span12")%>
 </p>
 <div class="pull-right">

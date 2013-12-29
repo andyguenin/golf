@@ -11,6 +11,7 @@
 #  updated_at    :datetime         not null
 #  admin         :boolean
 #  role          :integer
+#  active        :boolean
 #
 
 require 'test_helper'

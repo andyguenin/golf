@@ -4,9 +4,8 @@
 	<%= link_to "Create new Pool", new_pool_path%>
 <% end %>
 <ul>
-	<% pools = @pools.each.select {|po| can? :read, po}%>
-	<%= raw("There are no upcoming pools to join.<br/><br/>") if pools.empty?%>
-	<% pools.each do |p|%>
+	<%= raw("There are no upcoming pools to join.<br/><br/>") if @pools.empty?%>
+	<% @pools.each do |p|%>
 	<li>
 		<%unless p.published?%>
 		(Draft)
@@ -16,7 +15,7 @@
 		Tournament: 
 		<%= link_to "#{p.tournament.name}", p.tournament%>
 		Dates:
-		<%= "#{p.tournament.starttime.to_formatted_s(:long)}"%>
+		<%= "#{p.tournament.formatted_start}"%>
 	</li>
 <% end %>
 </ul>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131227192916) do
+ActiveRecord::Schema.define(:version => 20131229021120) do
 
   create_table "courses", :force => true do |t|
     t.integer  "tournament_id"
@@ -34,11 +34,11 @@ ActiveRecord::Schema.define(:version => 20131227192916) do
     t.boolean  "q4"
     t.boolean  "q5"
     t.integer  "tiebreak"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.integer  "pool_id"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
     t.integer  "score"
     t.integer  "bonus"
+    t.integer  "pool_membership_id"
   end
 
   create_table "holes", :force => true do |t|
@@ -47,6 +47,15 @@ ActiveRecord::Schema.define(:version => 20131227192916) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
     t.integer  "par"
+  end
+
+  create_table "nonmember_invitees", :force => true do |t|
+    t.integer  "pool_id"
+    t.integer  "inviter_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.string   "activation_key"
+    t.integer  "user_id"
   end
 
   create_table "options", :force => true do |t|
@@ -80,14 +89,24 @@ ActiveRecord::Schema.define(:version => 20131227192916) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "pool_memberships", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "pool_id"
+    t.boolean  "active"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "inviter_id"
+  end
+
   create_table "pools", :force => true do |t|
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
     t.integer  "tournament_id"
     t.integer  "min_units"
     t.string   "name"
     t.boolean  "published"
     t.boolean  "private"
+    t.boolean  "nonadmin_invite"
   end
 
   create_table "q_answers", :force => true do |t|
@@ -140,6 +159,7 @@ ActiveRecord::Schema.define(:version => 20131227192916) do
     t.datetime "updated_at",    :null => false
     t.boolean  "admin"
     t.integer  "role"
+    t.boolean  "active"
   end
 
 end

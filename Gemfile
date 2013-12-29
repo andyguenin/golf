@@ -21,12 +21,13 @@ group :assets do
   gem 'sprockets'
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', :platform => :ruby
-  gem 'bootstrap-sass', :github => 'thomas-mcdonald/bootstrap-sass'
+  gem 'bootstrap-sass'
   gem 'uglifier', '>= 1.0.3'
 end
 
 gem 'cancan'
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
 gem 'bcrypt-ruby', :require => "bcrypt"
 
 # To use ActiveModel has_secure_password

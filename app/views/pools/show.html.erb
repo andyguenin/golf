@@ -1,21 +1,5 @@
-<h1 class="title"><%= @pool.name %></h1> 
-<% if @pool.private %>
-(This is a private pool. Players must be invited to play)
-<%end%>
-<h2>for 
-  <%= link_to "#{@tournament.name} at #{@tournament.course.location}", tournament_path(@tournament) %></h2>
-	  
-  <div class="pull-right btn-group">
-  	<%= link_to "Join Pool", root_path, :class => "btn btn-success" if can? :join, @pool%>
-	<%= link_to "Edit", edit_pool_path(@pool), :class => "btn btn-primary" if can? :update, @pool %>
-	<%= link_to "Publish", publish_pool_path(@pool), :class => "btn btn-warning", 
-	  		:confirm => 'Are you sure you want to publish this pool? Once you publish it, you cannot edit any of the fields.' if can? :publish, @pool%>
-	<%= link_to "Leave Pool", root_path, :class => "btn btn-danger" if can? :leave, @pool %>
-	<%= link_to "Invite others to play!", invite_pool_path(@pool), :class => "btn btn-success" if can? :invite, @pool%>
-  </div>
+<%= render 'pool_header'%>
 
-
-    <br /><br />
 <table class="table table-condensed">
   <% @questions.each do |q| %>
     <tr><td class="<%= y_or_n(q.answer) %>">
@@ -23,30 +7,5 @@
   <% end %>
   <tr><td>1st round par</td><td><%= @tournament.low_score %></td></tr>
 </table>
-<table class="table table-condensed table-hover table-striped">
-  <tr>
-    <td> </td>
-    <td>Score</td>
-    <td>Players Subscore</td>
-    <td>Bonus</td>
-    <% (1..5).each do |p| %>
-      <td>Pick <%= p %></td>
-    <% end %>
-    <td>1st round par</td>
-  </tr>
-  <% @golfpicks.each do |u| %>
-    <% u.update_score %>
-    <tr>
-      <td><%= u.user.name %></td>
-      <td><%= u.score %></td>
-      <td><%= u.player_subscore %></td>
-      <td><%= u.bonus %></td>
-      <% (1..5).each do |pick| %>
-        <% player = u.send("pick#{pick}") %>
-        <td><%= link_to player.name, t_player_path(@tournament, player.slug) %></td>
-      <% end %>
-      <td><%= u.tiebreak %></td>
 
-    </tr>
-  <% end %>
-</table>
+<%= render 'pool_picks'%>

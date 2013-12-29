@@ -1,6 +1,11 @@
 <h1 class="no-bottom"><%= @tournament.name %></h1>
 <h2 class="lighten"><em><%= @tournament.course.location %></em></h2>
-
+<% if params[:bucketing_data]%>
+ABCDEFG
+<% end%>
+<div class="pull-right btn-group">
+	<%= link_to "Edit Tournament", edit_tournament_path(@tournament), :class => "btn btn-warning"%>
+</div><br /><br />
 <table class="table table-condensed" style="border-collapse:collapse;">
     <tbody>
 		<% holes = @tournament.course.holes.order("hole_number asc")%>

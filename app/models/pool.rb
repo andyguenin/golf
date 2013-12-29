@@ -2,23 +2,25 @@
 #
 # Table name: pools
 #
-#  id            :integer          not null, primary key
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  tournament_id :integer
-#  min_units     :integer
-#  name          :string(255)
-#  published     :boolean
-#  private       :boolean
+#  id              :integer          not null, primary key
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  tournament_id   :integer
+#  min_units       :integer
+#  name            :string(255)
+#  published       :boolean
+#  private         :boolean
+#  nonadmin_invite :boolean
 #
 
 class Pool < ActiveRecord::Base
   attr_accessor :q1, :q1a, :q2, :q2a, :q3, :q3a, :q4, :q4a, :q5, :q5a, :t_id
-  attr_accessible :tournament_id, :q1, :q1a, :q2, :q2a, :q3, :q3a, :q4, :q4a, :q5, :q5a, :name, :private
+  attr_accessible :tournament_id, :q1, :q1a, :q2, :q2a, :q3, :q3a, :q4, :q4a, :q5, :q5a, :name, :private, :nonadmin_invite
 
   belongs_to :tournament
   has_many :q_answers
-  has_many :golfpicks
+  has_many :pool_memberships
+  has_many :golfpicks, :through => :pool_memberships
 
   validates_presence_of :tournament_id
   validates_presence_of :private
@@ -60,7 +62,7 @@ class Pool < ActiveRecord::Base
 
   def default_values
     self.private ||= false
-    self.name ||= self.tournament.name
+    self.name ||= self.tournament.name if self.tournament
   end
   
 #  def is_user_admin(user)
