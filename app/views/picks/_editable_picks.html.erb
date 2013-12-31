@@ -1,0 +1,31 @@
+<div class="row">
+	<div class="col-md-1"> </div>
+	<% 5.times do |d|%>
+		<div id="bucket-<%= d+1 %>" class="col-md-2">
+			<% @tplayers.each do |tp| %>
+				<%if tp.bucket == d+1 %>
+					<div id="player-<%= tp.id %>" class="player-pick btn btn-primary full-width">
+						<%= tp.player.name %>
+					</div>
+				<%end %>
+			<% end%>
+		</div>
+	<%end%>
+</div>
+
+<%= form_for [@pool, @pick] do |f| %>
+<% 5.times do |d|%>
+	<p>
+		<% t = d+1%>
+		<%= f.hidden_field "p#{t}", :class => "bucket-pick" %>
+		<%= f.label "q#{t}".to_sym, @pool.send("q#{t}") %><br />
+		Yes <%= f.radio_button "q#{t}", true %>
+		No <%= f.radio_button "q#{t}", false %>
+	</p>
+<%end%>
+<p>
+	<%= f.label :tiebreak, "Number of shots taken by leader in first round"%>
+	<%= f.text_field :tiebreak %>
+</p>
+<%= f.submit :id => "player-pick-submit", :class => "btn btn-success"%>
+<% end %>

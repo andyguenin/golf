@@ -22,7 +22,10 @@ ABCDEFG
         <% counter = 1 %>
         <% (@tournament.players.includes(:scores).where("tournament_id = ?", @tournament.id).all.sort_by {|t| [t.score_by_tournament(@tournament), t.scores.length] }).each do |p| %>
         <tr data-toggle="collapse" data-target="#demo<%= counter %>" class="accordion-toggle">
-          <td><%= link_to p.name, t_player_path(@tournament, p) %></td>
+          <td>
+
+						<%= p.name %>
+					</td>
           <% ps = p.scores_by_tournament_round(@tournament, @tournament.round) %>
           <% (1..18).each do |h| %>
           <td

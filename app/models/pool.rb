@@ -20,7 +20,7 @@ class Pool < ActiveRecord::Base
   belongs_to :tournament
   has_many :q_answers
   has_many :pool_memberships
-  has_many :golfpicks, :through => :pool_memberships
+  has_many :picks, :through => :pool_memberships
 
   validates_presence_of :tournament_id
   validates_presence_of :private

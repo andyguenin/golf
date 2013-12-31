@@ -9,7 +9,7 @@ class TournamentsController < ApplicationController
   end
   
   def show
-    @tournament = Tournament.find_by_slug(params[:id], :include => :players)
+    @tournament = Tournament.find_by_slug(params[:id], :include => {:players => :scores})
   end
 
   def edit

@@ -8,10 +8,12 @@
 #  updated_at :datetime         not null
 #  ranking    :integer
 #  slug       :string(255)
+#  first_name :string(255)
+#  last_name  :string(255)
 #
 
 class Player < ActiveRecord::Base
-  attr_accessible :name, :ranking, :slug
+  attr_accessible :ranking, :slug, :first_name, :last_name
 
   validates_presence_of :name
   validates_presence_of :ranking
@@ -25,12 +27,19 @@ class Player < ActiveRecord::Base
   def to_param 
     slug
   end
+  
+  def name
+    "#{self.first_name} #{self.last_name}"
+  end
+
 
   def self.update_score_from_scraper(score_structure, tourn)
     player = Player.find_by_name(score_structure[0])
 
     if player.nil?
-      player = Player.create({:name => score_structure[0], :slug => score_structure[0].downcase.gsub(" ", "-"), :ranking => 0})
+      name_regex = /^(.*)\s(\S)+$/
+      match = name_regex.match(score_structure[0])
+      player = Player.create({:first_name => match[1], :last_name => match[2], :slug => score_structure[0].downcase.gsub(" ", "-"), :ranking => 0})
     end
 
     if player.tplayers.where("tournament_id = ?", tourn.id).empty?
@@ -74,9 +83,9 @@ class Player < ActiveRecord::Base
   end
 
   def score_by_tournament_round(tournament, round)
-        scores_by_tournament_round(tournament, round).inject(0) do |sum, n|
+        a = scores_by_tournament_round(tournament, round).inject(0) do |sum, n|
           sum + (n.strokes - n.hole.par)
-        end
+        end        
   end
 
   def scores_by_tournament_round(tournament, round)
@@ -85,7 +94,7 @@ class Player < ActiveRecord::Base
   end
 
   def score_by_tournament(tournament)
-    p = self.tplayers.find_by_tournament_id(tournament.id).score
+    p = self.tplayers.find_by_tournament_id(tournament.id).score || 0
   end
 
   def update_score(tournament)

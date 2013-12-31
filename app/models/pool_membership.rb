@@ -16,7 +16,7 @@ class PoolMembership < ActiveRecord::Base
   
   belongs_to :pool
   belongs_to :user
-  has_many :golfpicks
+  has_many :picks
   belongs_to :inviter, class_name: "User"
   
   validates_presence_of :pool, :user

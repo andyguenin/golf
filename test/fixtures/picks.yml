@@ -1,0 +1,30 @@
+# == Schema Information
+#
+# Table name: picks
+#
+#  id                 :integer          not null, primary key
+#  pool_membership_id :integer
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  p1                 :integer
+#  p2                 :integer
+#  p3                 :integer
+#  p4                 :integer
+#  p5                 :integer
+#  q1                 :boolean
+#  q2                 :boolean
+#  q3                 :boolean
+#  q4                 :boolean
+#  q5                 :boolean
+#  tiebreak           :integer
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  pool_membership_id: 1
+  pool_id: 1
+
+two:
+  pool_membership_id: 1
+  pool_id: 1

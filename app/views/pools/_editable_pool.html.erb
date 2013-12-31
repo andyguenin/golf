@@ -2,14 +2,16 @@
 <%= f.label :name, "Pool name" %>
 <%= f.text_field :name %>
 </p>
-<% unless pool.published %>
+
   <p>
   <%= f.label "pool[tournament_id]", "Tournament" %>
+  <% unless pool.published %>
 <%= select_tag("pool[tournament_id]", options_for_select(Hash[tournament_options.index_by(&:id).map{|k,v| [v.name + " " + v.starttime.year.to_s, k]}])) %>
-  </p>
 <% else %>
   <%= pool.tournament.name %>
 <% end %>
+  </p>
+
 <% (1..5).each do |t| %>
   <p>
   <%= f.label "q#{t}".to_sym, "Question #{t}" %>

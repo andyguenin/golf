@@ -9,7 +9,7 @@
     <% end %>
     <td>1st round par</td>
   </tr>
-  <% @golfpicks.each do |u| %>
+  <% @picks.each do |u| %>
     <% u.update_score %>
     <tr>
       <td><%= u.user.name %></td>

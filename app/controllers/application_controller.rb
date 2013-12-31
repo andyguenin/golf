@@ -19,6 +19,8 @@ class ApplicationController < ActionController::Base
       :tournament
     when "pages"
       params[:action] == "index" ? :home : :none
+    when "picks"
+      :pools
     else
       :none
     end

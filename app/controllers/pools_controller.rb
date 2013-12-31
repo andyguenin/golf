@@ -56,6 +56,15 @@ class PoolsController < ApplicationController
     redirect_to @pool, :notice => "You have joined the pool!"
   end
   
+  def leave
+    @pool = Pool.find(params[:id])
+    authorize! :leave, @pool
+    pm = PoolMembership.where("user_id = ? and pool_id = ?", current_user.id, @pool.id)[0]
+    pm.update_attribute(:active, false)
+    redirect_to pools_path
+  end
+  
+  
   def index
     @pools = Pool.all.each.select {|po| can? :see, po}
   end
@@ -66,10 +75,10 @@ class PoolsController < ApplicationController
     @questions = @pool.q_answers.order("number asc")
     if can? :read, @pool
       @tournament = @pool.tournament
-      @golfpicks = @pool.golfpicks.order("score asc #{", @(tiebreak - #{@tournament.low_score}) asc" if @tournament.low_score}, id asc")
+      @picks = @pool.picks.order("score asc #{", @(tiebreak - #{@tournament.low_score}) asc" if @tournament.low_score}, id asc")
     else
       @tournament = @pool.tournament
-      @golfpicks = current_user.golfpicks.where("pool_id = ?", Pool.last.id)
+      @picks = current_user.picks.where("pool_id = ?", Pool.last.id)
       render 'summary'
     end
   end  

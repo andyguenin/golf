@@ -9,7 +9,6 @@ class Ability
     
     initialize_pool(user)
     
-    
   end
   
   def initialize_pool(user)
@@ -47,5 +46,10 @@ class Ability
     cannot :join, Pool do |pool|
       user.pools.include? pool
     end
+    
+    cannot :pick, Pool do |pool|
+      not pool.published or not can? :read, pool or not user.pools.include?(pool)
+    end
+      
   end
 end

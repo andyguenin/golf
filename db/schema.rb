@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131229021120) do
+ActiveRecord::Schema.define(:version => 20131231041622) do
 
   create_table "courses", :force => true do |t|
     t.integer  "tournament_id"
@@ -65,6 +65,25 @@ ActiveRecord::Schema.define(:version => 20131229021120) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "picks", :force => true do |t|
+    t.integer  "pool_membership_id"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+    t.integer  "p1"
+    t.integer  "p2"
+    t.integer  "p3"
+    t.integer  "p4"
+    t.integer  "p5"
+    t.boolean  "q1"
+    t.boolean  "q2"
+    t.boolean  "q3"
+    t.boolean  "q4"
+    t.boolean  "q5"
+    t.integer  "tiebreak"
+    t.integer  "score"
+    t.integer  "bonus"
+  end
+
   create_table "player_premia", :force => true do |t|
     t.integer  "pool_id"
     t.integer  "player_id"
@@ -79,6 +98,8 @@ ActiveRecord::Schema.define(:version => 20131229021120) do
     t.datetime "updated_at", :null => false
     t.integer  "ranking"
     t.string   "slug"
+    t.string   "first_name"
+    t.string   "last_name"
   end
 
   create_table "pool_admins", :force => true do |t|
@@ -160,6 +181,8 @@ ActiveRecord::Schema.define(:version => 20131229021120) do
     t.boolean  "admin"
     t.integer  "role"
     t.boolean  "active"
+    t.string   "first_name"
+    t.string   "last_name"
   end
 
 end

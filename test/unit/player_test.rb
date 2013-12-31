@@ -8,6 +8,8 @@
 #  updated_at :datetime         not null
 #  ranking    :integer
 #  slug       :string(255)
+#  first_name :string(255)
+#  last_name  :string(255)
 #
 
 require 'test_helper'
