@@ -24,7 +24,7 @@
 	</p>
 <%end%>
 <p>
-	<%= f.label :tiebreak, "Number of shots taken by leader in first round"%>
+	<%= f.label :tiebreak, "Number of shots taken by leader in first round (Course par is #{@pool.tournament.course.holes.each.inject(0) {|a,b| a + b.par}})"%><br />
 	<%= f.text_field :tiebreak %>
 </p>
 <%= f.submit :id => "player-pick-submit", :class => "btn btn-success"%>

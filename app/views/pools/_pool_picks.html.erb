@@ -3,25 +3,25 @@
     <td> </td>
     <td>Score</td>
     <td>Players Subscore</td>
-    <td>Bonus</td>
     <% (1..5).each do |p| %>
       <td>Pick <%= p %></td>
     <% end %>
-    <td>1st round par</td>
+    <td>Low score</td>
+		<td> </td>
+		<td> </td>
   </tr>
-  <% @picks.each do |u| %>
-    <% u.update_score %>
+  <% @picks.each do |p| %>
     <tr>
-      <td><%= u.user.name %></td>
-      <td><%= u.score %></td>
-      <td><%= u.player_subscore %></td>
-      <td><%= u.bonus %></td>
-      <% (1..5).each do |pick| %>
-        <% player = u.send("pick#{pick}") %>
+      <td><%= p.user.name %></td>
+      <td><%= p.score %></td>
+      <td><%= p.player_subscore %></td>
+      <% (1..5).each do |pick_number| %>
+        <% player = p.send("pick#{pick_number}") %>
         <td><%= link_to player.name, t_player_path(@tournament, player.slug) %></td>
       <% end %>
-      <td><%= u.tiebreak %></td>
-
+      <td><%= p.tiebreak %></td>
+			<td><%= link_to raw("<span class=\"glyphicon glyphicon-pencil\"></span>"), edit_pool_pick_path(@pool, p) if can? :edit, p%></td>
+			<td><%= link_to raw("<span class=\"glyphicon glyphicon-trash\"></span>"), edit_pool_pick_path(@pool, p) if can? :edit, p%></td>
     </tr>
   <% end %>
 </table>

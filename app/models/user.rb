@@ -12,8 +12,6 @@
 #  admin         :boolean
 #  role          :integer
 #  active        :boolean
-#  first_name    :string(255)
-#  last_name     :string(255)
 #
 
 class User < ActiveRecord::Base
@@ -33,10 +31,6 @@ class User < ActiveRecord::Base
   validates_presence_of :email
   validates_presence_of :name, :if => :active?
   validates_uniqueness_of :email
-
-  def name
-    "#{self.first_name} #{self.last_name}"
-  end
   
   def self.authenticate(email, password)
     user = find_by_email(email)

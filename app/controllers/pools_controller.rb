@@ -44,14 +44,9 @@ class PoolsController < ApplicationController
   def join
     @pool = Pool.find(params[:id])
     authorize! :join, @pool
-    pm = PoolMembership.where("user_id = ? and pool_id = ?", current_user.id, @pool.id)
-    unless(pm.empty?)
-      pm[0].update_attribute(:active, true)
-    else
-      pm = PoolMembership.new({:user_id => current_user.id, :pool_id => @pool.id, :active => true})
-      unless(pm.save)
-        redirect_to @pool, :error => "There is an error: please contact #{email}"
-      end
+    pm = PoolMembership.new({:user_id => current_user.id, :pool_id => @pool.id, :active => true})
+    unless(pm.save)
+      redirect_to @pool, :error => "There is an error: please contact #{email}"
     end
     redirect_to @pool, :notice => "You have joined the pool!"
   end
@@ -60,7 +55,7 @@ class PoolsController < ApplicationController
     @pool = Pool.find(params[:id])
     authorize! :leave, @pool
     pm = PoolMembership.where("user_id = ? and pool_id = ?", current_user.id, @pool.id)[0]
-    pm.update_attribute(:active, false)
+    pm.delete
     redirect_to pools_path
   end
   

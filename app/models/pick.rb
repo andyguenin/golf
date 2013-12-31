@@ -17,10 +17,11 @@
 #  q4                 :boolean
 #  q5                 :boolean
 #  tiebreak           :integer
+#  score              :integer
 #
 
 class Pick < ActiveRecord::Base
-  attr_accessible :pool_id, :pool_membership_id, :p1, :p2, :p3, :p4, :p5, :q1, :q2, :q3, :q4, :q5, :tiebreak, :bonus
+  attr_accessible :pool_membership_id, :p1, :p2, :p3, :p4, :p5, :q1, :q2, :q3, :q4, :q5, :tiebreak
   
   belongs_to :pool_membership
   has_one :user, :through => :pool_membership
@@ -39,7 +40,7 @@ class Pick < ActiveRecord::Base
   has_one :pick4, :class_name => "Player", :through => :tp4, :source => :player
   has_one :pick5, :class_name => "Player", :through => :tp5, :source => :player
   
-  validates_presence_of :p1, :p2, :p3, :p4, :p5, :tiebreak
+  validates_presence_of :p1, :p2, :p3, :p4, :p5, :tiebreak, :pool_membership
   validates_inclusion_of :q1, :q2, :q3, :q4, :q5, :in => [true, false]
   
   after_initialize do
@@ -54,17 +55,6 @@ class Pick < ActiveRecord::Base
     players.inject(0) do |sum, p|
       sum = sum + p.score_by_tournament(pool.tournament)
     end
-  end
-
-
-  def update_score
-    s = player_subscore
-    as = pool.q_answers.order("number asc")
-    5.times do |t|
-      s -= as.all[t].answer.nil? ? 0 : (self.send("q#{t+1}") == as.all[t].answer ? 1 : 0)
-    end
-    s += (bonus || 0)
-    self.update_attribute(:score, s)
   end
   
   def players

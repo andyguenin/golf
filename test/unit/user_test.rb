@@ -12,8 +12,6 @@
 #  admin         :boolean
 #  role          :integer
 #  active        :boolean
-#  first_name    :string(255)
-#  last_name     :string(255)
 #
 
 require 'test_helper'

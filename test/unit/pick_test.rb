@@ -17,6 +17,7 @@
 #  q4                 :boolean
 #  q5                 :boolean
 #  tiebreak           :integer
+#  score              :integer
 #
 
 require 'test_helper'

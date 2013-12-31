@@ -34,7 +34,7 @@ class PicksController < ApplicationController
   def create
     @pick = Pick.new(params[:pick])
     @pool = Pool.find(params[:pool_id])
-    @pick.pool_membership = PoolMembership.where("user_id = ? and pool_id = ?", current_user.id, @pool.id)
+    @pick.pool_membership = PoolMembership.where("user_id = ? and pool_id = ?", current_user.id, @pool.id)[0]
     if(@pick.save)
       redirect_to @pool
     else
