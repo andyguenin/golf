@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # == Schema Information
 #
 # Table name: users
@@ -25,3 +26,34 @@ two:
   email: MyString
   password_hash: MyString
   password_salt: MyString
+=======
+# == Schema Information
+#
+# Table name: users
+#
+#  id            :integer          not null, primary key
+#  name          :string(255)
+#  email         :string(255)
+#  password_hash :string(255)
+#  password_salt :string(255)
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  admin         :boolean
+#  role          :integer
+#  active        :boolean
+#  first_name    :string(255)
+#  last_name     :string(255)
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  email: MyString
+  password_hash: MyString
+  password_salt: MyString
+
+two:
+  email: MyString
+  password_hash: MyString
+  password_salt: MyString
+>>>>>>> 862abcc2281186d7fcae420d3c3f34388a4f5c0a
