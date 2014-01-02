@@ -13,13 +13,15 @@
 #
 
 class Score < ActiveRecord::Base
-  attr_accessible :hole_id, :player, :strokes, :tournament, :round
+  attr_accessible :hole_id, :player, :strokes, :tournament, :round, :tournament_id, :player_id
 
   validates_presence_of :hole_id
   validates_presence_of :player_id
   validates_presence_of :strokes
   validates_presence_of :tournament_id
   validates_presence_of :round
+  
+  validates_uniqueness_of :hole_id, scope: [:tournament_id, :player_id, :round]
 
   belongs_to :player
   belongs_to :tournament

@@ -56,6 +56,17 @@ class Pick < ActiveRecord::Base
       sum = sum + p.score_by_tournament(pool.tournament)
     end
   end
+
+
+  def update_score
+    s = player_subscore
+    as = pool.q_answers.order("number asc")
+    5.times do |t|
+      s -= as.all[t].answer.nil? ? 0 : (self.send("q#{t+1}") == as.all[t].answer ? 1 : 0)
+    end
+#    s += (bonus || 0)
+    self.update_attribute(:score, s)
+  end
   
   def players
     [pick1, pick2, pick3, pick4, pick5]

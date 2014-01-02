@@ -40,15 +40,19 @@ class Ability
     
     # These are to prevent admin from performing illegal actions
     cannot :leave, Pool do |pool|
-      not user.pools.include? pool
+      not user.pools.include? pool or not pool.published
     end
     
     cannot :join, Pool do |pool|
-      user.pools.include? pool
+      user.pools.include? pool or not pool.published
     end
     
     cannot :pick, Pool do |pool|
       not pool.published or not can? :read, pool or not user.pools.include?(pool)
+    end
+    
+    cannot :invite, Pool do |pool|
+      not pool.published
     end
       
   end

@@ -13,7 +13,7 @@
 #
 
 class Tplayer< ActiveRecord::Base
-  attr_accessible :bucket, :player_id, :tournament, :score
+  attr_accessible :bucket, :player_id, :tournament, :score, :status
 
   validates :bucket, :inclusion => 0..5
   validates_presence_of :player_id

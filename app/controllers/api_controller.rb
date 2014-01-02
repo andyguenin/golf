@@ -12,7 +12,7 @@ class ApiController < ApplicationController
 
     ds = JSON.parse(message)
     start_time = Time.parse("#{ds[0][1]} #{ds[0][2]} #{ds[0][4]}")
-    end_time = Time.parse("#{ds[0][1]} #{ds[0][3] + 1} #{ds[0][4]}")
+    end_time = Time.parse("#{ds[0][1]} #{ds[0][3].to_i + 1} #{ds[0][4]}")
 
     t_name = ds[0][0]
     t_location = /(.*)\s\|.*/.match(ds[0][5])[1]
@@ -21,7 +21,6 @@ class ApiController < ApplicationController
     if t.nil?
       t = Tournament.new
       t.name = t_name
-#      t.location = t_location
       t.starttime = start_time
       t.endtime = end_time
       t.slug = "#{ds[0][0]} #{ds[0][4]}".downcase.gsub(" ", "-")
@@ -43,7 +42,8 @@ class ApiController < ApplicationController
     ds[1][1].each do |player|
       Player.update_score_from_scraper(player, t)
     end
-#    puts ds    
+
+    
 
     render :text => "success"
   end

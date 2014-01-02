@@ -21,9 +21,10 @@ class Pool < ActiveRecord::Base
   has_many :q_answers
   has_many :pool_memberships
   has_many :picks, :through => :pool_memberships
+  has_many :users, :through => :pool_memberships
 
   validates_presence_of :tournament_id
-  validates_presence_of :private
+  validates_inclusion_of :private, :in => [true, false]
 
   after_initialize :default_values
 

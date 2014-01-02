@@ -92,7 +92,7 @@ function get_scores() {
 		record.push(round_record)
 
 	    }
-	    record.push([thru])
+	    record.push(thru)
 	    players_scores.push(record)
 	}
 	var ret_arr = [];

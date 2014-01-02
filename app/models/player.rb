@@ -37,12 +37,13 @@ class Player < ActiveRecord::Base
     player = Player.find_by_name(score_structure[0])
 
     if player.nil?
-      name_regex = /^(.*)\s(\S)+$/
+      name_regex = /^(.*)\s(\S+)$/
       match = name_regex.match(score_structure[0])
       player = Player.create({:first_name => match[1], :last_name => match[2], :slug => score_structure[0].downcase.gsub(" ", "-"), :ranking => 0})
     end
 
-    if player.tplayers.where("tournament_id = ?", tourn.id).empty?
+    tplayers = player.tplayers.where("tournament_id = ?", tourn.id)
+    if tplayers.empty?
       player.tplayers.create({:tournament => tourn, :bucket => 0, :score => 0})
     end
 
@@ -64,12 +65,9 @@ class Player < ActiveRecord::Base
       end
     end
 
-    player.update_score(tourn)
+    player.update_score(tourn, score_structure.last)
     
-    tourn.update_attribute(:round, [[0,((Time.now - tourn.starttime)/60/60/24).floor].max + 1,4].max)
-    a = score_structure[-1][0]
-    player.tplayers.find_by_tournament_id(tourn.id).update_attribute(:status, a)
-    
+    tourn.update_attribute(:round, [[0,((Time.now - tourn.starttime)/60/60/24).floor].max + 1,4].min)   
   end
 
   def scores_by_tournament(tournament)
@@ -79,6 +77,7 @@ class Player < ActiveRecord::Base
     scores.each do |score|
       hm[score.round-1][score.hole.hole_number - 1] = score
     end
+    puts hm
     hm
   end
 
@@ -97,10 +96,24 @@ class Player < ActiveRecord::Base
     p = self.tplayers.find_by_tournament_id(tournament.id).score || 0
   end
 
-  def update_score(tournament)
-    score = self.scores.includes(:hole).where("tournament_id = ?", \
+  def get_tplayer(tournament)
+    self.tplayers.where("tournament_id = ?", tournament.id)[0]
+  end
+  
+  def update_score(tournament, status)
+    rawscore = self.scores.includes(:hole).where("tournament_id = ?", \
             tournament.id).inject(0) {|sum, n| sum + (n.strokes - n.hole.par)}
-    self.tplayers.where("tournament_id = ?", tournament.id)[0].update_attribute(:score, score)
-    score
+    score = 0
+    dnf = 0
+    begin
+      score = Integer(status)
+    rescue ArgumentError, TypeError
+      unless status == "E"
+        score = 100
+        dnf = 1
+      end
+    end
+    puts "--------\n#{score} #{dnf} #{rawscore} #{status}\n"
+    get_tplayer(tournament).update_attributes({:score => score, :status => dnf})
   end
 end

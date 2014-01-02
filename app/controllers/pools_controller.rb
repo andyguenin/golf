@@ -11,6 +11,7 @@ class PoolsController < ApplicationController
     @pool = Pool.find(params[:id])
     authorize! :update, @pool
     @pool.update_attribute(:published, true)
+    PoolMembership.create!({:user_id => current_user.id, :pool_id => @pool.id, :active => true})
     redirect_to pool_path(@pool)
   end
 
