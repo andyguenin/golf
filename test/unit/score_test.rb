@@ -12,6 +12,7 @@
 #  round         :integer
 #
 
+
 require 'test_helper'
 
 class ScoreTest < ActiveSupport::TestCase

@@ -10,6 +10,7 @@
 #  location      :string(255)
 #
 
+
 require 'test_helper'
 
 class CourseTest < ActiveSupport::TestCase

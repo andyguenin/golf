@@ -14,6 +14,7 @@
 #  locked     :boolean
 #
 
+
 require 'test_helper'
 
 class TournamentTest < ActiveSupport::TestCase

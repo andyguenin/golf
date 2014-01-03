@@ -10,6 +10,7 @@
 #  par         :integer
 #
 
+
 require 'test_helper'
 
 class HoleTest < ActiveSupport::TestCase

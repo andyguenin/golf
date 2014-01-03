@@ -13,7 +13,7 @@
 				<%end %></center>
 			</div>
 			<div class="bucket-id hidden"><%= d %></div>
-			<ul id="b<%= "#{d}"%>" class="player-list">
+			<ul id="b<%= "#{d}"%>" class="player-list" style="height: 100%;">
 				<%@tournament.tplayers.where("bucket = ?", d).each do |tp|%>
 					<li class="player-data btn btn-primary full-width"><div class="player-name"><%= tp.player.name %></div><div class="tp-id hidden"><%= tp.id%></div></li>
 				<%end%>

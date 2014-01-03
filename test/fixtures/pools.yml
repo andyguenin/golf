@@ -13,6 +13,7 @@
 #  nonadmin_invite :boolean
 #
 
+
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 # This model initially had no columns defined.  If you add columns to the

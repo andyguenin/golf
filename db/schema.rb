@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131231210223) do
+ActiveRecord::Schema.define(:version => 20140103051222) do
 
   create_table "courses", :force => true do |t|
     t.integer  "tournament_id"
@@ -148,6 +148,16 @@ ActiveRecord::Schema.define(:version => 20131231210223) do
     t.datetime "updated_at",    :null => false
     t.integer  "score"
     t.integer  "status"
+    t.integer  "deagle"
+    t.integer  "eagle"
+    t.integer  "birdie"
+    t.integer  "par"
+    t.integer  "bogey"
+    t.integer  "dbogey"
+    t.integer  "tbogey"
+    t.integer  "round"
+    t.integer  "hole"
+    t.string   "rank"
   end
 
   create_table "users", :force => true do |t|

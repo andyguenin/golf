@@ -12,6 +12,7 @@
 #  last_name  :string(255)
 #
 
+
 require 'test_helper'
 
 class PlayerTest < ActiveSupport::TestCase

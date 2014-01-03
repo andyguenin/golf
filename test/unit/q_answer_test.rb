@@ -11,6 +11,7 @@
 #  number     :integer
 #
 
+
 require 'test_helper'
 
 class QAnswerTest < ActiveSupport::TestCase

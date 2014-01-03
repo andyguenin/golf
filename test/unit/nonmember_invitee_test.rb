@@ -11,6 +11,7 @@
 #  user_id        :integer
 #
 
+
 require 'test_helper'
 
 class NonmemberInviteeTest < ActiveSupport::TestCase

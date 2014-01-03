@@ -13,6 +13,7 @@
 #  nonadmin_invite :boolean
 #
 
+
 require 'test_helper'
 
 class PoolTest < ActiveSupport::TestCase

@@ -15,9 +15,13 @@
 class Player < ActiveRecord::Base
   attr_accessible :ranking, :slug, :first_name, :last_name
 
-  validates_presence_of :name
+  validates_presence_of :first_name
+  validates_presence_of :last_name
   validates_presence_of :ranking
 
+  validates_uniqueness_of :first_name, scope: [:last_name]
+  validates_uniqueness_of :slug
+  
   has_many :scores
   has_many :player_score_statuses
   has_many :player_premia 
@@ -27,33 +31,47 @@ class Player < ActiveRecord::Base
   def to_param 
     slug
   end
-  
+
   def name
-    "#{self.first_name} #{self.last_name}"
+    "#{first_name} #{last_name}"
   end
 
-
   def self.update_score_from_scraper(score_structure, tourn)
-    player = Player.find_by_name(score_structure[0])
+    name_regex = /^(.*)\s(\S+)$/
+    match = name_regex.match(score_structure[0])
+    
+    player = Player.where("first_name = ? and last_name = ?", match[1], match[2])[0]
 
     if player.nil?
-      name_regex = /^(.*)\s(\S+)$/
-      match = name_regex.match(score_structure[0])
-      player = Player.create({:first_name => match[1], :last_name => match[2], :slug => score_structure[0].downcase.gsub(" ", "-"), :ranking => 0})
+      player = Player.create!({:first_name => match[1], :last_name => match[2], :slug => score_structure[0].downcase.gsub(" ", "-"), :ranking => 0})
+      player.tplayers.create!({:bucket => 0, :score => 0, :tournament => tourn})
     end
 
-    tplayers = player.tplayers.where("tournament_id = ?", tourn.id)
-    if tplayers.empty?
-      player.tplayers.create({:tournament => tourn, :bucket => 0, :score => 0})
+    tplayer = player.get_tplayer(tourn)
+    if tplayer.nil?
+      tplayer = player.tplayers.create!({:tournament => tourn, :bucket => 0, :score => 0})
     end
 
     holes = tourn.course.holes
     current_scores = player.scores_by_tournament(tourn)
-
+    pars = tourn.course.holes.map {|h| h.par}
+    freq = []
+    9.times do |t|
+      freq << 0
+    end
+    curr_round = 0
+    curr_hole = 0
+    
     (score_structure.length-2).times do |t|
       score_structure[t+1].length.times do |u|
         actual_strokes = score_structure[t+1][u]
         current_score = current_scores[t][u]
+        unless actual_strokes.nil?
+          s = actual_strokes - pars[u] + 4
+          freq[s] = freq[s] + 1
+          curr_round = t + 1
+          curr_hole = u + 1
+        end
         if current_score.nil?
           current_score = player.scores.new
           current_score.update_attributes({:tournament => tourn, :strokes => actual_strokes, :hole_id => holes[u].id, :round => t+1})
@@ -66,7 +84,7 @@ class Player < ActiveRecord::Base
     end
 
     player.update_score(tourn, score_structure.last)
-    
+    tplayer.update_attributes({:deagle => freq[1], :eagle => freq[2], :birdie => freq[3], :par => freq[4], :bogey => freq[5], :dbogey => freq[6], :tbogey => freq[7], :round => curr_round, :hole => curr_hole})
     tourn.update_attribute(:round, [[0,((Time.now - tourn.starttime)/60/60/24).floor].max + 1,4].min)   
   end
 
@@ -113,7 +131,6 @@ class Player < ActiveRecord::Base
         dnf = 1
       end
     end
-    puts "--------\n#{score} #{dnf} #{rawscore} #{status}\n"
     get_tplayer(tournament).update_attributes({:score => score, :status => dnf})
   end
 end

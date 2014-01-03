@@ -1,28 +1,89 @@
 <h1 class="no-bottom"><%= @tournament.name %></h1>
-<h2 class="lighten"><em><%= @tournament.course.location %></em></h2>
+<h2 class="lighten"><em><%= @tournament.course.location %> </em></h2>
+<h3 class="no-bottom lighten"><%= @tournament.formatted_start %> to <%= @tournament.formatted_end%></h3>
 <% if params[:bucketing_data]%>
 ABCDEFG
 <% end%>
 <div class="pull-right btn-group">
 	<%= link_to "Edit Tournament", edit_tournament_path(@tournament), :class => "btn btn-warning"%>
 </div><br /><br />
-<table class="table table-condensed" style="border-collapse:collapse;">
-    <tbody>
+</div>
+</div>
+
+<div class="row">
 		<% holes = @tournament.course.holes.order("hole_number asc")%>
+		<div class="col-md-1">
+			Place
+		</div>
+		<div class="col-md-2">
+			Player
+		</div>
+		<div class="col-md-1">
+			Bucket
+		</div>
+		<div class="col-md-6">
+			Score makeup
+		</div>
+		<div class="col-md-1">
+			Status
+		</div>
+		<div class="col-md-1">
+			Score
+		</div>
+	</div>
+  <% counter = 1 %>
 
-        <% counter = 1 %>
-        <% (@tournament.players.includes(:scores).where("tournament_id = ?", @tournament.id).all.sort_by {|t| [t.get_tplayer(@tournament).status, t.score_by_tournament(@tournament), t.scores.length, t.last_name] }).each do |p| %>
-        <tr data-toggle="collapse" data-target="#demo<%= counter %>" class="accordion-toggle">
-          <td>
 
+        <% (@tournament.players.includes([:scores, :tplayers]).where("scores.tournament_id = ? and tplayers.tournament_id = ?", @tournament.id, @tournament.id).all.sort_by {|t| [t.get_tplayer(@tournament).status, t.score_by_tournament(@tournament), t.scores.length, t.last_name] }).each do |p| %>
+	<div class="row  player-label" data-toggle="collapse" data-target="#demo<%= counter %>" class="accordion-toggle">
+					<% t = p.tplayers[0]%>
+					<% sum = t.eagle + t.birdie + t.par + t.bogey + t.dbogey%>
+					<div class="col-md-1">
+						<%= t.rank %>
+					</div>
+          <div class="col-md-2">
 						<%= p.name %>
-					</td>
-					<td>
+					</div>
+					<div class="col-md-1">
+						<%= t.bucket %>
+					</div>
+					<div class="col-md-6">
+						<div class="progress">
+					  <div class="progress-bar progress-bar-success" style="width: <%=t.eagle*100.0/sum%>%">
+							<span class="sr-only">Eagle</span></div>
+					  <div class="progress-bar progress-bar-primary" style="width: <%=t.birdie*100.0/sum%>%">
+							<span class="sr-only">Birdie</span></div>
+					  <div class="progress-bar progress-bar-info" style="width: <%=t.par*100.0/sum%>%">
+							<span class="sr-only">Par</span></div>
+					  <div class="progress-bar progress-bar-warning" style="width: <%=t.bogey*100.0/sum%>%">
+							<span class="sr-only">Bogey</span></div>
+					  <div class="progress-bar progress-bar-danger" style="width: <%=t.dbogey*100.0/sum%>%">
+							<span class="sr-only">Double Bogey</span></div>
+					  </div>
+					</div>
+					<div class="col-md-1">
+						<% if p.tplayers[0].status == 0 %>
+						  <% if p.tplayers[0].hole == 18 %>
+  							<% if p.tplayers[0].round == 4 %>
+							F 
+   							<%else%>
+									<%= "End Round #{t.round}" %>
+								<% end%>
+							<%else%>
+							  <%= "Round #{t.round} Hole #{t.hole}" %>
+							<%end%>
+						<%else%>
+						CUT
+						<%end%>
+					</div>
+					<div class="col-md-1">
 						<% tplayer = p.get_tplayer(@tournament)%>
 						<%= tplayer.status == 0 ? tplayer.score : "CUT"%>
-  
-      <tr >
-            <td colspan="20" class="hiddenRow"><div class="accordian-body collapse" id="demo<%= counter %>">
+					</div>
+				</div>
+      <div class="row" >
+				<div class="col-md-12" class="hiddenRow">
+           <div class="accordian-body collapse" id="demo<%= counter %>">
 
               <% tscores = p.scores_by_tournament(@tournament) %>
 
@@ -49,9 +110,11 @@ ABCDEFG
                 </tbody>
               </table>
 
-           </div> </td>
-        </tr>
+						</div>
+				 </div>
+			 </div>
       <% counter = counter + 1 %>  
       <% end %>
-    </tbody>
-</table>
+
+			<div class="row">
+				<div class="col-md-12">

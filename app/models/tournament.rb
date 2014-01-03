@@ -30,12 +30,22 @@ class Tournament < ActiveRecord::Base
   has_many :players, :through => :tplayers
   
   def formatted_start
-    self.starttime.to_formatted_s(:long)
+    self.starttime.strftime("%A, %B %d, %Y")
   end
   
   def formatted_end
-    self.endtime.to_formatted_s(:long)
+    self.endtime.strftime("%A, %B %d, %Y")
   end
   
-  
+  def rank_players
+    cur_place = 1
+    self.tplayers.count(:group => :score).each do |score, freq|
+      puts "#{score} #{freq}"
+      self.tplayers.where("score = ?", score).each do |t|
+        place = (freq = 1 && cur_place == 1) ? "T#{cur_place}" : "#{cur_place}"
+        t.update_attribute(:rank, place)
+      end
+      cur_place += freq
+    end
+  end  
 end
