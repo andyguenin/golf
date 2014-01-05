@@ -7,7 +7,7 @@ gem 'rails', '3.2.13'
 
 gem 'sqlite3', group: [:test, :development]
 gem 'aescrypt'
-gem 'pg'
+gem 'pg', group: :production
 
 gem 'rails_12factor', group: :production
 

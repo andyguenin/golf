@@ -40,7 +40,9 @@ class Tournament < ActiveRecord::Base
   
   def rank_players
     cur_place = 1
-    self.tplayers.count(:group => :score).each do |score, freq|
+    score_freq = self.tplayers.count(:group => :score)
+    score_freq.keys.sort.each do |score|
+      freq = score_freq[score]
       self.tplayers.where("score = ?", score).each do |t|
         place = (freq != 1 && cur_place == 1) ? "T#{cur_place}" : "#{cur_place}"
         t.update_attribute(:rank, place)

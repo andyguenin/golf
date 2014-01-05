@@ -50,7 +50,7 @@ class Ability
     end
     
     can :create, Pool do |pool|
-      true
+      not user.id.nil?
     end
     
     
