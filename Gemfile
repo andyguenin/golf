@@ -9,6 +9,8 @@ gem 'sqlite3'
 gem 'aescrypt'
 gem 'pg'
 
+gem 'rails_12factor', group: :production
+
 group :development do
   gem 'seed_dump'
   gem 'annotate', ">=2.5.0"
