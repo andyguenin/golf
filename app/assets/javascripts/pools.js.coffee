@@ -6,3 +6,4 @@ $(document).ready ->
 	$("#email_mistake").click ->
 		$("#confirm_box").addClass("hide")
 		$("#input_email_area").removeClass("hide")
+		

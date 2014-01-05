@@ -15,7 +15,7 @@
 #
 
 class User < ActiveRecord::Base
-  attr_accessible :email, :password, :password_confirmation, :active, :first_name, :last_name
+  attr_accessible :email, :password, :password_confirmation, :active, :name
   
   has_many :pool_memberships, :conditions => {:active => true}
   has_many :all_pool_memberships, class_name: "PoolMembership"
@@ -28,6 +28,7 @@ class User < ActiveRecord::Base
 
   validates_confirmation_of :password
   validates_presence_of :password, :on => :create, :if => :active?
+  validate :check_password, :on => :update
   validates_presence_of :email
   validates_presence_of :name, :if => :active?
   validates_uniqueness_of :email
@@ -45,6 +46,14 @@ class User < ActiveRecord::Base
     if password.present?
       self.password_salt = BCrypt::Engine.generate_salt
       self.password_hash = BCrypt::Engine.hash_secret(password, password_salt)
+    end
+  end
+  
+  private
+  
+  def check_password
+    if self.password_hash.nil? and self.password.empty?
+      errors.add(:password, "can't be blank")
     end
   end
 end

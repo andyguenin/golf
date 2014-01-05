@@ -2,15 +2,16 @@
 #
 # Table name: pools
 #
-#  id              :integer          not null, primary key
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  tournament_id   :integer
-#  min_units       :integer
-#  name            :string(255)
-#  published       :boolean
-#  private         :boolean
-#  nonadmin_invite :boolean
+#  id               :integer          not null, primary key
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  tournament_id    :integer
+#  min_units        :integer
+#  name             :string(255)
+#  published        :boolean
+#  private          :boolean
+#  nonadmin_invite  :boolean
+#  require_approval :boolean
 #
 
 class Pool < ActiveRecord::Base
@@ -19,14 +20,19 @@ class Pool < ActiveRecord::Base
 
   belongs_to :tournament
   has_many :q_answers
-  has_many :pool_memberships
+  has_many :pool_memberships, :conditions => {:active => true}
   has_many :picks, :through => :pool_memberships
   has_many :users, :through => :pool_memberships
+  has_many :admin_members, class_name: "PoolMembership", :conditions => {:admin => true}
+  has_many :admins, :through => :admin_members, :source => :user
+  has_many :non_admin_members, class_name: "PoolMembership", :conditions => {:admin => false}
+  has_many :non_admins, :through => :non_admin_members, :source => :user
 
   validates_presence_of :tournament_id
   validates_inclusion_of :private, :in => [true, false]
 
   after_initialize :default_values
+
 
   (1..5).each do |t|
 
@@ -56,6 +62,9 @@ class Pool < ActiveRecord::Base
     define_method("q#{t}a=") do |q|
       ans = q_answers.find_by_number(t)
       unless ans.nil?
+        if(q == "on")
+          q = nil
+        end
         ans.update_attribute(:answer, q)
       end
     end

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # == Schema Information
 #
 # Table name: picks
@@ -19,8 +18,11 @@
 #  q5                 :boolean
 #  tiebreak           :integer
 #  score              :integer
+#  approved           :boolean
+#  approver           :integer
 #
 
+<<<<<<< HEAD
 require 'test_helper'
 
 class PickTest < ActiveSupport::TestCase

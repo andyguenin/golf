@@ -18,6 +18,8 @@
 #  q5                 :boolean
 #  tiebreak           :integer
 #  score              :integer
+#  approved           :boolean
+#  approver           :integer
 #
 
 class Pick < ActiveRecord::Base
@@ -41,6 +43,11 @@ class Pick < ActiveRecord::Base
   has_one :pick5, :class_name => "Player", :through => :tp5, :source => :player
   
   validates_presence_of :p1, :p2, :p3, :p4, :p5, :tiebreak, :pool_membership
+  validates :p1, numericality: {greater_than: 0}
+  validates :p2, numericality: {greater_than: 0}
+  validates :p3, numericality: {greater_than: 0}
+  validates :p4, numericality: {greater_than: 0}
+  validates :p5, numericality: {greater_than: 0}
   validates_inclusion_of :q1, :q2, :q3, :q4, :q5, :in => [true, false]
   
   after_initialize do

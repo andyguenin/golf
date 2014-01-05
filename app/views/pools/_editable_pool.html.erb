@@ -1,24 +1,32 @@
-<p>
+<div class="form-group">
 <%= f.label :name, "Pool name" %>
-<%= f.text_field :name %>
-</p>
+<%= f.text_field :name, :class => "form-control" %>
+</div>
 
-  <p>
+  <div class="form-group">
   <%= f.label "pool[tournament_id]", "Tournament" %>
   <% unless pool.published %>
-<%= select_tag("pool[tournament_id]", options_for_select(Hash[tournament_options.index_by(&:id).map{|k,v| [v.name + " " + v.starttime.year.to_s, k]}])) %>
+<%= select_tag("pool[tournament_id]", options_for_select(Hash[tournament_options.index_by(&:id).map{|k,v| [v.name + " " + v.starttime.year.to_s, k]}]), :class => "form-control") %>
 <% else %>
   <%= pool.tournament.name %>
 <% end %>
-  </p>
+  </div>
 
 <% (1..5).each do |t| %>
-  <p>
+  <div class="form-group">
   <%= f.label "q#{t}".to_sym, "Question #{t}" %>
-  <%= f.text_field "q#{t}".to_sym%>
-  </p>
+  <%= f.text_field "q#{t}".to_sym, :class => "form-control"%>
+	</div>
+	<%if not pool.tournament.nil? and pool.tournament.locked%>
+	<div class="form-group">
+		<%= f.label "q#{t}a".to_sym, "Question #{t} Answer"%>
+		Yes <%= f.radio_button "q#{t}a", true %>
+		No <%= f.radio_button "q#{t}a", false %>
+		No Answer <%= f.radio_button "q#{t}a", nil%>
+	</div>
+	<% end%>
 <% end %>
-<p>
+  <div class="form-group">
 	<%= f.label :private, "Private pool?"%>
 	<%= f.check_box :private%>
-</p>
+</div>

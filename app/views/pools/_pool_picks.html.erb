@@ -21,7 +21,8 @@
       <% end %>
       <td><%= p.tiebreak %></td>
 			<td><%= link_to raw("<span class=\"glyphicon glyphicon-pencil\"></span>"), edit_pool_pick_path(@pool, p) if can? :edit, p%></td>
-			<td><%= link_to raw("<span class=\"glyphicon glyphicon-trash\"></span>"), edit_pool_pick_path(@pool, p) if can? :edit, p%></td>
+			<td><%= link_to raw("<span class=\"glyphicon glyphicon-trash\"></span>"), pool_pick_path(@pool, p), method: :delete, data: {confirm: 'Are you sure you want to delete this? This cannot be undone'} if can? :edit, p%></td>
+			<td><%= link_to raw("<span class=\"glyphicon glyphicon-ok\"></span>"), root_path if can?(:manage, @pool) and (not p.approved and @pool.require_approval)%>
     </tr>
   <% end %>
 </table>

@@ -6,12 +6,31 @@ class PoolsController < ApplicationController
   def getAvailableTournaments
     Tournament.where("starttime > ?", Time.now)
   end
-
+  
+  def admins
+    @pool = Pool.find(params[:id])
+    authorize! :manage, @pool
+  end
+  
+  def admins_update
+    @pool = Pool.find(params[:id])
+    authorize! :manage, @pool
+    admins = params[:pool_member]
+    @pool.pool_memberships.each do |pm|
+      if not admins.nil? and admins[pm.id.to_s] == "1" or pm.user == current_user
+        pm.update_attribute(:admin, true)
+      else
+        pm.update_attribute(:admin, false)
+      end
+    end
+    redirect_to edit_pool_path @pool
+  end
+  
   def publish
     @pool = Pool.find(params[:id])
     authorize! :update, @pool
     @pool.update_attribute(:published, true)
-    PoolMembership.create!({:user_id => current_user.id, :pool_id => @pool.id, :active => true})
+    PoolMembership.create({:user_id => current_user.id, :pool_id => @pool.id, :active => true}) unless @pool.users.include? current_user
     redirect_to pool_path(@pool)
   end
 
@@ -36,7 +55,7 @@ class PoolsController < ApplicationController
         else
           a = NonmemberInvitee.create!({:inviter_id => current_user.id, :user_id => u.id, :pool_id => @pool.id, :activation_key => (0..58).map{characters.sample}.join})
         end
-        pm = PoolMembership.create!({:user_id => u.id, :pool_id => @pool.id, :active => false})
+        pm = PoolMembership.create!({:user_id => u.id, :pool_id => @pool.id, :active => false, :inviter_id => current_user.id})
       end
       redirect_to @pool
     end     
@@ -45,11 +64,18 @@ class PoolsController < ApplicationController
   def join
     @pool = Pool.find(params[:id])
     authorize! :join, @pool
-    pm = PoolMembership.new({:user_id => current_user.id, :pool_id => @pool.id, :active => true})
-    unless(pm.save)
-      redirect_to @pool, :error => "There is an error: please contact #{email}"
+    pm = PoolMembership.where("user_id = ? and pool_id = ?", current_user.id, @pool.id)[0]
+    if pm.nil?
+      pm = PoolMembership.new({:user_id => current_user.id, :pool_id => @pool.id, :active => true})
+      unless(pm.save)
+        redirect_to @pool, :error => "There is an error: please contact #{email}"
+      else
+       redirect_to @pool, :notice => "You have joined the pool!"
+      end
+    else
+      pm.update_attribute(:active, true)
+     redirect_to @pool, :notice => "You have joined the pool!"
     end
-    redirect_to @pool, :notice => "You have joined the pool!"
   end
   
   def leave
@@ -71,7 +97,7 @@ class PoolsController < ApplicationController
     @questions = @pool.q_answers.order("number asc")
     if can? :read, @pool
       @tournament = @pool.tournament
-      @picks = @pool.picks.order("score asc #{", @(tiebreak - #{@tournament.low_score}) asc" if @tournament.low_score}, id asc")
+      @picks = @pool.picks.order("score asc, #{ "ABS(picks.tiebreak - " + @tournament.low_score.to_s + ") asc," if @tournament.low_score} id asc")
     else
       @tournament = @pool.tournament
       @picks = current_user.picks.where("pool_id = ?", Pool.last.id)
@@ -86,11 +112,14 @@ class PoolsController < ApplicationController
   end
   
   def create
-    @pool = Pool.new(params[:pool])
+    questions = ["q1","q2","q3","q4","q5"]
+    @pool = Pool.new(params[:pool].except(*questions))
     @tournament_options = getAvailableTournaments
     authorize! :create, @pool
     @pool.tournament = Tournament.find(params[:pool]["tournament_id"]) 
     if(@pool.save)
+      @pool.update_attributes(params[:pool].slice(*questions))
+      @pool.admin_members.create!({:user => current_user, :creator => true, :active => true})
       redirect_to @pool
     else
       render 'new'
@@ -117,6 +146,7 @@ class PoolsController < ApplicationController
 
   def getAvailableTournaments
     Tournament.where("starttime > ?", Time.now)
+    Tournament.all
   end
   
 

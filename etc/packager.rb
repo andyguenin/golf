@@ -26,6 +26,7 @@ post '/scores' do
       end
     end
   end
+  unenc_str[2] = unenc_str[2].to_i
 
   unenc = unenc_str
 

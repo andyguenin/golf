@@ -19,7 +19,7 @@
 #  tbogey        :integer
 #  round         :integer
 #  hole          :integer
-#  rank          :integer
+#  rank          :string(255)
 #
 
 

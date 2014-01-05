@@ -1,0 +1,38 @@
+<h1>Add/Remove Admins</h1>
+
+</div></div>
+
+<div class="row">
+	<div class="col-md-2">
+		Name
+	</div>
+	<div class="col-md-2">
+		Email
+	</div>
+	<div class="col-md-1">
+		Admin
+	</div>
+</div>
+
+<%= form_tag edit_admins_pool_path(@pool), :method => :put do %>
+
+		<% @pool.pool_memberships.includes(:user).order("users.name").each do |pm|%>
+		<div class="row">
+			<div class="col-md-2">
+				<%= pm.user.name %>
+			</div>
+			<div class="col-md-2">
+				<%= pm.user.email %>
+			</div>
+			<div class="col-md-1">
+				<%= check_box_tag "pool_member[#{pm.id}]", "1", pm.admin, disabled: false%>
+			</div>
+		</div>
+		<%end%>
+		<%= submit_tag %>
+<% end %>
+
+
+
+
+<div class="row"><div class="col-md-12">

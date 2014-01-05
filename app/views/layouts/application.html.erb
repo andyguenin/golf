@@ -32,7 +32,7 @@
 							Logged in as: <%= current_user.email %>
 							<%= link_to "Log out", logout_path, :class=>"navbar-link" %>
 						<% else %>
-							<%= link_to "Sign up", '#signup', "data-toggle"=>"modal", :class=>"navbar-link" %> or
+							<%= link_to "Sign up", new_user_path, "data-toggle"=>"modal", :class=>"navbar-link" %> or
 							<%= link_to "log in", login_path, :class=>"navbar-link" %>
 						<% end %>
 					</div>
@@ -58,6 +58,7 @@
 					</div>
 					<div class="row">
 						<div class="col-md-12">
+							<br /><br /><br />
        <%= params.inspect %>
      </div>
    </div>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140103051222) do
+ActiveRecord::Schema.define(:version => 20140105210010) do
 
   create_table "courses", :force => true do |t|
     t.integer  "tournament_id"
@@ -61,6 +61,8 @@ ActiveRecord::Schema.define(:version => 20140103051222) do
     t.boolean  "q5"
     t.integer  "tiebreak"
     t.integer  "score"
+    t.boolean  "approved"
+    t.integer  "approver"
   end
 
   create_table "player_premia", :force => true do |t|
@@ -81,14 +83,6 @@ ActiveRecord::Schema.define(:version => 20140103051222) do
     t.string   "last_name"
   end
 
-  create_table "pool_admins", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "pool_id"
-    t.boolean  "creator"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
   create_table "pool_memberships", :force => true do |t|
     t.integer  "user_id"
     t.integer  "pool_id"
@@ -96,17 +90,20 @@ ActiveRecord::Schema.define(:version => 20140103051222) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.integer  "inviter_id"
+    t.boolean  "admin"
+    t.boolean  "creator"
   end
 
   create_table "pools", :force => true do |t|
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
     t.integer  "tournament_id"
     t.integer  "min_units"
     t.string   "name"
     t.boolean  "published"
     t.boolean  "private"
     t.boolean  "nonadmin_invite"
+    t.boolean  "require_approval"
   end
 
   create_table "q_answers", :force => true do |t|

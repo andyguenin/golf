@@ -1,8 +1,22 @@
+<h1>Edit <%=link_to @pool.name, @pool %></h1>
+</div></div>
+<div class="row"><div class="col-md-12">
+	<div class="pull-right btn-group">
+		<%= link_to "Edit Admins", edit_admins_pool_path(@pool), :class=>"btn btn-primary"%>
+		<%= link_to "Publish", publish_pool_path(@pool), :class => "btn btn-warning", 
+		:confirm => 'Are you sure you want to publish this pool? Once you publish it, you cannot edit any of the fields.' if can? :publish, @pool and not @pool.published%>
+		<%= link_to "Unpublish", unpublish_pool_path(@pool), :class => "btn btn-danger", :confirm => 'Are you sure you want to unpublish this pool' if can? :unpublish, @pool and @pool.published%>
+	</div>
+</div></div>
+<div class="row"><div class="col-md-8 col-md-offset-2">
 <%= form_for @pool do |f| %>
   <%= render :partial => 'errors/form_field_error', :locals => {:f => @pool} %>
 
   <%= render :partial => "editable_pool", :locals => {:pool => @pool, :f => f, :tournament_options => @tournament_options} %>
   <div class="actions">
-    <%= f.submit "Submit", :class => "btn btn-primary"%>
+    <%= f.submit :class => "btn btn-success"%>
   </div>
 <% end %>
+</div></div>
+
+<div class="row"><div class="col-md-12">

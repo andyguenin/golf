@@ -12,42 +12,43 @@ ABCDEFG
 
 <div class="row">
 		<% holes = @tournament.course.holes.order("hole_number asc")%>
-		<div class="col-md-1">
+		<div class="col-md-1 text-center">
 			Place
 		</div>
-		<div class="col-md-2">
+		<div class="col-md-2 text-center">
 			Player
 		</div>
-		<div class="col-md-1">
+		<div class="col-md-1 text-center">
 			Bucket
 		</div>
-		<div class="col-md-6">
+		<div class="col-md-5 text-center">
 			Score makeup
 		</div>
-		<div class="col-md-1">
+		<div class="col-md-2 text-center">
 			Status
 		</div>
-		<div class="col-md-1">
+		<div class="col-md-1 text-center">
 			Score
 		</div>
 	</div>
   <% counter = 1 %>
 
 
-        <% (@tournament.players.includes([:scores, :tplayers]).where("scores.tournament_id = ? and tplayers.tournament_id = ?", @tournament.id, @tournament.id).all.sort_by {|t| [t.get_tplayer(@tournament).status, t.score_by_tournament(@tournament), t.scores.length, t.last_name] }).each do |p| %>
+        <% (@tournament.players.includes(:scores, :tplayers).all.sort_by {|t| u = t.get_tplayer(@tournament); [u.status, t.score_by_tournament(@tournament), -u.hole, t.last_name] }).each do |p| %>
+				<% (@tournament.players.join)%>
 	<div class="row  player-label" data-toggle="collapse" data-target="#demo<%= counter %>" class="accordion-toggle">
 					<% t = p.tplayers[0]%>
-					<% sum = t.eagle + t.birdie + t.par + t.bogey + t.dbogey%>
-					<div class="col-md-1">
-						<%= t.rank %>
+					<% sum = @tournament.round*18%>
+					<div class="col-md-1 players-rank text-center">
+						<%= t.rank if t.status <= 1%>
 					</div>
-          <div class="col-md-2">
+          <div class="col-md-2 players-name">
 						<%= p.name %>
 					</div>
-					<div class="col-md-1">
+					<div class="col-md-1 players-bucket text-center">
 						<%= t.bucket %>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-5 text-center">
 						<div class="progress">
 					  <div class="progress-bar progress-bar-success" style="width: <%=t.eagle*100.0/sum%>%">
 							<span class="sr-only">Eagle</span></div>
@@ -61,24 +62,27 @@ ABCDEFG
 							<span class="sr-only">Double Bogey</span></div>
 					  </div>
 					</div>
-					<div class="col-md-1">
-						<% if p.tplayers[0].status == 0 %>
-						  <% if p.tplayers[0].hole == 18 %>
-  							<% if p.tplayers[0].round == 4 %>
+					<div class="col-md-2 text-center">
+						<%if t.status.nil? or t.status <= 2 %>
+						  <% if t.hole == 18 %>
+  							<% if t.round == 4 %>
 							F 
    							<%else%>
 									<%= "End Round #{t.round}" %>
 								<% end%>
 							<%else%>
-							  <%= "Round #{t.round} Hole #{t.hole}" %>
+							<% if t.hole == 0 and t.round == 0%>
+							Starting Soon
+							<%else%>
+							  <%= "Hole #{t.hole + 1}" %>
+								<%end%>
 							<%end%>
 						<%else%>
 						CUT
 						<%end%>
 					</div>
-					<div class="col-md-1">
-						<% tplayer = p.get_tplayer(@tournament)%>
-						<%= tplayer.status == 0 ? tplayer.score : "CUT"%>
+					<div class="col-md-1 text-center">
+						<%= t.status <= 1 ? (t.score == 0 ? "E" : t.score) : ""%>
 					</div>
 				</div>
       <div class="row" >

@@ -17,13 +17,15 @@ class ApiController < ApplicationController
     t_name = ds[0][0]
     t_location = /(.*)\s\|.*/.match(ds[0][5])[1]
 
-    t = Tournament.where("name = ? and starttime = ?", t_name, start_time)[0]
+    slug = "#{ds[0][0]} #{ds[0][4]}".downcase.gsub(" ", "-")
+    
+    t = Tournament.where("slug = ? and starttime = ?", slug, start_time)[0]
     if t.nil?
       t = Tournament.new
       t.name = t_name
       t.starttime = start_time
       t.endtime = end_time
-      t.slug = "#{ds[0][0]} #{ds[0][4]}".downcase.gsub(" ", "-")
+      t.slug = slug
       t.round = 1
       t.locked = false
       t.save
@@ -42,9 +44,15 @@ class ApiController < ApplicationController
     ds[1][1].each do |player|
       Player.update_score_from_scraper(player, t)
     end
+    
+    if ds[2] == 1 and (t.low_score.nil? or t.low_score == 0)
+      t.update_attribute(:low_score, t.scores.select("SUM(scores.strokes) as strokes").where("scores.round = 1").group("player_id").map{|s| s.strokes}.min)
+    end
 
     
-
+    t.rank_players
+    t.picks.each {|p| p.update_score}
+    
     render :text => "success"
   end
   

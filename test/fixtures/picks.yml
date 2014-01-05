@@ -18,6 +18,8 @@
 #  q5                 :boolean
 #  tiebreak           :integer
 #  score              :integer
+#  approved           :boolean
+#  approver           :integer
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html

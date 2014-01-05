@@ -1,21 +1,45 @@
 <h1>Upcoming Pools</h1>
-
+</div></div>
+<div class="row"><div class="col-md-2 col-md-offset-10">
 <% if can? :create, Pool%>
-	<%= link_to "Create new Pool", new_pool_path%>
+	<%= link_to raw("<span class=\"glyphicon glyphicon-plus\"></span> Create new Pool"), new_pool_path, :class => "btn btn-primary pull-right"%>
 <% end %>
-<ul>
-	<%= raw("There are no upcoming pools to join.<br/><br/>") if @pools.empty?%>
-	<% @pools.each do |p|%>
-	<li>
+</div>
+</div>
+<%unless @pools.empty?%>
+<div class="row">
+	<div class="col-md-3">
+		Pool Name
+	</div>
+	<div class="col-md-3">
+		Tournament
+	</div>
+	<div class="col-md-2">
+		Members
+	</div>
+	<div class="col-md-2">
+		Lock Date
+	</div>
+</div>
+<% end%>
+<% @pools.each do |p|%>
+<div class="row">
+	<div class="col-md-3">
 		<%unless p.published?%>
 		(Draft)
 		<%end%>
-		Name: 
-		<%= link_to "#{p.name}; ", p%>
-		Tournament: 
+		<%= link_to "#{p.name}", p%>
+	</div>
+	<div class="col-md-3">
 		<%= link_to "#{p.tournament.name}", p.tournament%>
-		Dates:
+	</div>
+	<div class="col-md-2">
+		<%=p.users.count%>
+	</div>
+	<div class="col-md-2">
 		<%= "#{p.tournament.formatted_start}"%>
-	</li>
+	</div>
+</div>
 <% end %>
-</ul>
+<div class="row"><div class="col-md-12">
+<%= raw("There are no upcoming pools to join.<br/><br/>") if @pools.empty?%>

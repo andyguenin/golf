@@ -62,19 +62,30 @@ class Player < ActiveRecord::Base
     curr_round = 0
     curr_hole = 0
     
+    status = tplayer.status
+    if(status.nil?)
+      status = 1
+    end
+    if(curr_round ==0 and curr_hole == 0)
+      status = 2
+    end
+    
     (score_structure.length-2).times do |t|
       score_structure[t+1].length.times do |u|
         actual_strokes = score_structure[t+1][u]
         current_score = current_scores[t][u]
-        unless actual_strokes.nil?
+        unless actual_strokes == 0
           s = actual_strokes - pars[u] + 4
           freq[s] = freq[s] + 1
           curr_round = t + 1
           curr_hole = u + 1
+          status = 1
         end
         if current_score.nil?
-          current_score = player.scores.new
-          current_score.update_attributes({:tournament => tourn, :strokes => actual_strokes, :hole_id => holes[u].id, :round => t+1})
+          unless actual_strokes == 0
+            current_score = player.scores.new
+            current_score.update_attributes({:tournament => tourn, :strokes => actual_strokes, :hole_id => holes[u].id, :round => t+1})
+          end
         else
           if current_score.strokes != actual_strokes
             current_score.update_attribute(:strokes, actual_strokes)
@@ -82,9 +93,12 @@ class Player < ActiveRecord::Base
         end
       end
     end
+    
+
+       
 
     player.update_score(tourn, score_structure.last)
-    tplayer.update_attributes({:deagle => freq[1], :eagle => freq[2], :birdie => freq[3], :par => freq[4], :bogey => freq[5], :dbogey => freq[6], :tbogey => freq[7], :round => curr_round, :hole => curr_hole})
+    tplayer.update_attributes({:deagle => freq[1], :eagle => freq[2], :birdie => freq[3], :par => freq[4], :bogey => freq[5], :dbogey => freq[6], :tbogey => freq[7], :round => curr_round, :hole => curr_hole, :status => status})
     tourn.update_attribute(:round, [[0,((Time.now - tourn.starttime)/60/60/24).floor].max + 1,4].min)   
   end
 
@@ -122,15 +136,18 @@ class Player < ActiveRecord::Base
     rawscore = self.scores.includes(:hole).where("tournament_id = ?", \
             tournament.id).inject(0) {|sum, n| sum + (n.strokes - n.hole.par)}
     score = 0
-    dnf = 0
+    dnf = 1
     begin
       score = Integer(status)
     rescue ArgumentError, TypeError
       unless status == "E"
         score = 100
-        dnf = 1
+        dnf = 3
       end
     end
-    get_tplayer(tournament).update_attributes({:score => score, :status => dnf})
+    get_tplayer(tournament).update_attribute(:score, score)
+    if(dnf == 3)
+      get_tplayer(tournament).update_attribute(:status, dnf)
+    end
   end
 end

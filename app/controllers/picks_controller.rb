@@ -9,6 +9,7 @@ class PicksController < ApplicationController
   def edit
     @pick = Pick.find(params[:id])
     @pool = Pool.find(params[:pool_id])
+    authorize! :edit, @pick
     redirect_to root_path unless @pick.pool.id == @pool.id
     @tplayers = @tplayers = @pool.tournament.tplayers.includes(:player).order("players.last_name asc")
   end
@@ -16,6 +17,7 @@ class PicksController < ApplicationController
   def update
     @pick = Pick.find(params[:id])
     @pool = Pool.find(params[:pool_id])
+    authorize! :edit, @pick
     redirect_to root_path unless @pick.pool.id == @pool.id
     if(@pick.update_attributes(params[:pick]))
       redirect_to @pool
@@ -45,5 +47,10 @@ class PicksController < ApplicationController
   end
   
   def destroy
+    @pick = Pick.find(params[:id])
+    @pool = Pool.find(params[:pool_id])
+    authorize! :edit, @pick
+    @pick.delete
+    redirect_to @pool
   end
 end

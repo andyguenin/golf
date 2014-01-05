@@ -3,5 +3,5 @@
   <%= render :partial => 'errors/form_field_error', :locals => {:f => @pool} %>
 
   <%= render :partial => "editable_pool", :locals => {:pool => @pool, :f => f, :tournament_options => @tournament_options} %>
-  <p class="button"><%= f.submit %></p>
+  <p class="button"><%= f.submit :class => "btn btn-success"%></p>
 <% end %>
