@@ -1,7 +1,7 @@
 <h1>Upcoming Pools</h1>
 </div></div>
 <div class="row"><div class="col-md-2 col-md-offset-10">
-<% if can? :create, Pool%>
+<% if can? :create, Pool.new%>
 	<%= link_to raw("<span class=\"glyphicon glyphicon-plus\"></span> Create new Pool"), new_pool_path, :class => "btn btn-primary pull-right"%>
 <% end %>
 </div>

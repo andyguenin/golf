@@ -34,4 +34,10 @@ Spool::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+  
+  config.action_mailer.delivery_method = :sendmail
+  config.action_mailer.sendmail_settings = {
+    :location => '/usr/sbin/sendmail',
+    :arguments => '-i -t'
+  }
 end
