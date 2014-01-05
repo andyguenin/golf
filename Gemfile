@@ -7,6 +7,7 @@ gem 'rails', '3.2.13'
 
 gem 'sqlite3'
 gem 'aescrypt'
+gem 'pg'
 
 group :development do
   gem 'seed_dump'
