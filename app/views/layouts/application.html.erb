@@ -59,7 +59,7 @@
 					<div class="row">
 						<div class="col-md-12">
 							<br /><br /><br />
-       <%= params.inspect %>
+       <%= params.inspect if Rails.env.development? %>
      </div>
    </div>
 		</div>

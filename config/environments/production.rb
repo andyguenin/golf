@@ -69,8 +69,8 @@ Spool::Application.configure do
   config.action_mailer.smtp_settings = {
     :address => "smtp.1and1.com",
     :port => 25,
-    :user_name => "ag@andyguenin.com",
-    :password => "csdosage"
+    :user_name => "invite@thegolftourney.com",
+    :password => "HCeBo)Vm9$M8Vg"
   }
   
 end
