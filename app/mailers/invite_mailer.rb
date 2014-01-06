@@ -1,5 +1,5 @@
 class InviteMailer < ActionMailer::Base
-  default from: "ag@andyguenin.com"
+  default from: "\"TheGolfTourney.com\" <invite@thegolftourney.com>"
   
   def invite(user, invite)
     @user = user
