@@ -7,6 +7,7 @@ class PicksController < ApplicationController
   end
   
   def edit
+    @title = "Edit Pick"
     @pick = Pick.find(params[:id])
     @pool = Pool.find(params[:pool_id])
     authorize! :edit, @pick
@@ -15,6 +16,7 @@ class PicksController < ApplicationController
   end
   
   def update
+    @title = "Edit Pick"
     @pick = Pick.find(params[:id])
     @pool = Pool.find(params[:pool_id])
     authorize! :edit, @pick
@@ -28,12 +30,14 @@ class PicksController < ApplicationController
   end
   
   def new
+    @title = "New Pick"
     @pick = Pick.new
     @pool = Pool.find(params[:pool_id])
     @tplayers = @pool.tournament.tplayers.includes(:player).order("players.last_name asc")
   end
   
   def create
+    @title = "New Pick"
     @pick = Pick.new(params[:pick])
     @pool = Pool.find(params[:pool_id])
     @pick.pool_membership = PoolMembership.where("user_id = ? and pool_id = ?", current_user.id, @pool.id)[0]

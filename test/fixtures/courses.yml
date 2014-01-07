@@ -13,10 +13,13 @@
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
-one:
-  tournament_id: 1
-  name: MyString
+augusta:
+  name: Augusta National Golf Club
+	location: Augusta, GA
+	tournament: Masters
+	
+merion:
+	name: Merion Golf Club
+	location: Haverford Township, PA
+	tournament: PGA
 
-two:
-  tournament_id: 1
-  name: MyString

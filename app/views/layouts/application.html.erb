@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>rSpool</title>
+		<title><%= title %></title>
 		<%= stylesheet_link_tag "application", :media => "all" %>
 		<%= javascript_include_tag "application" %>
 		<%= csrf_meta_tags %>
@@ -9,7 +9,7 @@
 	<body>
 		<nav class="navbar navbar-default navbar-static-top" role="navigation">
 			<div class="navbar-header">
-				<%= link_to "PGA Challenge", root_url, :class=>"navbar-brand"%>
+				<%= link_to "The Golf Tourney", root_url, :class=>"navbar-brand"%>
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->

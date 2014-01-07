@@ -30,7 +30,7 @@ class Ability
     end
     
     can :join, Pool do |pool|
-      can? :read_summary, pool
+      can? :read_summary, pool and not user.id.nil?
     end
     
     can :publish, Pool do |pool|

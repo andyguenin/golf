@@ -40,7 +40,10 @@ class ApiController < ApplicationController
       end
       t.update_attribute(:course, course)
     end
-
+    locked = false
+    if ds[1][1].map {|p| p.length - 2}.sort.last > 0
+      locked = true
+    end
     ds[1][1].each do |player|
       Player.update_score_from_scraper(player, t)
     end

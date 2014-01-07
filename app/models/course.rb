@@ -15,6 +15,7 @@ class Course < ActiveRecord::Base
 
   validates_presence_of :name
   validates_presence_of :tournament_id
+  validates_presence_of :location
 
   belongs_to :tournament
   has_many :holes, :order => "hole_number asc"
