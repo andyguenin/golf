@@ -30,6 +30,7 @@ class Tplayer< ActiveRecord::Base
   validates_presence_of :player_id
   validates_presence_of :tournament_id
   validates_presence_of :score
+  validates_presence_of :status
 
   belongs_to :tournament
   belongs_to :player

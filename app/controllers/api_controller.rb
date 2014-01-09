@@ -51,7 +51,10 @@ class ApiController < ApplicationController
     if ds[2] == 1 and (t.low_score.nil? or t.low_score == 0)
       t.update_attribute(:low_score, t.scores.select("SUM(scores.strokes) as strokes").where("scores.round = 1").group("player_id").map{|s| s.strokes}.min)
     end
-
+    
+    if not t.locked and locked
+      t.update_attribute(:locked, true)
+    end
     
     t.rank_players
     t.picks.each {|p| p.update_score}

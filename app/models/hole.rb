@@ -16,6 +16,8 @@ class Hole < ActiveRecord::Base
   validates_presence_of :course_id
   validates_presence_of :hole_number
   validates_presence_of :par
+  
+  validates_uniqueness_of :course_id, scope: [:hole_number]
 
   belongs_to :course
   has_many :scores

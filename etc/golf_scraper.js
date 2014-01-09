@@ -90,28 +90,32 @@ function get_scores() {
 	    var record = []
 	    var playerid = "player-" + record_node[i].parentNode.parentNode.parentNode.parentNode.id.substring(3)
 	    var player_name = document.getElementById(playerid).querySelectorAll(".player")[0].querySelectorAll("a")[0].innerHTML
-	    var thru = document.getElementById(playerid).querySelectorAll(".score")[0].innerHTML
 	    record.push(player_name)
-	    for(var hole_i = 0; hole_i < record_node[i].querySelectorAll(".scorecard-table").length; hole_i++)
-	    {
-		var round_record_raw = record_node[i].querySelectorAll(".scorecard-table")[hole_i]
-		var round_record = extractScores(round_record_raw)
-		if(i == 0 && hole_i == 0)
-		{
-		    var raw_par = round_record_raw.querySelectorAll("tbody > .par > td")
-		    for(var j_it = 0; j_it < raw_par.length; j_it++)
-		    {
-			if(j_it != 0 && j_it != 10 && j_it != 20 && j_it != 21)
+			var score_list = document.getElementById(playerid).querySelectorAll(".score")
+			if(score_list.length != 0)
 			{
-			    pars.push(raw_par[j_it].innerHTML)
-			}
-		    }
-		}
-		record.push(round_record)
+	    	var thru = score_list[0].innerHTML
 
-	    }
-	    record.push(thru)
-	    players_scores.push(record)
+	    	for(var hole_i = 0; hole_i < record_node[i].querySelectorAll(".scorecard-table").length; hole_i++)
+	    	{
+					var round_record_raw = record_node[i].querySelectorAll(".scorecard-table")[hole_i]
+					var round_record = extractScores(round_record_raw)
+					if(i == 0 && hole_i == 0)
+					{
+						var raw_par = round_record_raw.querySelectorAll("tbody > .par > td")
+						for(var j_it = 0; j_it < raw_par.length; j_it++)
+						{
+							if(j_it != 0 && j_it != 10 && j_it != 20 && j_it != 21)
+							{
+								pars.push(raw_par[j_it].innerHTML)
+							}
+						}
+					}
+					record.push(round_record)
+				}
+				record.push(thru)
+			}
+			players_scores.push(record)
 	}
 	var ret_arr = [];
 	ret_arr.push(pars);

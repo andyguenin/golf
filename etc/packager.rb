@@ -33,7 +33,8 @@ post '/scores' do
   password = "RLMMKTeFNtPZEBxsbx8g3Ou0HxniC3l5wAmJUcwsGotZHvbImkOwbPQigcddFWgM"
   encrypted_data = AESCrypt.encrypt(unenc.to_s, password)
   encoded = Base64.encode64(encrypted_data)
-  uri = URI.parse("http://floating-everglades-7438.herokuapp.com/insert")
+  #uri = URI.parse("http://floating-everglades-7438.herokuapp.com/insert")
+  uri = URI.parse("http://localhost:3000/insert")
   response = Net::HTTP.post_form(uri, {"scores" => encoded})
   erb response.body 
 

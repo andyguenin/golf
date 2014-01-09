@@ -1,9 +1,6 @@
 <h1 class="no-bottom"><%= @tournament.name %></h1>
 <h2 class="lighten"><em><%= @tournament.course.location %> </em></h2>
 <h3 class="no-bottom lighten"><%= @tournament.formatted_start %> to <%= @tournament.formatted_end%></h3>
-<% if params[:bucketing_data]%>
-ABCDEFG
-<% end%>
 <div class="pull-right btn-group">
 	<%= link_to "Edit Tournament", edit_tournament_path(@tournament), :class => "btn btn-warning"%>
 </div><br /><br />

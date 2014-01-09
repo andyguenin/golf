@@ -19,8 +19,7 @@ class Player < ActiveRecord::Base
   validates_presence_of :last_name
   validates_presence_of :ranking
 
-  validates_uniqueness_of :first_name, scope: [:last_name]
-  validates_uniqueness_of :slug
+  validates_uniqueness_of :first_name, scope: [:last_name, :slug]
   
   has_many :scores
   has_many :player_score_statuses
@@ -44,12 +43,12 @@ class Player < ActiveRecord::Base
 
     if player.nil?
       player = Player.create!({:first_name => match[1], :last_name => match[2], :slug => score_structure[0].downcase.gsub(" ", "-"), :ranking => 0})
-      player.tplayers.create!({:bucket => 0, :score => 0, :tournament => tourn})
+      player.tplayers.create!({:bucket => 0, :score => 0, :tournament => tourn, :status => 2})
     end
 
     tplayer = player.get_tplayer(tourn)
     if tplayer.nil?
-      tplayer = player.tplayers.create!({:tournament => tourn, :bucket => 0, :score => 0})
+      tplayer = player.tplayers.create!({:tournament => tourn, :bucket => 0, :score => 0, :status => 2})
     end
 
     holes = tourn.course.holes
@@ -64,10 +63,12 @@ class Player < ActiveRecord::Base
     
     status = tplayer.status
     if(status.nil?)
-      status = 1
+      status = 2
     end
     if(curr_round ==0 and curr_hole == 0)
       status = 2
+    else
+      status = 1
     end
     
     (score_structure.length-2).times do |t|
@@ -133,16 +134,20 @@ class Player < ActiveRecord::Base
   end
   
   def update_score(tournament, status)
-    rawscore = self.scores.includes(:hole).where("tournament_id = ?", \
+    rawscore = self.scores.where("tournament_id = ?", tournament.id).includes(:hole).where("tournament_id = ?", \
             tournament.id).inject(0) {|sum, n| sum + (n.strokes - n.hole.par)}
     score = 0
     dnf = 1
     begin
       score = Integer(status)
     rescue ArgumentError, TypeError
-      unless status == "E"
-        score = 100
-        dnf = 3
+      if status.nil?
+        dnf = 2
+      else
+        unless status == "E"
+          score = 100
+          dnf = 3
+        end
       end
     end
     get_tplayer(tournament).update_attribute(:score, score)
