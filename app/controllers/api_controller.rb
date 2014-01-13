@@ -9,6 +9,15 @@ class ApiController < ApplicationController
     password = "RLMMKTeFNtPZEBxsbx8g3Ou0HxniC3l5wAmJUcwsGotZHvbImkOwbPQigcddFWgM"
     enc_message = params[:scores]
     message = AESCrypt.decrypt(Base64.decode64(enc_message), password)
+    
+    is_decrypt(message)
+  end
+  
+  def is_test
+    is_decrypt(params[:scores])
+  end
+  
+  def is_decrypt(message)
 
     ds = JSON.parse(message)
     start_time = Time.parse("#{ds[0][1]} #{ds[0][2]} #{ds[0][4]}")
@@ -19,45 +28,58 @@ class ApiController < ApplicationController
 
     slug = "#{ds[0][0]} #{ds[0][4]}".downcase.gsub(" ", "-")
     
-    t = Tournament.where("slug = ? and starttime = ?", slug, start_time)[0]
-    if t.nil?
-      t = Tournament.new
-      t.name = t_name
-      t.starttime = start_time
-      t.endtime = end_time
-      t.slug = slug
-      t.round = 1
-      t.locked = false
-      t.save
+    @t = Tournament.where("slug = ? and starttime = ?", slug, start_time)[0]
+    
+    location_info = /(.*)\s-\s(.*)/.match(t_location)
+    course = Course.where("name = ? and location = ?", location_info[1], location_info[2])[0]
+
+
+    
+    #if the tournament does not yet exist
+    if @t.nil?
+      @t = Tournament.new
+      @t.name = t_name
+      @t.starttime = start_time
+      @t.endtime = end_time
+      @t.slug = slug
+      @t.round = 1
+      @t.locked = false
+      @t.course = course
+      @t.save!
       
-      location_info = /(.*)\s-\s(.*)/.match(t_location)
-      course = Course.where("name = ? and location = ?", location_info[1], location_info[2])[0]
       if course.nil?
-        course = t.create_course({:name => location_info[1], :location => location_info[2]})
-        ds[1][0].length.times do |t|
-          course.holes.create({:hole_number => t+1, :par => ds[1][0][t]})
-        end
+        course = @t.create_course!({:name => location_info[1], :location => location_info[2]})
       end
-      t.update_attribute(:course, course)
+      @t.save!
     end
+    
+    if course.holes.count != 18
+      ds[1][0].length.times do |t|
+        course.holes.create({:hole_number => t+1, :par => ds[1][0][t]})
+      end
+    end
+    
     locked = false
+    #if there are any players scores, the tournament has begun, so lock down the tournament
     if ds[1][1].map {|p| p.length - 2}.sort.last > 0
       locked = true
     end
+    #update all players' scores
     ds[1][1].each do |player|
-      Player.update_score_from_scraper(player, t)
+      Player.update_score_from_scraper(player, @t)
     end
     
     if ds[2] == 1 and (t.low_score.nil? or t.low_score == 0)
-      t.update_attribute(:low_score, t.scores.select("SUM(scores.strokes) as strokes").where("scores.round = 1").group("player_id").map{|s| s.strokes}.min)
+      @t.update_attribute(:low_score, @t.scores.select("SUM(scores.strokes) as strokes").where("scores.round = 1").group("player_id").map{|s| s.strokes}.min)
     end
     
-    if not t.locked and locked
-      t.update_attribute(:locked, true)
+    if not @t.locked and locked
+      @t.update_attribute(:locked, true)
     end
     
-    t.rank_players
-    t.picks.each {|p| p.update_score}
+    
+    @t.rank_players
+    @t.picks.each {|p| p.update_score}
     
     render :text => "success"
   end

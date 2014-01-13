@@ -15,22 +15,3 @@
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
-andy:
-  email: andyguenin@gmail.com
-	password: andyg
-	password_confirmation: andyg
-	name: Andy Guenin
-	
-isaac:
-  email: isaacwittman@gmail.com
-	password: isaacw
-	password_confirmation: isaacw
-	name: Isaac Wittman
-	
-ted:
-  email: tguenin@gmail.com
-	password: teddyg
-	password_confirmation: teddyg
-	name: Ted Guenin
-	

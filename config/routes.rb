@@ -28,5 +28,10 @@ Spool::Application.routes.draw do
   match "pools/:id/invite" => "pools#invite", :as => "invite_pool", :via => [:get, :post]
   
   get "score" => "api#insert_score"
+  
+  unless Rails.env.production?
+    get "insert_t" => "api#is_test"
+  end
+  
   post "insert" => "api#is"
 end

@@ -40,7 +40,7 @@ class Tournament < ActiveRecord::Base
   
   def rank_players
     cur_place = 1
-    score_freq = self.tplayers.count(:group => :score)
+    score_freq = self.tplayers.where("status <= 1").count(:group => :score)
     score_freq.keys.sort.each do |score|
       freq = score_freq[score]
       self.tplayers.where("score = ?", score).each do |t|

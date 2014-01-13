@@ -13,22 +13,3 @@
 #  nonadmin_invite  :boolean
 #  require_approval :boolean
 #
-
-
-blk_25:
-	tournament: Masters
-	min_units: 25
-	name: BlackRock 25 Unit
-	published: true
-	private: true
-	nonadmin_invite: true
-	require_approval: false
-	
-pub_25:
-	tournament: PGA
-	min_units: 25
-	name: PGA Unit
-	published: true
-	private: true
-	nonadmin_invite: true
-	require_approval: false

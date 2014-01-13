@@ -13,13 +13,13 @@
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
-augusta:
-  name: Augusta National Golf Club
-	location: Augusta, GA
-	tournament: Masters
-	
-merion:
-	name: Merion Golf Club
-	location: Haverford Township, PA
-	tournament: PGA
+#augusta:
+#  name: "Augusta National Golf Club"
+#  location: "Augusta, GA"
+#  tournament: Masters
+
+#merion:
+#  name: Merion Golf Club
+#  location: "Haverford Township, PA"
+#  tournament: PGA
 

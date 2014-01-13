@@ -22,7 +22,7 @@
 			Score makeup
 		</div>
 		<div class="col-md-2 text-center">
-			Status
+			Thru
 		</div>
 		<div class="col-md-1 text-center">
 			Score
@@ -32,9 +32,8 @@
 
 
         <% (@tournament.players.includes(:scores, :tplayers).all.sort_by {|t| u = t.get_tplayer(@tournament); [u.status, t.score_by_tournament(@tournament), -u.hole, t.last_name] }).each do |p| %>
-				<% (@tournament.players.join)%>
 	<div class="row  player-label" data-toggle="collapse" data-target="#demo<%= counter %>" class="accordion-toggle">
-					<% t = p.tplayers[0]%>
+					<% t = p.get_tplayer(@tournament)%>
 					<% sum = @tournament.round*18%>
 					<div class="col-md-1 players-rank text-center">
 						<%= t.rank if t.status <= 1%>
@@ -60,28 +59,26 @@
 					  </div>
 					</div>
 					<div class="col-md-2 text-center">
-						<%if t.status.nil? or t.status <= 2 %>
-						  <% if t.hole == 18 %>
+						<% holes_completed = p.scores_by_tournament_round(@tournament, t.round).count%>
+						<%if t.status.nil? or t.status <= 1 %>
+						  <% if holes_completed == 18%>
   							<% if t.round == 4 %>
-							F 
+									F 
    							<%else%>
 									<%= "End Round #{t.round}" %>
 								<% end%>
 							<%else%>
-							<% if t.hole == 0 and t.round == 0%>
-							Starting Soon
-							<%else%>
-							  <%= "Hole #{t.hole + 1}" %>
-								<%end%>
+						  	<%= holes_completed %>
 							<%end%>
 						<%else%>
-						CUT
+						<%= status_to_text(t.status)%>
 						<%end%>
 					</div>
 					<div class="col-md-1 text-center">
 						<%= t.status <= 1 ? (t.score == 0 ? "E" : t.score) : ""%>
 					</div>
 				</div>
+					<% if @tournament.course.holes.count == 18%>
       <div class="row" >
 				<div class="col-md-12" class="hiddenRow">
            <div class="accordian-body collapse" id="demo<%= counter %>">
@@ -105,7 +102,7 @@
                     <% (1..18).each do |hole|%>
                       <td><%= tscores[round][hole-1].nil? ? "-" : tscores[round][hole-1].strokes%></td>
                     <% end %>
-                    <td><%= tscores[round].empty? ? "" :  (tscores[round].count == 18 ? tscores[round].map{|t| t.strokes}.sum : p.score_by_tournament_round(@tournament, round+1))%></td>
+                    <td><%= tscores[round].empty? ? "" :  (tscores[round].count == 18 ? tscores[round].map{|t| t.nil? ? 0 : t.strokes}.sum : p.score_by_tournament_round(@tournament, round+1))%></td>
                   </tr>
                   <% end %>
                 </tbody>
@@ -114,6 +111,7 @@
 						</div>
 				 </div>
 			 </div>
+			 			<%end%>
       <% counter = counter + 1 %>  
       <% end %>
 

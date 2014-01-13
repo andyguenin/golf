@@ -12,13 +12,3 @@
 
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
-one:
-  pool_id: 1
-  player_id: 1
-  premium: 1
-
-two:
-  pool_id: 1
-  player_id: 1
-  premium: 1

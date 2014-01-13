@@ -94,7 +94,8 @@ function get_scores() {
 			var score_list = document.getElementById(playerid).querySelectorAll(".score")
 			if(score_list.length != 0)
 			{
-	    	var thru = score_list[0].innerHTML
+				var score = score_list[0].innerHTML
+	    	var thru = score_list[1].innerHTML
 
 	    	for(var hole_i = 0; hole_i < record_node[i].querySelectorAll(".scorecard-table").length; hole_i++)
 	    	{
@@ -113,6 +114,7 @@ function get_scores() {
 					}
 					record.push(round_record)
 				}
+				record.push(score)
 				record.push(thru)
 			}
 			players_scores.push(record)

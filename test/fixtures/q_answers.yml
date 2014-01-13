@@ -13,11 +13,3 @@
 
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
-one:
-  pool_id: 1
-  answer: false
-
-two:
-  pool_id: 1
-  answer: false

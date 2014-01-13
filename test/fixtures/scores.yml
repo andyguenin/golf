@@ -14,15 +14,3 @@
 
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
-one:
-  tournament_id: 1
-  player_id: 1
-  hole: 1
-  strokes: 1
-
-two:
-  tournament_id: 1
-  player_id: 1
-  hole: 1
-  strokes: 1

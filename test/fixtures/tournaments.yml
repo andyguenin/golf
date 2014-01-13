@@ -15,19 +15,3 @@
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
-Masters:
-  name: Masters Tournament
-  starttime: 2013-04-16 21:27:07
-  endtime: 2013-04-16 21:27:07
-	slug: masters-2014
-	round: 1
-	locked: false
-	
-PGA:
-  name: PGA
-  starttime: 2013-04-16 21:27:07
-  endtime: 2013-04-16 21:27:07
-	slug: pga-2014
-	round: 1
-	locked: true

@@ -23,11 +23,3 @@
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
-one:
-  pool_membership_id: 1
-  pool_id: 1
-
-two:
-  pool_membership_id: 1
-  pool_id: 1

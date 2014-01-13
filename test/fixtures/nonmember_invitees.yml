@@ -13,15 +13,3 @@
 
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
-ted_blk25:
-	pool: blk_25
-	inviter: andy
-	activation_key: ACTIVATIONKEYabcdefg
-	user: ted
-	
-iw_pub:
-	pool: pub_25
-	inviter: isaac
-	activation_key: ACTIVATIONKEYPUBabcdefg
-	user: andy
