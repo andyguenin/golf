@@ -37,11 +37,17 @@ class Tplayer< ActiveRecord::Base
   after_initialize :set_default
   
   def set_default
-    [:deagle, :eagle, :birdie, :par, :bogey, :dbogey, :tbogey, :round, :hole, :rank].each do |t|
+    [:deagle, :eagle, :birdie, :par, :bogey, :dbogey, :tbogey, :rank].each do |t|
       self[t] ||= 0
     end
   end
 
   belongs_to :tournament
   belongs_to :player
+  has_many :rounds
+  
+  def get_round(r)
+    self.rounds.where("round = ?", r)[0]
+  end
+  
 end

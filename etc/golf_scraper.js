@@ -95,7 +95,18 @@ function get_scores() {
 			if(score_list.length != 0)
 			{
 				var score = score_list[0].innerHTML
-	    	var thru = score_list[1].innerHTML
+				var thru = "F"
+				if(score_list.length > 1)
+				{
+					thru = score_list[1].innerHTML
+				}
+				else
+				{
+					if(score_list[0].innerHTML !== parseInt(score_list[0].innerHTML))
+					{
+						thru = score_list[0].innerHTML
+					}
+				}
 
 	    	for(var hole_i = 0; hole_i < record_node[i].querySelectorAll(".scorecard-table").length; hole_i++)
 	    	{

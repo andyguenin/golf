@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140105210010) do
+ActiveRecord::Schema.define(:version => 20140114042850) do
 
   create_table "courses", :force => true do |t|
     t.integer  "tournament_id"
@@ -115,6 +115,31 @@ ActiveRecord::Schema.define(:version => 20140105210010) do
     t.integer  "number"
   end
 
+  create_table "rounds", :force => true do |t|
+    t.integer  "tplayer_id"
+    t.integer  "round"
+    t.integer  "h1"
+    t.integer  "h2"
+    t.integer  "h3"
+    t.integer  "h4"
+    t.integer  "h5"
+    t.integer  "h6"
+    t.integer  "h7"
+    t.integer  "h8"
+    t.integer  "h9"
+    t.integer  "h10"
+    t.integer  "h11"
+    t.integer  "h12"
+    t.integer  "h13"
+    t.integer  "h14"
+    t.integer  "h15"
+    t.integer  "h16"
+    t.integer  "h17"
+    t.integer  "h18"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "scores", :force => true do |t|
     t.integer  "tournament_id"
     t.integer  "player_id"
@@ -152,9 +177,9 @@ ActiveRecord::Schema.define(:version => 20140105210010) do
     t.integer  "bogey"
     t.integer  "dbogey"
     t.integer  "tbogey"
-    t.integer  "round"
     t.integer  "hole"
     t.string   "rank"
+    t.integer  "round"
   end
 
   create_table "users", :force => true do |t|

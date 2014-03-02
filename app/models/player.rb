@@ -62,6 +62,11 @@ class Player < ActiveRecord::Base
     
     unless score_structure.length == 1
       (score_structure.length-3).times do |t|
+        r = tplayer.get_round(t+1)
+        if(r.nil?)
+          Round.create_round(score_structure[t+1], t+1, tplayer)
+        end
+        s = 
         score_structure[t+1].length.times do |u|
           actual_strokes = score_structure[t+1][u].to_i
           current_score = current_scores[t][u]
