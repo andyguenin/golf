@@ -9,7 +9,7 @@ class ApiController < ApplicationController
     password = "RLMMKTeFNtPZEBxsbx8g3Ou0HxniC3l5wAmJUcwsGotZHvbImkOwbPQigcddFWgM"
     enc_message = params[:scores]
     message = AESCrypt.decrypt(Base64.decode64(enc_message), password)
-    
+
     is_decrypt(message)
   end
   
@@ -34,7 +34,7 @@ class ApiController < ApplicationController
     course = Course.where("name = ? and location = ?", location_info[1], location_info[2])[0]
 
 
-    
+
     #if the tournament does not yet exist
     if @t.nil?
       @t = Tournament.new
@@ -64,6 +64,9 @@ class ApiController < ApplicationController
     if ds[1][1].map {|p| p.length - 2}.sort.last > 0
       locked = true
     end
+
+
+
     #update all players' scores
     ds[1][1].each do |player|
       Player.update_score_from_scraper(player, @t)

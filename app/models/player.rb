@@ -59,39 +59,23 @@ class Player < ActiveRecord::Base
     end
     curr_round = 0
     curr_hole = 0
-    
+
     unless score_structure.length == 1
-      (score_structure.length-3).times do |t|
-        r = tplayer.get_round(t+1)
-        if(r.nil?)
-          Round.create_round(score_structure[t+1], t+1, tplayer)
-        end
-        s = 
-        score_structure[t+1].length.times do |u|
-          actual_strokes = score_structure[t+1][u].to_i
-          current_score = current_scores[t][u]
-          unless actual_strokes == 0
-            s = actual_strokes - pars[u]
-            s = [[-2, s].max, 2].min + 4
-            freq[s] = freq[s] + 1
-            curr_round = t + 1
-            curr_hole = u + 1
-          end
-          if current_score.nil?
-            unless actual_strokes == 0
-              current_score = player.scores.new
-              current_score.update_attributes({:tournament => tourn, :strokes => actual_strokes, :hole_id => holes[u].id, :round => t+1})
-            end
-          else
-            if current_score.strokes != actual_strokes
-              current_score.update_attribute(:strokes, actual_strokes)
-            end
-          end
+      existing_rounds = tplayer.rounds
+      if existing_rounds.length != score_structure.length-2
+        Round.create_round(score_structure[existing_rounds.length+1], existing_rounds.length+1, tplayer)
+        existing_rounds = player.get_tplayer(tourn).rounds
+      end
+      (score_structure.length-2).times do |t|
+        existing_rounds[t].update_scores(score_structure[t+1])
+        stats = [0,0,0,0,0]
+        existing_rounds.length.times do |u|
+          stats = Round.stats_combiner(existing_rounds[u].score_stats, stats)
         end
       end
     
       player.update_score(tourn, score_structure[-2], score_structure[-1])
-      tplayer.update_attributes({:deagle => freq[1], :eagle => freq[2], :birdie => freq[3], :par => freq[4], :bogey => freq[5], :dbogey => freq[6], :tbogey => freq[7], :round => curr_round, :hole => curr_hole})
+      tplayer.update_attributes({:deagle => freq[1], :eagle => freq[2], :birdie => freq[3], :par => freq[4], :bogey => freq[5], :dbogey => freq[6], :tbogey => freq[7]})
       tourn.update_attribute(:round, [[0,((Time.now - tourn.starttime)/60/60/24).floor].max + 1,4].min)   
     end
   end

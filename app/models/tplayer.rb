@@ -17,13 +17,12 @@
 #  bogey         :integer
 #  dbogey        :integer
 #  tbogey        :integer
-#  round         :integer
 #  hole          :integer
 #  rank          :string(255)
 #
 
 class Tplayer< ActiveRecord::Base
-  attr_accessible :bucket, :player_id, :tournament, :score, :status, :deagle, :eagle, :birdie, :par, :bogey, :dbogey, :tbogey, :round, :hole, :rank
+  attr_accessible :bucket, :player_id, :tournament, :score, :status, :deagle, :eagle, :birdie, :par, :bogey, :dbogey, :tbogey, :rank
 
   #status: 0> won 1>playing/finished 2> mdf 3> cut 4> wd 5> did not start 
   validates :bucket, :inclusion => 0..5
@@ -32,22 +31,34 @@ class Tplayer< ActiveRecord::Base
   validates_presence_of :score
   validates_presence_of :status
   validates_presence_of :deagle, :eagle, :birdie, :par, :bogey, :dbogey, :tbogey
-  validates_presence_of :round, :hole, :rank
+
   
   after_initialize :set_default
   
   def set_default
-    [:deagle, :eagle, :birdie, :par, :bogey, :dbogey, :tbogey, :rank].each do |t|
+    [:deagle, :eagle, :birdie, :par, :bogey, :dbogey, :tbogey].each do |t|
       self[t] ||= 0
     end
   end
 
   belongs_to :tournament
   belongs_to :player
-  has_many :rounds
-  
+  has_many :rounds, :order => "round asc"
+
+  def hole
+    if rounds.size != 0
+      18
+    else
+      1
+    end
+  end
+
+  def round
+    rounds.size
+  end
+
   def get_round(r)
-    self.rounds.where("round = ?", r)[0]
+    rounds.where("round = ?", r).first
   end
   
 end

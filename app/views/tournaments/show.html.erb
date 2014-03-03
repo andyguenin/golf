@@ -31,7 +31,7 @@
   <% counter = 1 %>
 
 
-        <% (@tournament.players.includes(:scores, :tplayers).all.sort_by {|t| u = t.get_tplayer(@tournament); [u.status, t.score_by_tournament(@tournament), -u.hole, t.last_name] }).each do |p| %>
+        <% (@tournament.players.includes(:tplayers => :rounds).all.sort_by {|t| u = t.get_tplayer(@tournament); [u.status, t.score_by_tournament(@tournament), -u.hole, t.last_name] }).each do |p| %>
 	<div class="row  player-label" data-toggle="collapse" data-target="#demo<%= counter %>" class="accordion-toggle">
 					<% t = p.get_tplayer(@tournament)%>
 					<% sum = @tournament.round*18%>

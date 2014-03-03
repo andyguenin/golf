@@ -11,6 +11,7 @@ class T
       Pick.all.each {|p| p.delete}
       Pool.all.each {|p| p.delete}
       Course.all.each {|p| p.delete}
+      Round.all.each {|p| p.delete}
     end
   end
 end

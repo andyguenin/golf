@@ -1,0 +1,4 @@
+class AddRankToTplayers < ActiveRecord::Migration
+  def change
+  end
+end

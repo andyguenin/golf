@@ -12,10 +12,15 @@ class Round < ActiveRecord::Base
   end
   
   def update_scores(vec)
+    changed = false
     vec.length.times do |t|
-      self["h#{t+1}".to_sym] = vec[t]
+      c_score = self["h#{t+1}".to_sym]
+      if vec[t].to_i != c_score
+        self["h#{t+1}".to_sym] = vec[t].to_i
+        changed = true
+      end
     end
-    save!
+    save! if changed
   end
   
   def as_vec
@@ -26,11 +31,26 @@ class Round < ActiveRecord::Base
     scores
   end
   
-  def score_stats(other)
+  def score_stats
+    pars = tplayer.tournament.course.holes.map{|h| h.par}
+    stats = [0,0,0,0,0]
     a = as_vec
     18.times do |t|
-      a[t] = a[t] - other[t] 
+      if a[t] != 0
+        s = a[t] - pars[t]
+        s = [[-2, s].max, 2].min + 2
+        stats[s] = stats[s] + 1
+      end
     end
-    a.group_by{|p| p}.map {|k,v| {k =>v.length}}.reduce(:merge)
-  end    
+    stats
+  end 
+
+  def self.stats_combiner(s1, s2)
+    stats = []
+    s1.length.times do |t|
+      stats << s1[t] + s2[t]
+    end
+    stats
+  end     
+
 end
