@@ -1,3 +1,32 @@
+# == Schema Information
+#
+# Table name: rounds
+#
+#  id         :integer          not null, primary key
+#  tplayer_id :integer
+#  round      :integer
+#  h1         :integer
+#  h2         :integer
+#  h3         :integer
+#  h4         :integer
+#  h5         :integer
+#  h6         :integer
+#  h7         :integer
+#  h8         :integer
+#  h9         :integer
+#  h10        :integer
+#  h11        :integer
+#  h12        :integer
+#  h13        :integer
+#  h14        :integer
+#  h15        :integer
+#  h16        :integer
+#  h17        :integer
+#  h18        :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 class Round < ActiveRecord::Base
   attr_accessible :h1, :h10, :h11, :h12, :h13, :h14, :h15, :h16, :h17, :h18, :h2, :h3, :h4, :h5, :h6, :h7, :h8, :h9, :round, :tplayer_id
   
@@ -7,13 +36,17 @@ class Round < ActiveRecord::Base
   
   def self.create_round(vec, round, tplayer)
     r = Round.new({:round => round, :tplayer_id => tplayer.id})
-    r.update_scores(vec)
+    18.times do |t|
+      r["h#{t+1}".to_sym] = 0
+    end
+    r.update_strokes(vec)
+    r.save!
     r
   end
   
-  def update_scores(vec)
+  def update_strokes(vec)
     changed = false
-    vec.length.times do |t|
+    18.times do |t|
       c_score = self["h#{t+1}".to_sym]
       if vec[t].to_i != c_score
         self["h#{t+1}".to_sym] = vec[t].to_i
@@ -45,12 +78,5 @@ class Round < ActiveRecord::Base
     stats
   end 
 
-  def self.stats_combiner(s1, s2)
-    stats = []
-    s1.length.times do |t|
-      stats << s1[t] + s2[t]
-    end
-    stats
-  end     
 
 end

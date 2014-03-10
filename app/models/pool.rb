@@ -19,7 +19,7 @@ class Pool < ActiveRecord::Base
   attr_accessible :tournament_id, :q1, :q1a, :q2, :q2a, :q3, :q3a, :q4, :q4a, :q5, :q5a, :name, :private, :nonadmin_invite
 
   belongs_to :tournament
-  has_many :q_answers
+  has_many :q_answers, :order => "number asc"
   has_many :pool_memberships, :conditions => {:active => true}
   has_many :picks, :through => :pool_memberships
   has_many :users, :through => :pool_memberships

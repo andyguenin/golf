@@ -2,6 +2,7 @@
 	<div class="col-md-1"> </div>
 	<% 5.times do |d|%>
 		<div id="bucket-<%= d+1 %>" class="col-md-2">
+		  Bucket <%= d+1 %>
 			<% @tplayers.each do |tp| %>
 				<%if tp.bucket == d+1 %>
 					<div id="player-<%= tp.id %>" class="player-pick btn btn-primary full-width">
@@ -24,7 +25,7 @@
 	</p>
 <%end%>
 <p>
-	<%= f.label :tiebreak, "Number of shots taken by leader in first round (Course par is #{@pool.tournament.course.holes.each.inject(0) {|a,b| a + b.par}})"%><br />
+	<%= f.label :tiebreak, "Number of strokes taken by leader in first round (Course par is #{@pool.tournament.course.holes.each.inject(0) {|a,b| a + b.par}})"%><br />
 	<%= f.text_field :tiebreak %>
 </p>
 <%= f.submit :id => "player-pick-submit", :class => "btn btn-success"%>

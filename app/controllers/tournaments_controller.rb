@@ -10,6 +10,13 @@ class TournamentsController < ApplicationController
   
   def show
     @tournament = Tournament.find_by_slug(params[:id], :include => {:players => :scores})
+    @players = @tournament.players.includes(:tplayers => :rounds).all.sort_by do |t| 
+      u = t.get_tplayer(@tournament)
+      [u.status, u.score, -u.hole, t.last_name]
+    end
+#    @holes = @tournament.course.holes.order("hole_number asc")
+#    @scores = p.scores_by_tournament(@tournament)
+    
   end
 
   def edit

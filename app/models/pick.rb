@@ -20,10 +20,12 @@
 #  score              :integer
 #  approved           :boolean
 #  approver           :integer
+#  bonus              :integer
+#  active_players     :integer
 #
 
 class Pick < ActiveRecord::Base
-  attr_accessible :pool_membership_id, :p1, :p2, :p3, :p4, :p5, :q1, :q2, :q3, :q4, :q5, :tiebreak
+  attr_accessible :pool_membership_id, :p1, :p2, :p3, :p4, :p5, :q1, :q2, :q3, :q4, :q5, :tiebreak, :score, :bonus, :active_players
   
   belongs_to :pool_membership
   has_one :user, :through => :pool_membership
@@ -59,23 +61,32 @@ class Pick < ActiveRecord::Base
   end
   
   def player_subscore
-    players.inject(0) do |sum, p|
-      sum = sum + p.score_by_tournament(pool.tournament)
-    end
+    scores = players.map{|p| p.get_tplayer(pool.tournament).score}
+    max = scores.max
+    scores = scores.select{|t| t != max}
+    scores.fill(max, scores.length, 4-scores.length)
+    scores.sum
   end
-
+  
+  def correct_questions
+    [q1,q2,q3,q4,q5].zip(pool.q_answers.map{|a| a.answer}).select do |a|
+      a[0] == a[1] and not a[0].nil?
+    end.length
+  end
 
   def update_score
     s = player_subscore
-    as = pool.q_answers.order("number asc")
-    5.times do |t|
-      s -= as.all[t].answer.nil? ? 0 : (self.send("q#{t+1}") == as.all[t].answer ? 1 : 0)
-    end
-#    s += (bonus || 0)
-    self.update_attribute(:score, s)
+    s -= correct_questions
+    num_active_players = players.map do |p| 
+      status = p.get_tplayer(tournament).status
+      status <=1 or status == 5
+    end.length
+    s -= num_active_players == 5 ? 3 : 0
+    self.update_attributes!({:score => s, :bonus => num_active_players == 5 ? -3 : 0, :active_players => num_active_players})
   end
   
   def players
     [pick1, pick2, pick3, pick4, pick5]
   end
+
 end

@@ -38,6 +38,9 @@ class User < ActiveRecord::Base
     if user && user.password_hash == BCrypt::Engine.hash_secret(password, user.password_salt) && user.active?
       user
     else
+      unless user.active?
+        user.errors.add(:email, "has been registered, but not activated. Please check your email and click on the confirmation link")
+      end
       nil
     end
   end

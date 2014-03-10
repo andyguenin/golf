@@ -2,118 +2,105 @@
 <h2 class="lighten"><em><%= @tournament.course.location %> </em></h2>
 <h3 class="no-bottom lighten"><%= @tournament.formatted_start %> to <%= @tournament.formatted_end%></h3>
 <div class="pull-right btn-group">
-	<%= link_to "Edit Tournament", edit_tournament_path(@tournament), :class => "btn btn-warning"%>
+  <%= link_to "Edit Tournament", edit_tournament_path(@tournament), :class => "btn btn-warning" if can? :edit, @tournament%>
 </div><br /><br />
 </div>
 </div>
 
 <div class="row">
-		<% holes = @tournament.course.holes.order("hole_number asc")%>
-		<div class="col-md-1 text-center">
-			Place
-		</div>
-		<div class="col-md-2 text-center">
-			Player
-		</div>
-		<div class="col-md-1 text-center">
-			Bucket
-		</div>
-		<div class="col-md-5 text-center">
-			Score makeup
-		</div>
-		<div class="col-md-2 text-center">
-			Thru
-		</div>
-		<div class="col-md-1 text-center">
-			Score
-		</div>
+  <div class="col-md-1 text-center">
+    Place
+  </div>
+  <div class="col-md-2 text-center">
+    Player
+  </div>
+  <div class="col-md-1 text-center">
+    Bucket
+  </div>
+  <div class="col-md-5 text-center">
+    Score makeup
+  </div>
+  <div class="col-md-2 text-center">
+    Thru
+  </div>
+  <div class="col-md-1 text-center">
+    Score
+  </div>
+</div>
+<% counter = 1 %>
+
+
+<% @players.each do |p| %>
+<div class="row  player-label" data-toggle="collapse" data-target="#demo<%= counter %>" class="accordion-toggle">
+  <% t = p.get_tplayer(@tournament)%>
+  <% sum = @tournament.round*18%>
+  <div class="col-md-1 players-rank text-center">
+    <%= t.rank if t.status <= 1%>
 	</div>
-  <% counter = 1 %>
+  <div class="col-md-2 players-name">
+    <%= p.name %>
+  </div>
+  <div class="col-md-1 players-bucket text-center">
+    <%= t.bucket %>
+  </div>
+  <div class="col-md-5 text-center">
+    <div class="progress">
+      <div class="progress-bar progress-bar-success" style="width: <%=t.eagle*100.0/sum%>%">
+	<span class="sr-only">Eagle</span></div>
+      <div class="progress-bar progress-bar-primary" style="width: <%=t.birdie*100.0/sum%>%">
+	<span class="sr-only">Birdie</span></div>
+      <div class="progress-bar progress-bar-info" style="width: <%=t.par*100.0/sum%>%">
+	<span class="sr-only">Par</span></div>
+      <div class="progress-bar progress-bar-warning" style="width: <%=t.bogey*100.0/sum%>%">
+	<span class="sr-only">Bogey</span></div>
+      <div class="progress-bar progress-bar-danger" style="width: <%=t.dbogey*100.0/sum%>%">
+	<span class="sr-only">Double Bogey</span></div>
+    </div>
+  </div>
+  <div class="col-md-2 text-center">
+    <% scores = t.scores %>
+    <%= get_thru_text(t) %>
+  </div>
+  <div class="col-md-1 text-center">
+    <%= t.status <= 1 ? (t.score == 0 ? "E" : t.score) : ""%>
+	</div>
+</div>
+<% if @tournament.course.holes.count == 18%>
+<div class="row" >
+  <div class="col-md-12" class="hiddenRow">
+    <div class="accordian-body collapse" id="demo<%= counter %>">
 
+      <table class="table table-condensed table-bordered score-table">
+        <thead>
+          <% 2.times do |s| %>
+          <tr><th><%= s==0 ? "Hole" : "Par" %></th>
+            <% @tournament.course.holes.order("hole_number asc").each do |h| %>
+            <td><strong><%= h.send("#{s==0 ? "hole_number" : "par"}") %></strong></td>
+            <% end %>  
+            <th><%= s==0 ? "Total" : @tournament.course.holes.map{|h| h.par}.sum %></th>
+          </tr>
+          <% end %>
+        </thead>
+        <tbody>
+          <% scores.length.times do |round| %>
+          <tr><td>Round <%= round+1 %></td>
+            <% (1..18).each do |hole|%>
+            <td><%= scores[round][hole-1][0] == 0 ? "-" : scores[round][hole-1][0]%></td>
+            <% end %>
+            <td>
+	      <%= scores[round].select{|h| h[0] != 0}.map{|h| h[0] - h[1]}.sum %>
+	    </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
 
-        <% (@tournament.players.includes(:tplayers => :rounds).all.sort_by {|t| u = t.get_tplayer(@tournament); [u.status, t.score_by_tournament(@tournament), -u.hole, t.last_name] }).each do |p| %>
-	<div class="row  player-label" data-toggle="collapse" data-target="#demo<%= counter %>" class="accordion-toggle">
-					<% t = p.get_tplayer(@tournament)%>
-					<% sum = @tournament.round*18%>
-					<div class="col-md-1 players-rank text-center">
-						<%= t.rank if t.status <= 1%>
-					</div>
-          <div class="col-md-2 players-name">
-						<%= p.name %>
-					</div>
-					<div class="col-md-1 players-bucket text-center">
-						<%= t.bucket %>
-					</div>
-					<div class="col-md-5 text-center">
-						<div class="progress">
-					  <div class="progress-bar progress-bar-success" style="width: <%=t.eagle*100.0/sum%>%">
-							<span class="sr-only">Eagle</span></div>
-					  <div class="progress-bar progress-bar-primary" style="width: <%=t.birdie*100.0/sum%>%">
-							<span class="sr-only">Birdie</span></div>
-					  <div class="progress-bar progress-bar-info" style="width: <%=t.par*100.0/sum%>%">
-							<span class="sr-only">Par</span></div>
-					  <div class="progress-bar progress-bar-warning" style="width: <%=t.bogey*100.0/sum%>%">
-							<span class="sr-only">Bogey</span></div>
-					  <div class="progress-bar progress-bar-danger" style="width: <%=t.dbogey*100.0/sum%>%">
-							<span class="sr-only">Double Bogey</span></div>
-					  </div>
-					</div>
-					<div class="col-md-2 text-center">
-						<% holes_completed = p.scores_by_tournament_round(@tournament, t.round).count%>
-						<%if t.status.nil? or t.status <= 1 %>
-						  <% if holes_completed == 18%>
-  							<% if t.round == 4 %>
-									F 
-   							<%else%>
-									<%= "End Round #{t.round}" %>
-								<% end%>
-							<%else%>
-						  	<%= holes_completed %>
-							<%end%>
-						<%else%>
-						<%= status_to_text(t.status)%>
-						<%end%>
-					</div>
-					<div class="col-md-1 text-center">
-						<%= t.status <= 1 ? (t.score == 0 ? "E" : t.score) : ""%>
-					</div>
-				</div>
-					<% if @tournament.course.holes.count == 18%>
-      <div class="row" >
-				<div class="col-md-12" class="hiddenRow">
-           <div class="accordian-body collapse" id="demo<%= counter %>">
+    </div>
+  </div>
+</div>
+<%end%>
+<% counter = counter + 1 %>  
+<% end %>
 
-              <% tscores = p.scores_by_tournament(@tournament) %>
-
-              <table class="table table-condensed table-bordered score-table">
-                <thead>
-                  <% 2.times do |s| %>
-                  <tr><th><%= s==0 ? "Hole" : "Par" %></th>
-                    <% @tournament.course.holes.order("hole_number asc").each do |h| %>
-                    <td><strong><%= h.send("#{s==0 ? "hole_number" : "par"}") %></strong></td>
-                    <% end %>  
-                    <th><%= s==0 ? "Total" : @tournament.course.holes.map{|h| h.par}.sum %></th>
-                  </tr>
-                  <% end %>
-                </thead>
-                <tbody>
-                  <% 4.times do |round| %>
-                  <tr><td><%= round+1 %></td>
-                    <% (1..18).each do |hole|%>
-                      <td><%= tscores[round][hole-1].nil? ? "-" : tscores[round][hole-1].strokes%></td>
-                    <% end %>
-                    <td><%= tscores[round].empty? ? "" :  (tscores[round].count == 18 ? tscores[round].map{|t| t.nil? ? 0 : t.strokes}.sum : p.score_by_tournament_round(@tournament, round+1))%></td>
-                  </tr>
-                  <% end %>
-                </tbody>
-              </table>
-
-						</div>
-				 </div>
-			 </div>
-			 			<%end%>
-      <% counter = counter + 1 %>  
-      <% end %>
-
-			<div class="row">
-				<div class="col-md-12">
+<div class="row">
+  <div class="col-md-12">

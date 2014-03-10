@@ -3,22 +3,19 @@
     <td> </td>
     <td>Score</td>
     <td>Players Subscore</td>
-    <% (1..5).each do |p| %>
-      <td>Pick <%= p %></td>
-    <% end %>
-    <td>Low score</td>
-		<td> </td>
-		<td> </td>
+    <td>Bonus</td>
+    <td>Correct Question Bonus</td>
+    <td>1st Par Tiebreak</td>
+    <td> </td>
+    <td> </td>
   </tr>
   <% @picks.each do |p| %>
     <tr>
       <td><%= p.user.name %></td>
       <td><%= p.score %></td>
       <td><%= p.player_subscore %></td>
-      <% (1..5).each do |pick_number| %>
-        <% player = p.send("pick#{pick_number}") %>
-        <td><%= link_to player.name, t_player_path(@tournament, player.slug) %></td>
-      <% end %>
+      <td><%= p.bonus %></td>
+      <td><%= p.correct_questions * -1 %></td>
       <td><%= p.tiebreak %></td>
 			<td><%= link_to raw("<span class=\"glyphicon glyphicon-pencil\"></span>"), edit_pool_pick_path(@pool, p) if can? :edit, p%></td>
 			<td><%= link_to raw("<span class=\"glyphicon glyphicon-trash\"></span>"), pool_pick_path(@pool, p), method: :delete, data: {confirm: 'Are you sure you want to delete this? This cannot be undone'} if can? :edit, p%></td>

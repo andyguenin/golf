@@ -50,4 +50,8 @@ class Tournament < ActiveRecord::Base
       cur_place = cur_place + freq
     end
   end  
+
+  def pars
+    self.course.holes.map{|h| h.par}
+  end
 end

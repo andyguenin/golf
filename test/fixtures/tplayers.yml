@@ -17,10 +17,8 @@
 #  bogey         :integer
 #  dbogey        :integer
 #  tbogey        :integer
-#  round         :integer
-#  hole          :integer
-#  rank          :string(255)
+#  current_round :integer
+#  rank          :integer
 #
-
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html

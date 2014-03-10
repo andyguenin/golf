@@ -49,85 +49,28 @@ class Player < ActiveRecord::Base
     if tplayer.nil?
       tplayer = player.tplayers.create!({:tournament => tourn, :bucket => 0, :score => 0, :status => 5})
     end
-
-    holes = tourn.course.holes
-    current_scores = player.scores_by_tournament(tourn)
-    pars = tourn.course.holes.map {|h| h.par}
-    freq = []
-    9.times do |t|
-      freq << 0
-    end
-    curr_round = 0
-    curr_hole = 0
-
     unless score_structure.length == 1
       existing_rounds = tplayer.rounds
-      if existing_rounds.length != score_structure.length-2
-        Round.create_round(score_structure[existing_rounds.length+1], existing_rounds.length+1, tplayer)
-        existing_rounds = player.get_tplayer(tourn).rounds
-      end
-      (score_structure.length-2).times do |t|
-        existing_rounds[t].update_scores(score_structure[t+1])
-        stats = [0,0,0,0,0]
-        existing_rounds.length.times do |u|
-          stats = Round.stats_combiner(existing_rounds[u].score_stats, stats)
+      if existing_rounds.length != score_structure.length-3
+        (score_structure.length-existing_rounds.length-3).times do |r|
+          c_round = r + 1
+          Round.create_round(score_structure[c_round], c_round, tplayer)
         end
+        existing_rounds = tplayer.rounds
       end
-    
-      player.update_score(tourn, score_structure[-2], score_structure[-1])
-      tplayer.update_attributes({:deagle => freq[1], :eagle => freq[2], :birdie => freq[3], :par => freq[4], :bogey => freq[5], :dbogey => freq[6], :tbogey => freq[7]})
+      tplayer.update_score(score_structure[-1])
       tourn.update_attribute(:round, [[0,((Time.now - tourn.starttime)/60/60/24).floor].max + 1,4].min)   
     end
   end
 
   def scores_by_tournament(tournament)
-    hm = [[],[],[],[]]
-    scores = self.scores.includes(:hole).where("tournament_id = ?", tournament.id). \
-      order("round asc, holes.hole_number asc")
-    scores.each do |score|
-      hm[score.round-1][score.hole.hole_number - 1] = score
-    end
-    hm
+    get_tplayer(tournament).rounds.map {|r| r.as_vec}
   end
 
-  def score_by_tournament_round(tournament, round)
-        a = scores_by_tournament_round(tournament, round).inject(0) do |sum, n|
-          sum + (n.strokes - n.hole.par)
-        end        
-  end
-
-  def scores_by_tournament_round(tournament, round)
-    self.scores.includes(:hole).where("tournament_id = ? and round = ?", \
-        tournament.id, round).order("holes.hole_number asc")
-  end
-
-  def score_by_tournament(tournament)
-    p = self.tplayers.find_by_tournament_id(tournament.id).score || 0
-  end
 
   def get_tplayer(tournament)
     self.tplayers.where("tournament_id = ?", tournament.id)[0]
   end
   
-  def update_score(tournament, score, status)
-    dnf = 1
-    a = 0
-    begin
-      a = Integer(status)
-    rescue ArgumentError, TypeError
-      unless a.to_s == score
-        unless status == "F"
-          score = 100
-          if status == "WD"
-            dnf = 4
-          elsif status == "CUT"
-            dnf = 3
-          elsif status == "MDF"
-            dnf = 2
-          end
-        end
-      end
-    end
-    get_tplayer(tournament).update_attributes({:score => score, :status => dnf})
-  end
+
 end

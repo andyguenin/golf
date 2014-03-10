@@ -20,7 +20,10 @@
 #  score              :integer
 #  approved           :boolean
 #  approver           :integer
+#  bonus              :integer
+#  active_players     :integer
 #
+
 require 'test_helper'
 
 class PickTest < ActiveSupport::TestCase

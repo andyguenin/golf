@@ -17,8 +17,8 @@
 #  bogey         :integer
 #  dbogey        :integer
 #  tbogey        :integer
-#  hole          :integer
-#  rank          :string(255)
+#  current_round :integer
+#  rank          :integer
 #
 
 class Tplayer< ActiveRecord::Base
@@ -32,7 +32,7 @@ class Tplayer< ActiveRecord::Base
   validates_presence_of :status
   validates_presence_of :deagle, :eagle, :birdie, :par, :bogey, :dbogey, :tbogey
 
-  
+
   after_initialize :set_default
   
   def set_default
@@ -53,6 +53,17 @@ class Tplayer< ActiveRecord::Base
     end
   end
 
+  def scores
+    if self.id.nil?
+      [[[]]]
+    else
+      player.scores_by_tournament(tournament).map do |s|
+        s.zip(tournament.pars)
+      end
+    end
+  end
+
+
   def round
     rounds.size
   end
@@ -60,5 +71,51 @@ class Tplayer< ActiveRecord::Base
   def get_round(r)
     rounds.where("round = ?", r).first
   end
+
+  def update_score(status)
+    sc = scores.flatten(1).select do |h| 
+      h[0] != 0
+    end
+    upd_status = 1
+    begin 
+      a = Integer(status)
+    rescue ArgumentError, TypeError
+      
+      unless a.to_s == score
+        unless status == "F"
+          if status == "WD" or status == "N/A"
+            upd_status = 4
+          elsif status == "CUT"
+            upd_status = 3
+          elsif status == "MDF"
+            upd_status = 2
+          else
+            unless sc.length > 0
+              upd_status = 5
+            end
+          end
+        end
+      end
+    end
+            
+    score_type = scores.flatten(1).select{|t| t[0] != 0}.map{|r| [[0,r[0] - r[1] + 2].max,4].min}
+    stats=[0,0,0,0,0]
+    score_type.length.times do |t|
+      stats[score_type[t]] = stats[score_type[t]]+1
+    end
+    self.update_attributes!({
+                              :status => upd_status,
+                              :score => sc.map{|t| t[0] - t[1]}.sum,
+                              :deagle => stats[0],
+                              :eagle => stats[0],
+                              :birdie => stats[1],
+                              :par => stats[2],
+                              :bogey => stats[3],
+                              :dbogey => stats[4],
+                              :tbogey => stats[4]
+                              })
+      
+  end
+
   
 end
