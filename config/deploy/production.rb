@@ -1,5 +1,5 @@
 set :stage, :production
-set :branch, fetch(:branch, "production")
+set :branch,  "production"
 
 set :full_app_name, "#{fetch(:application)}_#{fetch(:stage)}"
 
