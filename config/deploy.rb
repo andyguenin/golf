@@ -38,7 +38,7 @@ namespace :deploy do
     end
   end
 
-  task :setup_db, :roles => :app do 
+  task :setup_db do 
     raise RuntimeError.new('db:setup aborted!') unless Capistrano::CLI.ui.ask("About to `rake db:setup`. Are you sure to wipe the entire database (anything other than 'yes' aborts):") == 'yes'
     run "cd #{current_path}; bundle exec rake db:setup RAILS_ENV=#{rails_env}"
   end

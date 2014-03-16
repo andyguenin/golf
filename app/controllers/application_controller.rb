@@ -1,7 +1,5 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  
-  http_basic_authenticate_with name: "mr. ducky", password: "golf@blackrock", :except => :is if Rails.env.production?
 
   helper_method :current_user, :selected_menu, :print_menu_active
 
