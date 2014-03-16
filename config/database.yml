@@ -24,3 +24,4 @@ production:
   database: golf
   pool: 5
   username: andy
+  host: localhost
