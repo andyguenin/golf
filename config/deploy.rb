@@ -31,12 +31,15 @@ namespace :deploy do
   end
 
   task :cold do 
-    update
-    load_schema
-    start
+    transaction do 
+      update
+      setup_db
+      start
+    end
   end
 
-  task :load_schema, :roles => :app do 
-    run "cd #{current_path}; rake db:schema:load"
+  task :setup_db, :roles => :app do 
+    raise RuntimeError.new('db:setup aborted!') unless Capistrano::CLI.ui.ask("About to `rake db:setup`. Are you sure to wipe the entire database (anything other than 'yes' aborts):") == 'yes'
+    run "cd #{current_path}; bundle exec rake db:setup RAILS_ENV=#{rails_env}"
   end
 end
