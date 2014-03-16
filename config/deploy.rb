@@ -29,4 +29,14 @@ namespace :deploy do
   task :restart do
     run "touch #{current_release}/tmp/restart.txt"
   end
+
+  task :cold do 
+    update
+    load_schema
+    start
+  end
+
+  task :load_schema, :roles => :app do 
+    run "cd #{current_path}; rake db:schema:load"
+  end
 end
