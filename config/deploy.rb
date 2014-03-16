@@ -2,7 +2,7 @@
 lock '3.1.0'
 
 set :application, 'golf'
-set :deploy_user, 'deployer'
+set :deploy_user, 'deploy'
 
 set :scm, :git
 set :repo_url, 'git@github.com:andyguenin/golf.git'
