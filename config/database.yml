@@ -25,3 +25,4 @@ production:
   pool: 5
   username: andy
   host: localhost
+  password: 
