@@ -8,7 +8,6 @@ set :scm, :git
 set :repo_url, 'git@github.com:andyguenin/golf.git'
 
 
-set :rben_type, :system
 set :rbenv_ruby, '2.1.1p76'
 set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
 set :rbenv_map_bins, %w{rake gem bundle ruby rails}

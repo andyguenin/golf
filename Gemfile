@@ -45,7 +45,7 @@ gem 'bcrypt-ruby', :require => "bcrypt"
 # Deploy with Capistrano
 gem 'capistrano'
 gem 'capistrano-rails'
-gem 'capistrano-rbenv', github: "capistrano/rbenv"
+gem 'capistrano-rvm'
 
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
