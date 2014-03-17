@@ -1,4 +1,13 @@
-<h1>Upcoming Pools</h1>
+<div class="row">
+  <div class="col-md-5">
+    <h1 class="title">Upcoming Pools</h1>
+  </div>
+  <div class="col-md-5 page-description">
+    A pool is a group of people playing against each other to assemble the best possible team of golfers.  
+    Each pool is associated with a particular tournament. You may, at the discression of the pool administrator, enter multiple teams. 
+    Pool rankings are updated every two minutes. For the time being, only approved members may create a pool.
+  </div>
+</div>
 </div></div>
 <div class="row"><div class="col-md-2 col-md-offset-10">
 <% if can? :create, Pool.new%>
@@ -7,37 +16,43 @@
 </div>
 </div>
 <%unless @pools.empty?%>
-<div class="row">
-	<div class="col-md-3">
-		Pool Name
+<div class="row pool-table-header">
+	<div class="col-md-6">
+		Pool Name and Tournament
 	</div>
-	<div class="col-md-3">
-		Tournament
-	</div>
-	<div class="col-md-2">
+	<div class="col-md-1">
 		Members
 	</div>
-	<div class="col-md-2">
+	<div class="col-md-5">
 		Lock Date
 	</div>
 </div>
 <% end%>
 <% @pools.each do |p|%>
-<div class="row">
-	<div class="col-md-3">
+<div class="row pool-table-content">
+	<div class="col-md-6 pool-tournament-links">
 		<%unless p.published?%>
-		(Draft)
+		<div class="pool-is-draft">
+		<span class="glyphicon glyphicon-th-list"></span> Draft
+		</div>
 		<%end%>
 		<%= link_to "#{p.name}", p%>
+		<% if (not current_user.nil?) and current_user.pools.include? p %>
+		<div class="user-is-in-pool">
+		  <span class="glyphicon glyphicon-ok-circle"></span> You are a member
+		</div>
+		<% end %>
+		<div class = "pool-tournament-name">
+		  <%= link_to "#{p.tournament.name}", p.tournament%>
+
+		</div>
+		     
 	</div>
-	<div class="col-md-3">
-		<%= link_to "#{p.tournament.name}", p.tournament%>
-	</div>
-	<div class="col-md-2">
+	<div class="col-md-1">
 		<%=p.users.count%>
 	</div>
-	<div class="col-md-2">
-		<%= "#{p.tournament.formatted_start}"%>
+	<div class="col-md-5">
+		<%= "#{p.tournament.formatted_time} #{p.tournament.formatted_start}"%>
 	</div>
 </div>
 <% end %>

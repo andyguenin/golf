@@ -114,8 +114,8 @@ class PoolsController < ApplicationController
   def create
     questions = ["q1","q2","q3","q4","q5"]
     @pool = Pool.new(params[:pool].except(*questions))
-    @tournament_options = getAvailableTournaments
     authorize! :create, @pool
+    @tournament_options = getAvailableTournaments
     @pool.tournament = Tournament.find(params[:pool]["tournament_id"]) 
     if(@pool.save)
       @pool.update_attributes(params[:pool].slice(*questions))

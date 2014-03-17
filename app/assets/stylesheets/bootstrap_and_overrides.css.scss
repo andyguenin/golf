@@ -1,10 +1,10 @@
 @import "bootstrap";
 
 $dark-grey: #606060;
-
+$dark-green: #243729;
 
 body {
-  background-color: #243729; 
+  background-color: $dark-green; 
 }
 
 nav {
@@ -16,11 +16,14 @@ textarea {
 }
 .navbar {
 	margin-bottom: 0px;
+	position: fixed;
+	width: 100%;
 }
 
 
 
 .container {
+  padding-top: 40px;
   padding-bottom: 10px;
   background-color:#F7F7F7;
 }
@@ -75,4 +78,14 @@ textarea {
 }
 .player-pick {
 	margin-bottom: 10px;
+}
+
+
+.page-description	{	
+  padding-top: 20px;
+  font-style: oblique;		  
+}
+
+h1.title {
+   color: darken($dark-green, 0%);
 }

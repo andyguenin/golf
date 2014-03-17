@@ -50,7 +50,7 @@ class Ability
     end
     
     can :create, Pool do |pool|
-      not user.id.nil?
+      not user.id.nil? and user.admin
     end
     
     

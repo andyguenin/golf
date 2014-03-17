@@ -37,6 +37,10 @@ class Tournament < ActiveRecord::Base
   def formatted_end
     self.endtime.strftime("%A, %B %d, %Y")
   end
+
+  def formatted_time
+    self.starttime.in_time_zone("Eastern Time (US & Canada)").strftime("%k:%M %Z")
+  end
   
   def rank_players
     cur_place = 1
