@@ -25,13 +25,13 @@ preproduction:
   timeout: 5000
 
 staging:
-	adapter: postgresql
-	encode: unicode
-	database: golf_staging
-	pool: 5
-	username: andy
-	host: localhost
-	password:
+  adapter: postgresql
+  encode: unicode
+  database: golf_staging
+  pool: 5
+  username: andy
+  host: localhost
+  password:
 
 production:
   adapter: postgresql
