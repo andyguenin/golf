@@ -21,16 +21,16 @@ class Ability
       pool.admins.include? user
     end
     
-    can :read_summary, Pool do |pool|
-      pool.published and (not pool.private? or user.all_pools.include?(pool))
-    end
-    
     can :read, Pool do |pool|
-      pool.published and (not pool.private or user.pools.include?(pool)) and pool.tournament.locked
+      (pool.published and (not pool.private or user.pools.include?(pool))) or can? :manage, pool
     end
     
     can :join, Pool do |pool|
-      can? :read_summary, pool and not user.id.nil?
+      not user.id.nil? and not user.pools.include? pool and can? :read, pool
+    end
+
+    can :leave, Pool do |pool|
+      not user.id.nil? and user.pools.include? pool
     end
     
     can :publish, Pool do |pool|
@@ -41,18 +41,13 @@ class Ability
       pool.published and pool.nonadmin_invite and user.pools.include? pool
     end
     
-    can :see, Pool do |pool|
-      can?(:read, pool) or can?(:join, pool)
-    end
-    
     can :pick, Pool do |pool|
-      can?(:read_summary, pool) and (not pool.tournament.locked or pool.admins.include? user)
+      user.pools.include? pool and (not pool.tournament.locked or pool.admins.include? user)
     end
     
     can :create, Pool do |pool|
       not user.id.nil? and user.admin
     end
-    
     
     # These are to prevent admin from performing illegal actions
     cannot :leave, Pool do |pool|

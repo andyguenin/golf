@@ -1,7 +1,7 @@
 <div class="row">
 	<div class="col-md-1"> </div>
 	<% 5.times do |d|%>
-		<div id="bucket-<%= d+1 %>" class="col-md-2">
+		<div id="bucket-<%= d+1 %>" class="col-md-2 <%= "field_with_errors" unless @pick.errors["p#{d+1}".to_sym].empty? %>">
 		  Bucket <%= d+1 %>
 			<% @tplayers.each do |tp| %>
 				<%if tp.bucket == d+1 %>
@@ -14,19 +14,34 @@
 	<%end%>
 </div>
 
+<div class="row questions-cont">
+<div class="col-md-8 col-md-offset-2">
 <%= form_for [@pool, @pick] do |f| %>
 <% 5.times do |d|%>
-	<p>
-		<% t = d+1%>
-		<%= f.hidden_field "p#{t}", :class => "bucket-pick" %>
-		<%= f.label "q#{t}".to_sym, @pool.send("q#{t}") %><br />
-		Yes <%= f.radio_button "q#{t}", true %>
+	<div class="row question-answer-list">
+	  <div class="col-md-8 col-md-offset-1 question-answer-list-question">
+	       <% t = d+1%>
+	       <%= f.hidden_field "p#{t}", :class => "bucket-pick" %>
+               <%= f.label "q#{t}".to_sym, @pool.send("q#{t}") %>
+	  </div>
+	  <div class="col-md-2 question-answer-list-answer">
+		Yes <%= f.radio_button "q#{t}", true %><br/>
 		No <%= f.radio_button "q#{t}", false %>
-	</p>
+	  </div>
+	</div>
 <%end%>
-<p>
-	<%= f.label :tiebreak, "Number of strokes taken by leader in first round (Course par is #{@pool.tournament.course.holes.each.inject(0) {|a,b| a + b.par}})"%><br />
-	<%= f.text_field :tiebreak %>
-</p>
-<%= f.submit :id => "player-pick-submit", :class => "btn btn-success"%>
+<div class="row question-answer-list">
+<div class="col-md-8 col-md-offset-1 question-answer-list-question">
+	<%= f.label :tiebreak, "Number of strokes taken by leader in first round."%><br >
+	<%= "(Par for the course is #{@pool.tournament.course.holes.each.inject(0) {|a,b| a + b.par}})"%>
+</div>
+<div class="col-md-2 question-answer-list-answer">
+	<%= f.text_field :tiebreak, :size=>2 %>
+</div>
+</div>
+
+
+</div>
+</div>
+<div class="col-md-2 col-md-offset-5 question-submit"><%= f.submit :id => "player-pick-submit", :class => "btn btn-success"%></div>
 <% end %>

@@ -1,10 +1,12 @@
 @import "bootstrap";
+@import "http://fonts.googleapis.com/css?family=Lusitana";
 
 $dark-grey: #606060;
 $dark-green: #243729;
 
 body {
   background-color: $dark-green; 
+  color: #666666;
 }
 
 nav {
@@ -84,8 +86,42 @@ textarea {
 .page-description	{	
   padding-top: 20px;
   font-style: oblique;		  
+  padding-bottom: 50px;
 }
 
 h1.title {
-   color: darken($dark-green, 0%);
+   font-size: 70px;
+   font-family: 'Lusitana', serif;  
+}
+
+h3.subtitle {
+   font-family: 'Lusitana', serif;
+   padding-bottom: 20px;
+}
+
+.field_with_errors {
+		   color: #a94442;
+		   display: inline;
+       font-style: italic;
+       font-weight: bold;
+}
+
+.alert {
+       margin-top: 10px;
+
+}
+
+.question-answer-list {
+
+		      padding-top: 15px;
+		      padding-bottom: 15px;
+		      border-bottom: 1px dotted $dark-grey;
+}
+
+.question-answer-list-answer {
+			     text-align: right;
+}
+
+.question-submit {
+		margin-top: 20px;
 }

@@ -2,7 +2,7 @@
 <% if @pool.private %>
 	(This is a private pool. Players must be invited to play)
 <%end%>
-<h2>for <%= link_to "#{@tournament.name} at #{@tournament.course.location}", tournament_path(@tournament) %></h2>
+<h3 class="subtitle">for <%= link_to "#{@pool.tournament.name} at #{@pool.tournament.course.location}", tournament_path(@pool.tournament) %></h3>
 
 <div class="pull-right btn-group">
 	<%= link_to ((not current_user.nil? and current_user.all_pools.include?(@pool)) ? "Accept Invite" : "Join Pool"), join_pool_path(@pool), :class => "btn btn-success" if can? :join, @pool%>
@@ -10,8 +10,10 @@
 	<%= link_to "Publish", publish_pool_path(@pool), :class => "btn btn-warning", 
 	:confirm => 'Are you sure you want to publish this pool? Once you publish it, you cannot edit any of the fields.' if can? :publish, @pool and not @pool.published%>
 	<%= link_to "Unpublish", unpublish_pool_path(@pool), :class => "btn btn-danger", :confirm => 'Are you sure you want to unpublish this pool' if can? :unpublish, @pool and @pool.published%>
-	<%= link_to "Leave Pool", leave_pool_path(@pool), :class => "btn btn-danger" if can? :leave, @pool %>
+	<%= link_to "Leave Pool", leave_pool_path(@pool), :class => "btn btn-danger", :confirm => 'Are you sure you want to leave this pool? Once you leave, your picks will be deleted' if can? :leave, @pool %>
 	<%= link_to "Invite others to play!", invite_pool_path(@pool), :class => "btn btn-success" if can? :invite, @pool%>
 	<%= link_to "Enter a pick sheet", new_pool_pick_path(@pool), :class => "btn btn-primary" if can? :pick, @pool%>
+	<%= link_to "My picks", my_picks_path, :class => "btn btn-primary" if current_page?(pool_path(@pool))%>
+	<%= link_to "Pool Summary", pool_path(@pool), :class => "btn btn-primary" if current_page?(my_picks_path) %>
 </div>
 <br /><br />

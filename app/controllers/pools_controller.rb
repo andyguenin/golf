@@ -11,6 +11,17 @@ class PoolsController < ApplicationController
     @pool = Pool.find(params[:id])
     authorize! :manage, @pool
   end
+
+  def mypicks
+    @pool = Pool.find(params[:id])
+    authorize! :read, @pool
+
+    puts can? :read, @pool
+    sleep(5.0)
+    @picks = current_user.picks.where("pool_id = ?", Pool.last.id)
+    @questions = @pool.q_answers.order("number asc")
+    render 'summary'
+  end
   
   def admins_update
     @pool = Pool.find(params[:id])
@@ -70,7 +81,7 @@ class PoolsController < ApplicationController
       unless(pm.save)
         redirect_to @pool, :error => "There is an error: please contact #{email}"
       else
-       redirect_to @pool, :notice => "You have joined the pool!"
+       redirect_to @pool, :success => "You have joined the pool!"
       end
     else
       pm.update_attribute(:active, true)
@@ -82,24 +93,22 @@ class PoolsController < ApplicationController
     @pool = Pool.find(params[:id])
     authorize! :leave, @pool
     pm = PoolMembership.where("user_id = ? and pool_id = ?", current_user.id, @pool.id)[0]
-    pm.delete
+    pm.destroy
     redirect_to pools_path
   end
   
   
   def index
-    @pools = Pool.all.each.select {|po| can? :see, po}
+    @pools = Pool.all.each.select {|po| can? :read, po}
   end
 
   def show
     @pool = Pool.find(params[:id], :include => [:tournament, :q_answers])
-    authorize! :read_summary, @pool
+    authorize! :read, @pool
     @questions = @pool.q_answers.order("number asc")
-    if can? :read, @pool
-      @tournament = @pool.tournament
-      @picks = @pool.picks.order("score asc, #{ "ABS(picks.tiebreak - " + @tournament.low_score.to_s + ") asc," if @tournament.low_score} id asc")
+    if can? :read, @pool and @pool.tournament.locked
+      @picks = @pool.picks.order("score asc, #{ "ABS(picks.tiebreak - " + @pool.tournament.low_score.to_s + ") asc," if @pool.tournament.low_score} id asc")
     else
-      @tournament = @pool.tournament
       @picks = current_user.picks.where("pool_id = ?", Pool.last.id)
       render 'summary'
     end
@@ -114,6 +123,7 @@ class PoolsController < ApplicationController
   def create
     questions = ["q1","q2","q3","q4","q5"]
     @pool = Pool.new(params[:pool].except(*questions))
+    @pool.nonadmin_invite = true
     authorize! :create, @pool
     @tournament_options = getAvailableTournaments
     @pool.tournament = Tournament.find(params[:pool]["tournament_id"]) 

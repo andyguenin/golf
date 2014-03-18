@@ -1,6 +1,5 @@
-<h1 class="no-bottom"><%= @tournament.name %></h1>
-<h2 class="lighten"><em><%= @tournament.course.location %> </em></h2>
-<h3 class="no-bottom lighten"><%= @tournament.formatted_start %> to <%= @tournament.formatted_end%></h3>
+<h1 class="no-bottom title"><%= @tournament.name %></h1>
+<h3 class="no-bottom lighten subtitle">From <%= @tournament.formatted_start %> to <%= @tournament.formatted_end%></h3>
 <div class="pull-right btn-group">
   <%= link_to "Edit Tournament", edit_tournament_path(@tournament), :class => "btn btn-warning" if can? :edit, @tournament%>
 </div><br /><br />
@@ -30,8 +29,10 @@
 <% counter = 1 %>
 
 
+
+<div class="row">
 <% @players.each do |p| %>
-<div class="row  player-label" data-toggle="collapse" data-target="#demo<%= counter %>" class="accordion-toggle">
+<div class="player-label collapse-group" data-toggle="collapse" href="#demo<%= counter %>" class="accordion-toggle">
   <% t = p.get_tplayer(@tournament)%>
   <% sum = @tournament.round*18%>
   <div class="col-md-1 players-rank text-center">
@@ -101,6 +102,6 @@
 <%end%>
 <% counter = counter + 1 %>  
 <% end %>
-
+</div>
 <div class="row">
   <div class="col-md-12">
