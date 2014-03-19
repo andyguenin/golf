@@ -176,5 +176,5 @@ function send_to_ruby(str)
 var page = require('webpage').create();
 page.settings.userAgent = "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.2 Safari/537.36"
 //scrape('http://espn.go.com/golf/leaderboard', false, send_to_ruby)
-scrape('http://espn.go.com/golf/leaderboard', true, send_to_ruby)
+scrape('http://espn.go.com/golf/leaderboard?tournamentId=1314', true, send_to_ruby)
 

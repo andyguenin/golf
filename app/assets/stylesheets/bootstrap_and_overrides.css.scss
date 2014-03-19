@@ -125,3 +125,47 @@ h3.subtitle {
 .question-submit {
 		margin-top: 20px;
 }
+
+
+$link-size: 24px;
+
+.list-table-content {
+height: 100px;
+font-size: $link-size;
+padding-top: 20px;
+padding-bottom: 20px;
+text-align: center;
+
+}
+
+.list-table-header {
+text-align: center;
+}
+
+.list-tournament-links{
+text-align: left;
+}
+.list-tournament-name{
+font-size: 3/4*$link-size;
+padding-left: 20px;
+a {
+color: lighten(#428bca, 20%);
+}
+
+}
+
+.list-tournament-date {
+		     font-size: ($link-size - 6px);
+		     padding-top: 6px;
+}
+.user-is-in-pool {
+font-size: 1/2*$link-size;
+color: #09C700;
+display: inline;
+}
+
+.pool-is-draft {
+font-size: 3/4*$link_size;
+color: #A20505;
+display: inline;
+}

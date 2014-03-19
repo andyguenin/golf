@@ -16,7 +16,7 @@
 </div>
 </div>
 <%unless @pools.empty?%>
-<div class="row pool-table-header">
+<div class="row list-table-header">
 	<div class="col-md-6">
 		Pool Name and Tournament
 	</div>
@@ -29,8 +29,8 @@
 </div>
 <% end%>
 <% @pools.each do |p|%>
-<div class="row pool-table-content">
-	<div class="col-md-6 pool-tournament-links">
+<div class="row list-table-content">
+	<div class="col-md-6 list-tournament-links">
 		<%unless p.published?%>
 		<div class="pool-is-draft">
 		<span class="glyphicon glyphicon-th-list"></span> Draft
@@ -42,7 +42,7 @@
 		  <span class="glyphicon glyphicon-ok-circle"></span> You are a member
 		</div>
 		<% end %>
-		<div class = "pool-tournament-name">
+		<div class = "list-tournament-name">
 		  <%= link_to "#{p.tournament.name}", p.tournament%>
 
 		</div>

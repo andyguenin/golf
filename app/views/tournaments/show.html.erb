@@ -66,8 +66,9 @@
     <%= t.status <= 1 ? (t.score == 0 ? "E" : t.score) : ""%>
 	</div>
 </div>
-<% if @tournament.course.holes.count == 18%>
 <div class="row" >
+<% if @tournament.course.holes.count == 18%>
+
   <div class="col-md-12" class="hiddenRow">
     <div class="accordian-body collapse" id="demo<%= counter %>">
 
@@ -98,8 +99,9 @@
 
     </div>
   </div>
-</div>
+
 <%end%>
+</div>
 <% counter = counter + 1 %>  
 <% end %>
 </div>
