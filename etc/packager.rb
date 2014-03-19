@@ -36,6 +36,8 @@ post '/scores' do
   #uri = URI.parse("http://floating-everglades-7438.herokuapp.com/insert")
   uri = URI.parse("http://localhost:3000/insert")
   response = Net::HTTP.post_form(uri, {"scores" => encoded})
+  uri = URI.parse("http://localhost/insert")
+  response = Net::HTTP.post_form(uri, {"scores" => encoded})
   erb response.body 
 
 end
