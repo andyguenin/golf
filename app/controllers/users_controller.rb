@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   
-  before_filter :require_logged_out, :only => [:new, :create]
+  before_filter :require_logged_out, :only => [:new, :create, :forgot_password, :send_forgotten_password]
   
   def new
     @user = session[:activate_email].nil? ? User.new : User.find_by_email(session[:activate_email])
@@ -56,6 +56,27 @@ class UsersController < ApplicationController
         nmi.delete
       end
     end
+  end
+
+  def forgot_password
+  end
+
+  def send_forgotten_password
+    u = User.find_by_username(params[:login])
+    if(u.nil?)
+      u = User.find_by_email(params[:login])
+    end
+    characters = ('a'..'z').to_a + ('A'..'Z').to_a + ('0'..'9').to_a
+    key = (0..58).map{characters.sample}.join
+    unless u.nil?
+      u.update_attribute(:forgot_password, key)
+      InviteMailer.forgot_password(u).deliver
+    end
+    f = {:success => "An email has been sent to that user."}
+    if not flash[:danger].nil?
+      f = {:danger => flash[:danger]}
+    end
+    redirect_to root_path, :flash => f
   end
         
   private

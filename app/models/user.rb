@@ -2,17 +2,18 @@
 #
 # Table name: users
 #
-#  id            :integer          not null, primary key
-#  name          :string(255)
-#  email         :string(255)
-#  password_hash :string(255)
-#  password_salt :string(255)
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  admin         :boolean
-#  role          :integer
-#  active        :boolean
-#  username      :string(255)
+#  id              :integer          not null, primary key
+#  name            :string(255)
+#  email           :string(255)
+#  password_hash   :string(255)
+#  password_salt   :string(255)
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  admin           :boolean
+#  role            :integer
+#  active          :boolean
+#  username        :string(255)
+#  forgot_password :string(255)
 #
 
 class User < ActiveRecord::Base
@@ -26,7 +27,7 @@ class User < ActiveRecord::Base
   has_many :invites, class_name: "NonmemberInvitee", :dependent => :destroy
   
   attr_accessor :password
-  before_save :encrypt_password
+  before_save :encrypt_password, :set_defaults
 
 
   validate :ensure_static_username
@@ -40,6 +41,11 @@ class User < ActiveRecord::Base
   def to_param
     self.username
   end
+  
+  def set_defaults
+    self.locked ||= false
+    self.consec_failed_login_attempts ||= 0
+  end
 
   def ensure_static_username
     if not self.id.nil?
@@ -51,8 +57,24 @@ class User < ActiveRecord::Base
 
   def self.authenticate(email, password)
     user = find_by_email(email)
-    if user && user.password_hash == BCrypt::Engine.hash_secret(password, user.password_salt) && user.active?
-      user
+    if user && user.active?
+      if user.locked
+        raise SecurityError, 'User has been locked'
+      else
+        if user.password_hash == BCrypt::Engine.hash_secret(password, user.password_salt) && user.active?
+          if user.consec_failed_login_attempts != 0
+            user.update_attribute(:consec_failed_login_attempts, 0)
+          end
+          user
+        else
+          user.update_attribute(:consec_failed_login_attempts, user.consec_failed_login_attempts + 1)
+          if(user.consec_failed_login_attempts == 3)
+            user.update_attribute(:locked, true)
+            raise SecurityError, 'User has been locked'
+          end
+          nil
+        end
+      end
     else
       unless user.nil? or user.active
         user.errors.add(:email, "has been registered, but not activated. Please check your email and click on the confirmation link")
@@ -75,7 +97,7 @@ class User < ActiveRecord::Base
   private
   
   def check_password
-    if self.password_hash.nil? and self.password.empty?
+    if self.password_hash.nil? and (not self.password.nil? and self.password.empty?)
       errors.add(:password, "can't be blank")
     end
   end

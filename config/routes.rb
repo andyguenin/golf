@@ -1,6 +1,8 @@
 Spool::Application.routes.draw do
   get "logout" => "sessions#destroy", :as => "logout"
   get "login" => "sessions#new", :as => "login"
+  get "forgot" => "users#forgot_password", :as => "forgot_password"
+  get "send_reset" => "users#send_forgotten_password", :as => "send_reset"
   get "signup" => "users#new", :as => "signup"
   root :to => "pages#index"
   get "about" => "pages#about"

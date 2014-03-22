@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140322142240) do
+ActiveRecord::Schema.define(:version => 20140322172358) do
 
   create_table "courses", :force => true do |t|
     t.integer  "tournament_id"
@@ -194,12 +194,15 @@ ActiveRecord::Schema.define(:version => 20140322142240) do
     t.string   "email"
     t.string   "password_hash"
     t.string   "password_salt"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
     t.boolean  "admin"
     t.integer  "role"
     t.boolean  "active"
     t.string   "username"
+    t.string   "forgot_password"
+    t.integer  "consec_failed_login_attempts"
+    t.boolean  "locked"
   end
 
 end
