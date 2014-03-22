@@ -14,7 +14,8 @@ Spool::Application.configure do
   config.action_controller.perform_caching = false
 
   # Don't care if the mailer can't send
-  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.perform_deliveries = true
 
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
@@ -35,9 +36,21 @@ Spool::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
   
-  config.action_mailer.delivery_method = :sendmail
-  config.action_mailer.sendmail_settings = {
-    :location => '/usr/sbin/sendmail',
-    :arguments => '-i -t'
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    :address => "smtp.mandrillapp.com",
+    :port => 587,
+    :user_name => "andyguenin@gmail.com",
+    :password => "i0fGoANyNIFK_-eKUvqx8g",
+    :domain => "thegolftourney.com",
   }
+
+
+#  config.action_mailer.delivery_method = :smtp
+#  config.action_mailer.smtp_settings = {
+#    :address => "smtp.1and1.com",
+#    :port => 25,
+#    :user_name => "invite@thegolftourney.com",
+#    :password => "HCeBo)Vm9$M8Vg"
+#  }
 end

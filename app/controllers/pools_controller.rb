@@ -15,9 +15,6 @@ class PoolsController < ApplicationController
   def mypicks
     @pool = Pool.find(params[:id])
     authorize! :read, @pool
-
-    puts can? :read, @pool
-    sleep(5.0)
     @picks = current_user.picks.where("pool_id = ?", Pool.last.id)
     @questions = @pool.q_answers.order("number asc")
     render 'summary'
@@ -75,17 +72,22 @@ class PoolsController < ApplicationController
   def join
     @pool = Pool.find(params[:id])
     authorize! :join, @pool
-    pm = PoolMembership.where("user_id = ? and pool_id = ?", current_user.id, @pool.id)[0]
-    if pm.nil?
-      pm = PoolMembership.new({:user_id => current_user.id, :pool_id => @pool.id, :active => true})
-      unless(pm.save)
-        redirect_to @pool, :error => "There is an error: please contact #{email}"
-      else
-       redirect_to @pool, :success => "You have joined the pool!"
-      end
+    if current_user.nil?
+      session[:return_to] = pool_path(@pool)
+      redirect_to login_path, :flash => {:warning => "You must be signed in to join a pool."}
     else
-      pm.update_attribute(:active, true)
-     redirect_to @pool, :notice => "You have joined the pool!"
+      pm = PoolMembership.where("user_id = ? and pool_id = ?", current_user.id, @pool.id)[0]
+      if pm.nil?
+        pm = PoolMembership.new({:user_id => current_user.id, :pool_id => @pool.id, :active => true})
+        unless(pm.save)
+          redirect_to @pool, :error => "There is an error: please contact #{email}"
+        else
+          redirect_to @pool, :flash => {:success => "You have joined the pool!"}
+        end
+      else
+        pm.update_attribute(:active, true)
+        redirect_to @pool, :notice => "You have joined the pool!"
+      end
     end
   end
   
@@ -109,7 +111,7 @@ class PoolsController < ApplicationController
     if can? :read, @pool and @pool.tournament.locked
       @picks = @pool.picks.order("score asc, #{ "ABS(picks.tiebreak - " + @pool.tournament.low_score.to_s + ") asc," if @pool.tournament.low_score} id asc")
     else
-      @picks = current_user.picks.where("pool_id = ?", Pool.last.id)
+      @picks = current_user.nil? ? [] : current_user.picks.where("pool_id = ?", Pool.last.id)
       render 'summary'
     end
   end  

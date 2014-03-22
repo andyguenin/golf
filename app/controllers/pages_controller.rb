@@ -8,6 +8,7 @@ class PagesController < ApplicationController
   end
 
   def about
-    authorize! :about, :page
+#    authorize! :about, :page
+ #   InviteMailer.invite(User.first).deliver
   end
 end

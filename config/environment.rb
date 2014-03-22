@@ -7,3 +7,4 @@ ADMIN = 10
 
 # Initialize the rails application
 Spool::Application.initialize!
+

@@ -13,7 +13,7 @@
 	<%= link_to "Leave Pool", leave_pool_path(@pool), :class => "btn btn-danger", :confirm => 'Are you sure you want to leave this pool? Once you leave, your picks will be deleted' if can? :leave, @pool %>
 	<%= link_to "Invite others to play!", invite_pool_path(@pool), :class => "btn btn-success" if can? :invite, @pool%>
 	<%= link_to "Enter a pick sheet", new_pool_pick_path(@pool), :class => "btn btn-primary" if can? :pick, @pool%>
-	<%= link_to "My picks", my_picks_path, :class => "btn btn-primary" if current_page?(pool_path(@pool))%>
+	<%= link_to "My picks", my_picks_path, :class => "btn btn-primary" if current_page?(pool_path(@pool)) and can? :pick, @pool%>
 	<%= link_to "Pool Summary", pool_path(@pool), :class => "btn btn-primary" if current_page?(my_picks_path) %>
 </div>
 <br /><br />

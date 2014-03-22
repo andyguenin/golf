@@ -14,6 +14,8 @@ class Ability
     end
     
   end
+
+
   
   def initialize_pool(user)
     
@@ -26,7 +28,7 @@ class Ability
     end
     
     can :join, Pool do |pool|
-      not user.id.nil? and not user.pools.include? pool and can? :read, pool
+      not user.pools.include? pool and can? :read, pool
     end
 
     can :leave, Pool do |pool|

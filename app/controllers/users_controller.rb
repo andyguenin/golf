@@ -19,10 +19,11 @@ class UsersController < ApplicationController
       @user.update_attributes(params[:user].merge({:active => true}))
     end
     if @user.save
-      session[:user_id] = @user.id
-      redirect_to root_url, :notice => "Signed up!"
+      redirect_to login_url, :flash => {:success => "Signed up! Please log in"}
     else
+      flash.now[:danger] = "Please fix the errors below"
       render "new"
+
     end
   end
   

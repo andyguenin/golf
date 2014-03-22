@@ -1,7 +1,8 @@
-<h1>Invite players</h1>
+<h1 class="title">Invite players</h1>
 
 <div id="confirm_box" <%= raw("class=\"hide\"") unless params[:emails] %>>
-Here is a list of the emails extracted from your text. Please confirm:<br />
+<h2>
+Here is a list of the emails extracted from your text. Please confirm:</h2><br />
 <% @emails.each do |t|%>
 <%= t %><br />
 <%end %>
