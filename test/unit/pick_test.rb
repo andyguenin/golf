@@ -22,6 +22,8 @@
 #  approver           :integer
 #  bonus              :integer
 #  active_players     :integer
+#  name               :string(255)
+#  slug               :string(255)
 #
 
 require 'test_helper'

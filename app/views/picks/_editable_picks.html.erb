@@ -1,3 +1,12 @@
+<%= form_for [@pool, @pick] do |f| %>
+<div class="row title-field">
+  <div class="col-md-2 col-md-offset-2 pick-title">
+    <%= f.label :name, "Title of Pick" %>
+  </div>
+  <div class="col-md-6 pick-title-field">
+    <%= f.text_field :name, :class => "form-control" %>
+  </div>
+</div>
 <div class="row">
 	<div class="col-md-1"> </div>
 	<% 5.times do |d|%>
@@ -16,7 +25,7 @@
 
 <div class="row questions-cont">
 <div class="col-md-8 col-md-offset-2">
-<%= form_for [@pool, @pick] do |f| %>
+
 <% 5.times do |d|%>
 	<div class="row question-answer-list">
 	  <div class="col-md-8 col-md-offset-1 question-answer-list-question">
@@ -36,7 +45,7 @@
 	<%= "(Par for the course is #{@pool.tournament.course.holes.each.inject(0) {|a,b| a + b.par}})"%>
 </div>
 <div class="col-md-2 question-answer-list-answer">
-	<%= f.text_field :tiebreak, :size=>2 %>
+	<%= f.text_field :tiebreak, :size=>2, :class => "form-control" %>
 </div>
 </div>
 

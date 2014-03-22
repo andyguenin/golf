@@ -13,7 +13,7 @@
 #
 
 class Player < ActiveRecord::Base
-  attr_accessible :ranking, :slug, :first_name, :last_name
+  attr_accessible :ranking, :slug, :first_name, :last_name, :pga_rank, :pga_rank_update, :pga_rank_status, :name
 
   validates_presence_of :first_name
   validates_presence_of :last_name
@@ -21,10 +21,9 @@ class Player < ActiveRecord::Base
 
   validates_uniqueness_of :first_name, scope: [:last_name, :slug]
   
-  has_many :scores
   has_many :player_score_statuses
   has_many :player_premia 
-  has_many :tplayers
+  has_many :tplayers, :dependent => :destroy
   has_many :tournaments, :through => :tplayers
 
   def to_param 
@@ -42,7 +41,7 @@ class Player < ActiveRecord::Base
     player = Player.where("first_name = ? and last_name = ?", match[1], match[2])[0]
 
     if player.nil?
-      player = Player.create!({:first_name => match[1], :last_name => match[2], :slug => score_structure[0].downcase.gsub(" ", "-"), :ranking => 0})
+      player = Player.create!({:name => score_structure[0], :first_name => match[1], :last_name => match[2], :slug => score_structure[0].downcase.gsub(" ", "-"), :ranking => 0})
     end
 
     tplayer = player.get_tplayer(tourn)
@@ -60,6 +59,20 @@ class Player < ActiveRecord::Base
       end
       tplayer.update_score(score_structure[-1])
       tourn.update_attribute(:round, [[0,((Time.now - tourn.starttime)/60/60/24).floor].max + 1,4].min)   
+    end
+  end
+
+  def self.update_pga_rankings
+    response = Net::HTTP.get_response("www.kimonolabs.com", "/api/57e143n8?apikey=0f4df33b701889c3fb3b542b8298cc84")
+    ds = JSON.parse(response.body)
+    status = ds["results"]["collection1"][0]["property1"]
+    ds["results"]["collection2"].each do |rec|
+      unless rec["property2"]["text"].nil?
+        player = Player.find_by_name(rec["property2"]["text"].gsub("\u00A0", " "))
+        unless player.nil?
+          player.update_attributes({:pga_rank => rec["property3"].to_i, :pga_rank_update => Time.now, :pga_rank_status => status})
+        end
+      end
     end
   end
 

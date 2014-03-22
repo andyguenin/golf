@@ -89,6 +89,8 @@ class Tplayer< ActiveRecord::Base
             upd_status = 3
           elsif status == "MDF"
             upd_status = 2
+          elsif status == "SS"
+            upd_status = 5
           else
             unless sc.length > 0
               upd_status = 5

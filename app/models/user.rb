@@ -18,10 +18,11 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation, :active, :name
   
   has_many :pool_memberships, :conditions => {:active => true}
-  has_many :all_pool_memberships, class_name: "PoolMembership"
+  has_many :all_pool_memberships, class_name: "PoolMembership", :dependent => :destroy
   has_many :pools, :through => :pool_memberships
   has_many :all_pools, :through => :all_pool_memberships, source: "pool"
-  has_many :picks, :through => :pool_memberships
+  has_many :picks, :through => :pool_memberships, :dependent => :destroy
+  has_many :invites, class_name: "NonmemberInvitee", :dependent => :destroy
   
   attr_accessor :password
   before_save :encrypt_password

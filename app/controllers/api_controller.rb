@@ -33,7 +33,7 @@ class ApiController < ApplicationController
     location_info = /(.*)\s-\s(.*)/.match(t_location)
     course = Course.where("name = ? and location = ?", location_info[1], location_info[2])[0]
 
-
+    new_tournament = false
 
     #if the tournament does not yet exist
     if @t.nil?
@@ -51,6 +51,7 @@ class ApiController < ApplicationController
         course = @t.create_course!({:name => location_info[1], :location => location_info[2]})
       end
       @t.save!
+      new_tournament = true
     end
     
     if course.holes.count != 18
@@ -84,6 +85,10 @@ class ApiController < ApplicationController
     @t.rank_players
     @t.picks.each {|p| p.update_score}
     
+    if new_tournament
+      Player.update_pga_rankings
+      @t.auto_bucket
+    end
     render :text => "success"
   end
   

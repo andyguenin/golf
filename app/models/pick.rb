@@ -22,10 +22,12 @@
 #  approver           :integer
 #  bonus              :integer
 #  active_players     :integer
+#  name               :string(255)
+#  slug               :string(255)
 #
 
 class Pick < ActiveRecord::Base
-  attr_accessible :pool_membership_id, :p1, :p2, :p3, :p4, :p5, :q1, :q2, :q3, :q4, :q5, :tiebreak, :score, :bonus, :active_players
+  attr_accessible :pool_membership_id, :p1, :p2, :p3, :p4, :p5, :q1, :q2, :q3, :q4, :q5, :tiebreak, :score, :bonus, :active_players, :name
   
   belongs_to :pool_membership
   has_one :user, :through => :pool_membership
@@ -44,13 +46,17 @@ class Pick < ActiveRecord::Base
   has_one :pick4, :class_name => "Player", :through => :tp4, :source => :player
   has_one :pick5, :class_name => "Player", :through => :tp5, :source => :player
   
-  validates_presence_of :p1, :p2, :p3, :p4, :p5, :tiebreak, :pool_membership
+  validates_presence_of :p1, :p2, :p3, :p4, :p5, :tiebreak, :pool_membership, :name
   validates :p1, numericality: {greater_than: 0}
   validates :p2, numericality: {greater_than: 0}
   validates :p3, numericality: {greater_than: 0}
   validates :p4, numericality: {greater_than: 0}
   validates :p5, numericality: {greater_than: 0}
   validates_inclusion_of :q1, :q2, :q3, :q4, :q5, :in => [true, false]
+  validate :validate_name_uniqueness
+
+  before_validation :fix_name
+  before_save :create_slug
   
   after_initialize do
     self.p1 ||= 0
@@ -87,6 +93,26 @@ class Pick < ActiveRecord::Base
   
   def players
     [pick1, pick2, pick3, pick4, pick5]
+  end
+
+  private
+  def create_slug
+    slugs = pool.picks.map {|p| p.slug}
+    s = self.name.downcase.gsub(/[^a-z0-9\s]/,'').gsub(" ","-")
+    while slugs.include? s
+      s += "-0"
+    end
+    self.slug = s
+  end
+
+  def validate_name_uniqueness
+    if pool.picks.map {|p| p.name}.include? self.name
+      errors.add(:name, "has already been taken")
+    end
+  end
+
+  def fix_name
+    self.name = name.strip.squish
   end
 
 end

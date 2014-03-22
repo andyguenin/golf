@@ -55,6 +55,24 @@ class Tournament < ActiveRecord::Base
     end
   end  
 
+  def auto_bucket
+    null_ranked = players.where("pga_rank is NULL")
+    null_ranked.each do |p|
+      p.update_attribute(:pga_rank, 10000)
+    end
+    all_p = players.order("pga_rank asc")
+    division = (all_p.count-8)/4
+    all_p.size.times do |t|
+      bucket = 5
+      if t < 8
+        bucket = 1
+      else
+        bucket = [5,((t-8)/division).to_i + 2].min
+      end        
+      all_p[t].get_tplayer(self).update_attribute(:bucket, bucket)
+    end
+  end
+
   def pars
     self.course.holes.map{|h| h.par}
   end

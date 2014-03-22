@@ -1,39 +1,60 @@
 class UsersController < ApplicationController
   
-  before_filter :require_logged_out
+  before_filter :require_logged_out, :only => [:new, :create]
   
   def new
-    @user = User.new
+    @user = session[:activate_email].nil? ? User.new : User.find_by_email(session[:activate_email])
   end
 
   def create
     @user = nil
-    if params[:email].nil? and params[:activation].nil?
-      @user = User.new(params[:user].merge({:active => true}))
-    else
-      u = NonmemberInvitee.includes(:user).where("users.email = ? and activation_key = ?", params[:email], params[:activation])[0]
-      if u.nil?
-        redirect_to root_path
+    if not session[:activate_email].nil?
+      nmis = NonmemberInvitee.includes(:user).where("users.email = ? and activation_key = ?", session[:activate_email], session[:activate_activation])
+      if nmis.empty?
+        redirect_to root_path, :flash => {:danger => "There is no invite corresponding to that email address and activation code"}
+        return false
       end
-      @user = u.user
-      @user.update_attributes(params[:user].merge({:active => true}))
+      nmi = nmis[0]
+      @user = nmi.user
+      @user.assign_attributes(params[:user].merge({:active => true}))
+    else
+      @user = User.new(params[:user].merge({:active => true}))
     end
     if @user.save
-      redirect_to login_url, :flash => {:success => "Signed up! Please log in"}
+      if not session[:activate_email].nil? and  params[:user][:email] != session[:activate_email] 
+        session[:activate_email] = params[:user][:email]
+      end
+      redirect_to login_url, :flash => {:success => "Signed up! Please log in."}
     else
-      flash.now[:danger] = "Please fix the errors below"
+      message = "Please fix the errors below."
+      if params[:user][:password] != params[:user][:password_confirmation]
+        message = "Passwords do not match. Please enter matching passwords."
+      end
+      flash.now[:danger] = message
       render "new"
-
     end
+
+
   end
   
   def activate
-    u = NonmemberInvitee.includes(:user).where("users.email = ? and activation_key = ?", params[:email], params[:activation])[0]
-    if u.nil?
-      redirect_to root_path
+    email = params[:email] || session[:activate_email]
+    code = params[:activation] || session[:activate_activation]
+    nmis = NonmemberInvitee.includes(:user).where("users.email = ? and activation_key = ?", email, code)
+    if nmis.size == 0
+      redirect_to root_path, :flash => {:danger => "There is no invite corresponding to that email address and activation code"}
+      reset_session
     else
-      @user = u.user
-      render "new"
+      nmi = nmis.first
+      if not nmi.user.active
+        session[:activate_email] = email
+        session[:activate_activation] = code
+        redirect_to signup_path, :flash => {:info => "You must first create an account. You will then be prompted to sign in and then redirected to your pool."}
+      else
+        nmi.pool.user_join(nmi.user)
+        redirect_to pool_path(nmi.pool), :flash => {:success => "You have joined the pool. Enter your picks before the tournament starts!"}
+        nmi.delete
+      end
     end
   end
         

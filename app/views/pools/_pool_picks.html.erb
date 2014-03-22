@@ -12,7 +12,7 @@
   </tr>
   <% @picks.each do |p| %>
     <tr>
-      <td><%= p.user.name %></td>
+      <td><%= link_to p.name, pool_pick_path(@pool.id, p.slug) %></td>
       <td><%= p.score %></td>
       <td><%= p.player_subscore %></td>
       <td><%= p.bonus %></td>

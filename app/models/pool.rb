@@ -21,6 +21,7 @@ class Pool < ActiveRecord::Base
   belongs_to :tournament
   has_many :q_answers, :order => "number asc"
   has_many :pool_memberships, :conditions => {:active => true}
+  has_many :inactive_memberships, class_name: "PoolMembership", :conditions => {:active => false}
   has_many :picks, :through => :pool_memberships
   has_many :users, :through => :pool_memberships
   has_many :admin_members, class_name: "PoolMembership", :conditions => {:admin => true}
@@ -28,11 +29,17 @@ class Pool < ActiveRecord::Base
   has_many :non_admin_members, class_name: "PoolMembership", :conditions => {:admin => false}
   has_many :non_admins, :through => :non_admin_members, :source => :user
 
-  validates_presence_of :tournament_id
+  validates_presence_of :tournament_id, :q1, :q2, :q3, :q4, :q5
   validates_inclusion_of :private, :in => [true, false]
+  validate :validate_slug
 
+  before_validation :create_slug
   after_initialize :default_values
 
+
+  def to_param
+    self.slug
+  end
 
   (1..5).each do |t|
 
@@ -74,7 +81,28 @@ class Pool < ActiveRecord::Base
     self.private ||= false
     self.name ||= self.tournament.name if self.tournament
   end
+
+  def user_join(user)
+    pms = inactive_memberships.where("user_id = ?", user.id)
+    if pms.empty?
+      pm = PoolMembership.new({:user => user, :pool_id => self.id, :active => true})
+      pm.save!
+    else
+      pms[0].update_attribute(:active, true)
+    end    
+  end
   
+  def create_slug
+    self.slug = self.name.downcase.gsub(/[^a-z0-9\s]/,'').gsub(" ","-") + "-" + tournament.starttime.strftime("%d%m%Y")
+  end
+
+  def validate_slug
+    p = Pool.find_by_slug(slug)
+    if not p.nil? and p.id != self.id
+      errors.add(:name, "has alread been taken")
+    end
+  end
+
 #  def is_user_admin(user)
     
 

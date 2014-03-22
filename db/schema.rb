@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140309211705) do
+ActiveRecord::Schema.define(:version => 20140322063507) do
 
   create_table "courses", :force => true do |t|
     t.integer  "tournament_id"
@@ -65,6 +65,8 @@ ActiveRecord::Schema.define(:version => 20140309211705) do
     t.integer  "approver"
     t.integer  "bonus"
     t.integer  "active_players"
+    t.string   "name"
+    t.string   "slug"
   end
 
   create_table "player_premia", :force => true do |t|
@@ -77,12 +79,15 @@ ActiveRecord::Schema.define(:version => 20140309211705) do
 
   create_table "players", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
     t.integer  "ranking"
     t.string   "slug"
     t.string   "first_name"
     t.string   "last_name"
+    t.integer  "pga_rank"
+    t.date     "pga_rank_update"
+    t.string   "pga_rank_status"
   end
 
   create_table "pool_memberships", :force => true do |t|
@@ -106,6 +111,7 @@ ActiveRecord::Schema.define(:version => 20140309211705) do
     t.boolean  "private"
     t.boolean  "nonadmin_invite"
     t.boolean  "require_approval"
+    t.string   "slug"
   end
 
   create_table "q_answers", :force => true do |t|
