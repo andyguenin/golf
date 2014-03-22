@@ -49,13 +49,13 @@ class PicksController < ApplicationController
   def create
     @title = "New Pick"
     @pool = Pool.find_by_slug(params[:pool_id])
-    @pick = @pool.picks.where("slug = ?", params[:id])[0]
+    @pick = @pool.picks.new(params[:pick])
     @pick.pool_membership = PoolMembership.where("user_id = ? and pool_id = ?", current_user.id, @pool.id)[0]
     if(@pick.save)
       @pick.update_score
       redirect_to @pool
     else
-      @tplayers = @pool.tournament.tplayers.includes(:player).order("players.last_name asc")
+      @tplayers = @pool.tournament.tplayers.includes(:player).order("players.pga_rank asc")
       er = "There was an error creating the pool. Please input your choices for the fields highlighted in red."
       if @pick.errors[:name] == "has already been taken"
         er = "The title of your pick has already been used in this pool. Please choose a new name."

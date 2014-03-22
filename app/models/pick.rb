@@ -65,6 +65,10 @@ class Pick < ActiveRecord::Base
     self.p4 ||= 0
     self.p5 ||= 0
   end
+
+  def to_param
+    self.slug
+  end
   
   def player_subscore
     scores = players.map{|p| p.get_tplayer(pool.tournament).score}
@@ -106,7 +110,8 @@ class Pick < ActiveRecord::Base
   end
 
   def validate_name_uniqueness
-    if pool.picks.map {|p| p.name}.include? self.name
+    s_pool = pool.picks.find_by_name(self.name)
+    if not s_pool.nil? and s_pool.id != self.id
       errors.add(:name, "has already been taken")
     end
   end

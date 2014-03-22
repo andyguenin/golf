@@ -12,8 +12,8 @@
 #  private          :boolean
 #  nonadmin_invite  :boolean
 #  require_approval :boolean
+#  slug             :string(255)
 #
-
 
 require 'test_helper'
 

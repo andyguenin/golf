@@ -1,0 +1,25 @@
+<tr>
+  <% if can? :view, pick %>
+  <td><%= link_to pick.name, pool_pick_path(pick.pool, pick.slug) %></td>
+  <td><%= pick.score %></td>
+  <td><%= pick.player_subscore %></td>
+  <td><%= pick.bonus %></td>
+  <td><%= pick.correct_questions * -1 %></td>
+  <td><%= pick.tiebreak %></td>
+  <td><%= link_to raw("<span class=\"glyphicon glyphicon-pencil\"></span>"), edit_pool_pick_path(@pool, pick) if can? :edit, pick%></td>
+  <td><%= link_to raw("<span class=\"glyphicon glyphicon-trash\"></span>"), pool_pick_path(@pool, pick), method: :delete, data: {confirm: 'Are you sure you want to delete this? This cannot be undone'} if can? :edit, pick%></td>
+  <td><%= link_to raw("<span class=\"glyphicon glyphicon-ok\"></span>"), root_path if can?(:manage, @pool) and (not pick.approved and @pool.require_approval)%></td>
+  <% else %>
+
+  <td><%= pick.name %></td>
+  <td> </td>
+  <td> </td>
+  <td> </td>
+  <td> </td>
+  <td> </td>
+  <td> </td>
+  <td> </td>
+  <td> </td>
+
+  <% end %>
+</tr>

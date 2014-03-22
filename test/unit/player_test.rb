@@ -2,16 +2,18 @@
 #
 # Table name: players
 #
-#  id         :integer          not null, primary key
-#  name       :string(255)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  ranking    :integer
-#  slug       :string(255)
-#  first_name :string(255)
-#  last_name  :string(255)
+#  id              :integer          not null, primary key
+#  name            :string(255)
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  ranking         :integer
+#  slug            :string(255)
+#  first_name      :string(255)
+#  last_name       :string(255)
+#  pga_rank        :integer
+#  pga_rank_update :date
+#  pga_rank_status :string(255)
 #
-
 
 require 'test_helper'
 

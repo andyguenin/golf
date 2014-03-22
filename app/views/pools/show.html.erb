@@ -1,12 +1,19 @@
+<h1 class="title"><%= @pool.name %></h1> 
+<% if @pool.private %>
+	(This is a private pool. Players must be invited to play)
+<%end%>
+<h3 class="subtitle">for <%= link_to "#{@pool.tournament.name} at #{@pool.tournament.course.location}", tournament_path(@pool.tournament) %></h3>
+
+
 <%= render 'pool_header'%>
 
 <table class="table table-condensed">
   <% @questions.each do |q| %>
     <tr><td class="<%= y_or_n(q.answer) %>">
-        <%= q.question %></td><td><%= y_or_n(q.answer).capitalize %></td></tr>
+        <%= q.question %></td><td><%= y_or_n(q.answer).capitalize %>
+    </td></tr>
   <% end %>
   <tr><td>1st round par</td><td><%= @pool.tournament.low_score %></td></tr>
 </table>
-
 
 <%= render 'pool_picks'%>

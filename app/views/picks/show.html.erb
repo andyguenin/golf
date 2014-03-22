@@ -1,1 +1,13 @@
 <h1 class="title"><%= @pick.name %></h1>
+<div class="row">
+<div class="col-md-12">
+<div class = "pull-right btn-group">
+  <%= link_to "My picks", user_picks_path(@pool, current_user), :class=> "btn btn-primary" %>
+  <%= link_to "Back to Pool", pool_path(@pool), :class => "btn btn-primary" %>
+</div>
+</div>
+</div>
+<br><br>
+<table>
+  <%= render "pools/single_pick", pick: @pick %>
+</table>

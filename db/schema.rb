@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140322063507) do
+ActiveRecord::Schema.define(:version => 20140322142240) do
 
   create_table "courses", :force => true do |t|
     t.integer  "tournament_id"
@@ -199,6 +199,7 @@ ActiveRecord::Schema.define(:version => 20140322063507) do
     t.boolean  "admin"
     t.integer  "role"
     t.boolean  "active"
+    t.string   "username"
   end
 
 end

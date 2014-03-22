@@ -12,12 +12,17 @@ class PoolsController < ApplicationController
     authorize! :manage, @pool
   end
 
-  def mypicks
+  def userpicks
     @pool = Pool.find_by_slug(params[:id])
-    authorize! :read, @pool
-    @picks = current_user.picks.where("pool_id = ?", Pool.last.id)
-    @questions = @pool.q_answers.order("number asc")
-    render 'summary'
+    @user = User.find_by_username(params[:username])
+    pm = @user.pool_memberships.where("pool_id = ?", (@pool.id))
+    if pm.empty?
+      raise ActionController::RoutingError.new('Not Found')
+    else
+      authorize! :view_user_picks, pm[0]
+      @picks = @user.get_picks_by_tournament(@pool.tournament)
+      render 'single_user'
+    end
   end
   
   def admins_update
@@ -50,7 +55,7 @@ class PoolsController < ApplicationController
   end
   
   def invite
-    @pool = Pool.find_slug(params[:id])
+    @pool = Pool.find_by_slug(params[:id])
     authorize! :invite, @pool
     new_users = 0
     existing_users = 0
@@ -110,11 +115,10 @@ class PoolsController < ApplicationController
     @pool = Pool.find_by_slug(params[:id], :include => [:tournament, :q_answers])
     authorize! :read, @pool
     @questions = @pool.q_answers.order("number asc")
-    if can? :read, @pool and @pool.tournament.locked
+    if can? :read, @pool
       @picks = @pool.picks.order("score asc, #{ "ABS(picks.tiebreak - " + @pool.tournament.low_score.to_s + ") asc," if @pool.tournament.low_score} id asc")
     else
-      @picks = current_user.nil? ? [] : current_user.picks.where("pool_id = ?", Pool.last.id)
-      render 'summary'
+      @picks = []
     end
   end  
 

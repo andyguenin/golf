@@ -15,7 +15,7 @@ Spool::Application.routes.draw do
   resources :players, :except => :index
   
 
-  
+  get "pools/:id/user/:username" => "pools#userpicks", :as => "user_picks"
   resources :pools do
     resources :picks
   end
@@ -24,7 +24,6 @@ Spool::Application.routes.draw do
   get "pools/:id/join" => "pools#join", :as => "join_pool"
   get "pools/:id/leave" => "pools#leave", :as => "leave_pool"
   get "pools/:id/edit/admins" => "pools#admins", :as => "edit_admins_pool"
-  get "pools/:id/mypicks" => "pools#mypicks", :as => "my_picks"
   put "pools/:id/edit/admins" => "pools#admins_update", :as => "update_admins_pool"
   match "pools/:id/invite" => "pools#invite", :as => "invite_pool", :via => [:get, :post]
   

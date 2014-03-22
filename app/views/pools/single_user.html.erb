@@ -1,0 +1,7 @@
+<h1 class="title"><%= @user.name%>'s picks</h1>
+<%= render 'pool_header'%>
+
+<% @picks.each do |p| %>
+<h3 class="title"><%= p.name %></h3>
+<%= render 'single_pick', pick: p%>
+<% end %>

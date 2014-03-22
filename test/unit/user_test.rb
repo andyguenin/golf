@@ -1,4 +1,3 @@
-
 # == Schema Information
 #
 # Table name: users
@@ -13,6 +12,7 @@
 #  admin         :boolean
 #  role          :integer
 #  active        :boolean
+#  username      :string(255)
 #
 
 require 'test_helper'

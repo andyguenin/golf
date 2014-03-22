@@ -10,7 +10,11 @@ class Ability
     initialize_pool(user)
     
     can :edit, Pick do |pick|
-      (can?(:pick, pick.pool) and pick.user == user) or pick.pool.admins.include? user
+      (can?(:pick, pick.pool) and pick.user == user) or (pick.pool.admins.include? user and can :view, pick)
+    end
+
+    can :view, Pick do |pick|
+      can?(:read, pick.pool) and (pick.pool.tournament.locked or user.picks.include? pick)
     end
     
   end
@@ -18,7 +22,11 @@ class Ability
 
   
   def initialize_pool(user)
-    
+
+    can :view_user_picks, PoolMembership do |pm|
+      pm.pool.published? or pm.user == user
+    end
+
     can :manage, Pool do |pool|
       pool.admins.include? user
     end
@@ -27,6 +35,10 @@ class Ability
       (pool.published and (not pool.private or user.pools.include?(pool))) or can? :manage, pool
     end
     
+    can :read_others, Pool do |pool|
+      (can? :read, pool and (pool.published or user.pools.include? pool)) or can? :manage, pool
+    end
+
     can :join, Pool do |pool|
       not user.pools.include? pool and can? :read, pool
     end
@@ -40,7 +52,7 @@ class Ability
     end
     
     can :invite, Pool do |pool|
-      pool.published and pool.nonadmin_invite and user.pools.include? pool
+      pool.published and pool.nonadmin_invite and user.pools.include? pool and not pool.tournament.locked
     end
     
     can :pick, Pool do |pool|
