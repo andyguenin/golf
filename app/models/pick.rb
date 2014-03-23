@@ -79,7 +79,7 @@ class Pick < ActiveRecord::Base
   end
   
   def correct_questions
-    [q1,q2,q3,q4,q5].zip(pool.q_answers.map{|a| a.answer}).select do |a|
+    [q1,q2,q3,q4,q5].zip(pool.q_answers.map{|a| a[1]}).select do |a|
       a[0] == a[1] and not a[0].nil?
     end.length
   end

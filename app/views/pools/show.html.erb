@@ -9,8 +9,8 @@
 
 <table class="table table-condensed">
   <% @questions.each do |q| %>
-    <tr><td class="<%= y_or_n(q.answer) %>">
-        <%= q.question %></td><td><%= y_or_n(q.answer).capitalize %>
+    <tr><td class="<%= y_or_n(q[1]) %>">
+        <%= q[0] %></td><td><%= y_or_n(q[1]).capitalize %>
     </td></tr>
   <% end %>
   <tr><td>1st round par</td><td><%= @pool.tournament.low_score %></td></tr>

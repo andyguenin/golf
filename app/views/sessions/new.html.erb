@@ -2,9 +2,9 @@
 <%= form_tag sessions_path, :class => "form-horizontal" do %>
 
 <div class="form-group">
-	<%= label_tag :email, "Email", :class => "col-md-1 col-md-offset-4 control-label"%>
+	<%= label_tag :login, "Email or Username", :class => "col-md-2 col-md-offset-3 control-label"%>
 	<div class = "col-md-3">
-		<%= text_field_tag :email, params[:email], :class => "form-control" %>
+		<%= text_field_tag :login, params[:login], :class => "form-control" %>
 	</div>
 </div>
 

@@ -112,9 +112,9 @@ class PoolsController < ApplicationController
   end
 
   def show
-    @pool = Pool.find_by_slug(params[:id], :include => [:tournament, :q_answers])
+    @pool = Pool.find_by_slug(params[:id], :include => :tournament)
     authorize! :read, @pool
-    @questions = @pool.q_answers.order("number asc")
+    @questions = @pool.q_answers
     if can? :read, @pool
       @picks = @pool.picks.order("score asc, #{ "ABS(picks.tiebreak - " + @pool.tournament.low_score.to_s + ") asc," if @pool.tournament.low_score} id asc")
     else
@@ -129,14 +129,12 @@ class PoolsController < ApplicationController
   end
   
   def create
-    questions = ["q1","q2","q3","q4","q5"]
-    @pool = Pool.new(params[:pool].except(*questions))
+    @pool = Pool.new(params[:pool])
     @pool.nonadmin_invite = true
     authorize! :create, @pool
     @tournament_options = getAvailableTournaments
     @pool.tournament = Tournament.find(params[:pool]["tournament_id"]) 
     if(@pool.save)
-      @pool.update_attributes(params[:pool].slice(*questions))
       @pool.admin_members.create!({:user => current_user, :creator => true, :active => true})
       redirect_to @pool
     else

@@ -13,6 +13,16 @@
 #  nonadmin_invite  :boolean
 #  require_approval :boolean
 #  slug             :string(255)
+#  q1               :string(255)
+#  q1a              :string(255)
+#  q2               :string(255)
+#  q2a              :string(255)
+#  q3               :string(255)
+#  q3a              :string(255)
+#  q4               :string(255)
+#  q4a              :string(255)
+#  q5               :string(255)
+#  q5a              :string(255)
 #
 
 require 'test_helper'

@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
   def create
     user = nil
     begin
-      user = User.authenticate(params[:email], params[:password])
+      user = User.authenticate(params[:login], params[:password])
     rescue SecurityError
       redirect_to send_reset_path, :login => :params["email"], :flash => {:danger => "Your account has been locked, Please check your email for instructions on resetting your password."}
     else      

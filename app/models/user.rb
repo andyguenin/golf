@@ -2,22 +2,24 @@
 #
 # Table name: users
 #
-#  id              :integer          not null, primary key
-#  name            :string(255)
-#  email           :string(255)
-#  password_hash   :string(255)
-#  password_salt   :string(255)
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  admin           :boolean
-#  role            :integer
-#  active          :boolean
-#  username        :string(255)
-#  forgot_password :string(255)
+#  id                           :integer          not null, primary key
+#  name                         :string(255)
+#  email                        :string(255)
+#  password_hash                :string(255)
+#  password_salt                :string(255)
+#  created_at                   :datetime         not null
+#  updated_at                   :datetime         not null
+#  admin                        :boolean
+#  role                         :integer
+#  active                       :boolean
+#  username                     :string(255)
+#  forgot_password              :string(255)
+#  consec_failed_login_attempts :integer
+#  locked                       :boolean
 #
 
 class User < ActiveRecord::Base
-  attr_accessible :email, :password, :password_confirmation, :active, :name
+  attr_accessible :email, :password, :password_confirmation, :active, :name, :username
   
   has_many :pool_memberships, :conditions => {:active => true}
   has_many :all_pool_memberships, class_name: "PoolMembership", :dependent => :destroy
@@ -55,8 +57,13 @@ class User < ActiveRecord::Base
     end      
   end
 
-  def self.authenticate(email, password)
-    user = find_by_email(email)
+  def self.authenticate(login, password)
+    user = nil
+    if login.index("@").nil?
+      user = find_by_username(login)
+    else  
+      user = find_by_email(login)
+    end
     if user && user.active?
       if user.locked
         raise SecurityError, 'User has been locked'

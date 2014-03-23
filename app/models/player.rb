@@ -66,6 +66,7 @@ class Player < ActiveRecord::Base
   end
 
   def self.update_pga_rankings
+    require 'Net/http'
     response = Net::HTTP.get_response("www.kimonolabs.com", "/api/57e143n8?apikey=0f4df33b701889c3fb3b542b8298cc84")
     ds = JSON.parse(response.body)
     status = ds["results"]["collection1"][0]["property1"]
