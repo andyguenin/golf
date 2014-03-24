@@ -24,6 +24,7 @@
 #  active_players     :integer
 #  name               :string(255)
 #  slug               :string(255)
+#  received_unit      :integer
 #
 
 class Pick < ActiveRecord::Base
@@ -33,6 +34,7 @@ class Pick < ActiveRecord::Base
   has_one :user, :through => :pool_membership
   has_one :pool, :through => :pool_membership
   has_one :tournament, :through => :pool
+  belongs_to :approver, :class_name => "User", :foreign_key => "approver"
   
   belongs_to :tp1, :class_name => "Tplayer", :foreign_key => "p1"
   belongs_to :tp2, :class_name => "Tplayer", :foreign_key => "p2"
@@ -46,17 +48,17 @@ class Pick < ActiveRecord::Base
   has_one :pick4, :class_name => "Player", :through => :tp4, :source => :player
   has_one :pick5, :class_name => "Player", :through => :tp5, :source => :player
   
-  validates_presence_of :p1, :p2, :p3, :p4, :p5, :tiebreak, :pool_membership, :name
+  validates_presence_of :p1, :p2, :p3, :p4, :p5, :tiebreak, :pool_membership, :name, :received_unit
   validates :p1, numericality: {greater_than: 0}
   validates :p2, numericality: {greater_than: 0}
   validates :p3, numericality: {greater_than: 0}
   validates :p4, numericality: {greater_than: 0}
   validates :p5, numericality: {greater_than: 0}
-  validates_inclusion_of :q1, :q2, :q3, :q4, :q5, :in => [true, false]
+  validates_inclusion_of :q1, :q2, :q3, :q4, :q5, :approved, :in => [true, false]
   validate :validate_name_uniqueness
 
-  before_validation :fix_name
-  before_save :create_slug
+  before_validation :fix_name, :set_defaults
+  before_save :create_slug, :update_approved_status
   
   after_initialize do
     self.p1 ||= 0
@@ -98,8 +100,27 @@ class Pick < ActiveRecord::Base
   def players
     [pick1, pick2, pick3, pick4, pick5]
   end
+  
+  def approve(approver)
+    self.approver = approver
+    self.approved = true
+    self.received_unit = cost
+    self.save!
+  end
+  
+  def cost
+    [tp1, tp2, tp3, tp4, tp5].map {|tp| tp.get_premium_by_pool(pool).premium}.sum + 25
+  end
 
   private
+  
+  def update_approved_status
+    if approved and cost != received_unit
+      approved = false
+      approver = nil
+    end
+  end
+  
   def create_slug
     slugs = pool.picks.map {|p| p.slug}
     s = self.name.downcase.gsub(/[^a-z0-9\s]/,'').gsub(" ","-")
@@ -118,6 +139,10 @@ class Pick < ActiveRecord::Base
 
   def fix_name
     self.name = name.strip.squish
+  end
+  
+  def set_defaults
+    self.received_unit ||= 0
   end
 
 end

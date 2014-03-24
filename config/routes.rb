@@ -18,6 +18,8 @@ Spool::Application.routes.draw do
   
 
   get "pools/:id/user/:username" => "pools#userpicks", :as => "user_picks"
+  get "pools/:pool_id/picks/:id/approve" => "picks#approve", :as => "approve_pick"
+  get "pools/:pool_id/picks/:id/reject" => "picks#reject", :as => "reject_pick"
   resources :pools do
     resources :picks
   end

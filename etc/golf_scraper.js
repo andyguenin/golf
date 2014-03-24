@@ -1,4 +1,4 @@
-var scrape = function(scrape_url, log_scores, send_callback) {
+var scrape = function(scrape_url, log_scores, send_callback, url) {
     var currentdate = new Date(); 
     var datetime =  currentdate.getFullYear() + "/"
 	+ (currentdate.getMonth()+1)  + "/" 
@@ -65,7 +65,7 @@ var scrape = function(scrape_url, log_scores, send_callback) {
 	    re.push(l);
 	    re.push(scores);
 			re.push(complete);
-	    send_callback(btoa(JSON.stringify(re)));
+	    send_callback(btoa(JSON.stringify(re)), url);
 	}, 50000);
     });
 };
@@ -156,10 +156,9 @@ function expand_all() {
     }, eventFire);
 }
 
-function send_to_ruby(str)
+function send_to_ruby(str, url)
 {
     var page2 = require('webpage').create();
-    var url = "http://localhost:6001/scores"
     var payload = "payload=" + str;
     page2.open(url, 'post', payload, function(status) {
 	if(status !== 'success') {
@@ -172,9 +171,19 @@ function send_to_ruby(str)
 	phantom.exit()
     });
 }
-
+var args = require('system').args;
+scrape_site = 'http://espn.go.com/golf/leaderboard';
+target = "http://localhost:6001/scores";
+if(args.length === 2)
+{
+	scrape_site = args[1];
+}
+if(args.length === 3)
+{
+	scrape_site = args[1];
+	target = args[2];
+}
 var page = require('webpage').create();
 page.settings.userAgent = "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.2 Safari/537.36"
-//scrape('http://espn.go.com/golf/leaderboard', false, send_to_ruby)
-scrape('http://espn.go.com/golf/leaderboard?tournamentId=1314', true, send_to_ruby)
+scrape(scrape_site, true, send_to_ruby, target)
 

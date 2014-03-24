@@ -14,15 +14,15 @@
 #  require_approval :boolean
 #  slug             :string(255)
 #  q1               :string(255)
-#  q1a              :string(255)
 #  q2               :string(255)
-#  q2a              :string(255)
 #  q3               :string(255)
-#  q3a              :string(255)
 #  q4               :string(255)
-#  q4a              :string(255)
 #  q5               :string(255)
-#  q5a              :string(255)
+#  q1a              :boolean
+#  q2a              :boolean
+#  q3a              :boolean
+#  q4a              :boolean
+#  q5a              :boolean
 #
 
 class Pool < ActiveRecord::Base
@@ -30,10 +30,11 @@ class Pool < ActiveRecord::Base
   attr_accessible :tournament_id, :name, :private, :nonadmin_invite, :q1, :q1a, :q2, :q2a, :q3, :q3a, :q4, :q4a, :q5, :q5a
 
   belongs_to :tournament
-  has_many :q_answers, :order => "number asc"
   has_many :pool_memberships, :conditions => {:active => true}
   has_many :inactive_memberships, class_name: "PoolMembership", :conditions => {:active => false}
-  has_many :picks, :through => :pool_memberships
+  has_many :picks, :through => :pool_memberships, :conditions => {:approved => true}
+  has_many :pending_picks, :through => :pool_memberships, :source => :picks,  :conditions => {:approved => false}
+  has_many :all_picks, :through => :pool_memberships, :source => :picks
   has_many :users, :through => :pool_memberships
   has_many :admin_members, class_name: "PoolMembership", :conditions => {:admin => true}
   has_many :admins, :through => :admin_members, :source => :user

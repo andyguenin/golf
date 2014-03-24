@@ -12,8 +12,8 @@
 #  round      :integer
 #  low_score  :integer
 #  locked     :boolean
+#  tiebreak   :integer
 #
-
 
 require 'test_helper'
 

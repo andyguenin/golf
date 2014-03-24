@@ -12,6 +12,7 @@
 #  round      :integer
 #  low_score  :integer
 #  locked     :boolean
+#  tiebreak   :integer
 #
 
 class Tournament < ActiveRecord::Base

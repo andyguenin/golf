@@ -81,7 +81,23 @@ class ApiController < ApplicationController
       @t.update_attribute(:locked, true)
     end
     
+    if @t.tiebreak.nil?
+      first_round = @t.tplayers.map do |t| 
+        r = t.get_round(1)
+        if r.nil?
+          [t.status, [], false]
+        else
+          [t.status, r.as_vec.sum, r.as_vec.include?(0)] 
+        end
+      end.select do |r|
+        r[0] <= 1
+      end
     
+      if not first_round.map {|t| t[2]}.include? true
+        @t.update_attribute(:tiebreak, first_round.map{|r| r[1]}.min)
+      end
+    end
+        
     @t.rank_players
     @t.picks.each {|p| p.update_score}
     

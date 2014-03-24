@@ -4,10 +4,10 @@
 #
 #  id         :integer          not null, primary key
 #  pool_id    :integer
-#  player_id  :integer
 #  premium    :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  tplayer_id :integer
 #
 
 

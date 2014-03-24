@@ -12,6 +12,7 @@
 #  round      :integer
 #  low_score  :integer
 #  locked     :boolean
+#  tiebreak   :integer
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html

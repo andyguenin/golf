@@ -25,7 +25,7 @@ class Player < ActiveRecord::Base
   validates_uniqueness_of :first_name, scope: [:last_name, :slug]
   
   has_many :player_score_statuses
-  has_many :player_premia 
+  has_many :player_premia, :through => :tplayers
   has_many :tplayers, :dependent => :destroy
   has_many :tournaments, :through => :tplayers
 
@@ -87,6 +87,10 @@ class Player < ActiveRecord::Base
 
   def get_tplayer(tournament)
     self.tplayers.where("tournament_id = ?", tournament.id)[0]
+  end
+  
+  def get_premium(pool)
+    get_tplayer(pool.tournament).get_premium_by_pool(pool)
   end
   
 

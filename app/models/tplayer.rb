@@ -44,6 +44,7 @@ class Tplayer< ActiveRecord::Base
   belongs_to :tournament
   belongs_to :player
   has_many :rounds, :order => "round asc"
+  has_many :player_premia
 
   def hole
     if rounds.size != 0
@@ -72,6 +73,7 @@ class Tplayer< ActiveRecord::Base
     rounds.where("round = ?", r).first
   end
 
+
   def update_score(status)
     sc = scores.flatten(1).select do |h| 
       h[0] != 0
@@ -99,6 +101,7 @@ class Tplayer< ActiveRecord::Base
         end
       end
     end
+    
             
     score_type = scores.flatten(1).select{|t| t[0] != 0}.map{|r| [[0,r[0] - r[1] + 2].max,4].min}
     stats=[0,0,0,0,0]
@@ -119,5 +122,13 @@ class Tplayer< ActiveRecord::Base
       
   end
 
+  def get_premium_by_pool(pool)
+    p = player_premia.where("pool_id = ?", pool.id)
+    if p.empty?
+      p.new({:pool_id => pool.id})
+    else
+      p[0]
+    end
+  end
   
 end
