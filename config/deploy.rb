@@ -35,17 +35,18 @@ namespace :deploy do
     
   end
 
-  task :cold do 
-    transaction do 
-      update
-      setup_db
-      start
+  task :load_schema do       # Overriding the default deploy:cold
+      #update
+      on roles(:all) do 
+        execute "cd #{current_path}; RAILS_ENV=production ~/.rvm/bin/rvm default do bundle exec rake db:setup"
+      end
+      #start
     end
-  end
+
+    
 
   task :setup_db do 
-    raise RuntimeError.new('db:setup aborted!') unless Capistrano::CLI.ui.ask("About to `rake db:setup`. Are you sure to wipe the entire database (anything other than 'yes' aborts):") == 'yes'
-    run "cd #{current_path}; bundle exec rake db:setup RAILS_ENV=#{rails_env}"
+    
   end
 end
 
