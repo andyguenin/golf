@@ -14,13 +14,13 @@ set :rbenv_map_bins, %w{rake gem bundle ruby rails}
 
 set :keep_releases, 5
 
-after 'deploy:publishing', 'deploy:setup_db'
+
 after 'deploy:publishing', 'deploy:restart'
 
 
 namespace :deploy do
   task :start do
-    run "touch #{current_release}/tmp/restart.txt"
+    run "touch #{deploy_to}/tmp/restart.txt"
   end
  
   task :stop  do
@@ -29,7 +29,10 @@ namespace :deploy do
  
   desc "Restart Application"
   task :restart do
-    run "touch #{current_release}/tmp/restart.txt"
+    on roles(:all) do
+      execute "mkdir -p #{deploy_to}/tmp; touch #{deploy_to}/tmp/restart.txt"
+    end
+    
   end
 
   task :cold do 
