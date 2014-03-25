@@ -1,10 +1,10 @@
 class FixBustedPools < ActiveRecord::Migration
   def up
 #    remove_column :pools, :q_answer_id1, :integer
-    remove_column :pools, :q_answer_id2, :integer
-    remove_column :pools, :q_answer_id3, :integer
-    remove_column :pools, :q_answer_id4, :integer
-    remove_column :pools, :q_answer_id5, :integer
+#    remove_column :pools, :q_answer_id2, :integer
+#    remove_column :pools, :q_answer_id3, :integer
+#    remove_column :pools, :q_answer_id4, :integer
+#    remove_column :pools, :q_answer_id5, :integer
 
     add_column :pools, :q1, :string
     add_column :pools, :q1a, :string
