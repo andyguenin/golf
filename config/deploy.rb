@@ -14,6 +14,9 @@ set :rbenv_map_bins, %w{rake gem bundle ruby rails}
 
 set :keep_releases, 5
 
+after 'deploy:publishing', 'deploy:setup_db'
+after 'deploy:publishing', 'deploy:restart'
+
 
 namespace :deploy do
   task :start do
