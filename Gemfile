@@ -46,6 +46,9 @@ gem 'bcrypt-ruby', :require => "bcrypt"
 gem 'capistrano'
 gem 'capistrano-rails'
 gem 'capistrano-rvm'
+
+gem 'resque'
+gem 'resque-scheduler', :require => 'resque_scheduler'
 gem 'net-scp'
 gem 'net-ssh'
 

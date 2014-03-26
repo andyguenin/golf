@@ -1,4 +1,7 @@
+require 'resque/server'
 Spool::Application.routes.draw do
+  mount Resque::Server.new, at: "/resque"
+  post "insert" => "api#is"
   get "logout" => "sessions#destroy", :as => "logout"
   get "login" => "sessions#new", :as => "login"
   get "forgot" => "users#forgot_password", :as => "forgot_password"
@@ -37,5 +40,5 @@ Spool::Application.routes.draw do
     get "insert_t" => "api#is_test"
   end
   
-  post "insert" => "api#is"
+  
 end
