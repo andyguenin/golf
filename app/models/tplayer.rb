@@ -24,7 +24,7 @@
 class Tplayer< ActiveRecord::Base
   attr_accessible :bucket, :player_id, :tournament, :score, :status, :deagle, :eagle, :birdie, :par, :bogey, :dbogey, :tbogey, :rank
 
-  #status: 0> won 1>playing/finished 2> mdf 3> cut 4> wd 5> did not start 
+  #status: 0> won 1>playing/finished 2> mdf 3> cut 4> wd 5> dq 6> did not start 
   validates :bucket, :inclusion => 0..5
   validates_presence_of :player_id
   validates_presence_of :tournament_id
@@ -92,10 +92,12 @@ class Tplayer< ActiveRecord::Base
           elsif status == "MDF"
             upd_status = 2
           elsif status == "SS"
+            upd_status = 6
+          elsif status == "DQ"
             upd_status = 5
           else
             unless sc.length > 0
-              upd_status = 5
+              upd_status = 6
             end
           end
         end

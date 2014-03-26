@@ -9,6 +9,8 @@ module TournamentHelper
     when 4
       "WD"
     when 5
+      "DQ"
+    when 6
       "Starting Soon"
     else
       "Unknown"
