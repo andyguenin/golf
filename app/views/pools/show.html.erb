@@ -7,6 +7,7 @@
 		<h3 class="subtitle">for <%= link_to "#{@pool.tournament.name} at #{@pool.tournament.course.location}", tournament_path(@pool.tournament) %></h3>
   </div>
 	<div class="col-md-4">
+		<% if @pool.admins.include? current_user%>
 		<table class="table table-condensed">
 			<tr><td>Number of Members</td><td><%= @pool.users.count %></td></tr>
 			<tr><td>Number of Approved Picks</td><td><%= @pool.picks.count %></td></tr>
@@ -15,6 +16,7 @@
 			<tr><td>Total Purse Collected</td><td><%= @pool.all_picks.map{|p| p.received_unit}.sum%></td></tr>
 			<tr><td>Outstanding payment</td><td><%= @pool.pending_picks.map{|p| p.cost - p.received_unit}.sum%></td></tr>
 		</table>
+		<% end %>
 	</div>
 </div>
 

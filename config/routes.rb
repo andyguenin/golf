@@ -1,5 +1,7 @@
 require 'resque/server'
 Spool::Application.routes.draw do
+
+
   mount Resque::Server.new, at: "/resque"
   post "insert" => "api#is"
   get "logout" => "sessions#destroy", :as => "logout"
@@ -18,7 +20,7 @@ Spool::Application.routes.draw do
   resources :users, :except => :index
   resources :sessions
   resources :players, :except => :index
-  
+  resources :scrapers, :except => :show
 
   get "pools/:id/user/:username" => "pools#userpicks", :as => "user_picks"
   get "pools/:pool_id/picks/:id/approve" => "picks#approve", :as => "approve_pick"
