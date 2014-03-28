@@ -16,7 +16,7 @@ set :keep_releases, 5
 
 
 after "deploy:publishing", "deploy:restart"
-after "deploy:restart", "deploy:restart_workers"
+#after "deploy:restart", "deploy:restart_workers"
 
 
 namespace :deploy do
@@ -31,7 +31,7 @@ namespace :deploy do
   desc "Restart Application"
   task :restart do
     on roles(:all) do
-      execute "mkdir -p #{deploy_to}/tmp; touch #{deploy_to}/tmp/restart.txt"
+      execute "mkdir -p #{deploy_to}/current/tmp; touch #{deploy_to}/current/tmp/restart.txt"
     end
     
   end
@@ -46,9 +46,9 @@ namespace :deploy do
 
     
 
-    desc "Restart Resque Workers"
-    task :restart_workers, :roles => :worker do
-      run_remote_rake "resque:restart_workers"
-    end
+    #desc "Restart Resque Workers"
+    #task :restart_workers, :roles => :worker do
+    #  run_remote_rake "resque:restart_workers"
+    #end
 end
 

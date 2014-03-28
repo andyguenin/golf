@@ -13,8 +13,8 @@
 			<tr><td>Number of Approved Picks</td><td><%= @pool.picks.count %></td></tr>
 			<tr><td>Number of Pending Picks</td><td><%= @pool.pending_picks.count %></td></tr>
 			<tr><td>Total Purse</td><td><%= @pool.all_picks.map{|p| p.cost}.sum %></td></tr>
-			<tr><td>Total Purse Collected</td><td><%= @pool.all_picks.map{|p| p.received_unit}.sum%></td></tr>
-			<tr><td>Outstanding payment</td><td><%= @pool.pending_picks.map{|p| p.cost - p.received_unit}.sum%></td></tr>
+			<tr><td>Total Purse Collected</td><td><%= @pool.all_picks.map{|p| p.received_unit}.sum unless @pool.all_picks.empty?%></td></tr>
+			<tr><td>Outstanding payment</td><td><%= @pool.pending_picks.map{|p| p.cost - p.received_unit}.sum unless @pool.pending_picks.empty?%></td></tr>
 		</table>
 		<% end %>
 	</div>
