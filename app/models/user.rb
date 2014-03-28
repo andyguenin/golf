@@ -50,7 +50,7 @@ class User < ActiveRecord::Base
   end
 
   def ensure_static_username
-    if not self.id.nil?
+    if not self.password_hash.nil?
       if self.username != self.username_was
         self.errors.add(:username, "cannot be changed")
       end

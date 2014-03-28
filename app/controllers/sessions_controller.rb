@@ -1,7 +1,7 @@
 class SessionsController < ApplicationController
   def new
     unless current_user.nil?
-      #redirect_to root_path
+      redirect_to root_path
     end
   end
 
@@ -17,11 +17,9 @@ class SessionsController < ApplicationController
         if not session[:return_to].nil?
           redirect_path = session[:return_to]
         end
-        if not session[:activate_email].nil?
-          redirect_path = user_activate_path
-        end
-        redirect_to redirect_path
+        reset_session
         session[:user_id] = user.id
+        redirect_to redirect_path        
       else
         flash.now[:danger] = "Invalid email or password"
         render "new"
@@ -30,7 +28,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    session[:user_id] = nil
+    reset_session
     redirect_to root_url
   end
 end

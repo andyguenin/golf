@@ -15,7 +15,8 @@ set :rbenv_map_bins, %w{rake gem bundle ruby rails}
 set :keep_releases, 5
 
 
-after 'deploy:publishing', 'deploy:restart'
+after "deploy:publishing", "deploy:restart"
+after "deploy:restart", "deploy:restart_workers"
 
 
 namespace :deploy do
@@ -45,8 +46,9 @@ namespace :deploy do
 
     
 
-  task :setup_db do 
-    
-  end
+    desc "Restart Resque Workers"
+    task :restart_workers, :roles => :worker do
+      run_remote_rake "resque:restart_workers"
+    end
 end
 

@@ -49,8 +49,11 @@ gem 'capistrano-rvm'
 
 gem 'resque'
 gem 'resque-scheduler', :require => 'resque_scheduler'
+gem 'resque-web', require: 'resque_web'
+
 gem 'net-scp'
 gem 'net-ssh'
+gem 'god'
 
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'

@@ -13,11 +13,12 @@ class PoolsController < ApplicationController
   end
 
   def userpicks
-    @pool = Pool.find_by_slug(params[:id])
-    @user = User.find_by_username(params[:username])
+    @pool = Pool.find_by_slug(params[:pool_id])
+    @user = User.find_by_username(params[:id])
     pm = @user.pool_memberships.where("pool_id = ?", (@pool.id))
     if pm.empty?
-      raise ActionController::RoutingError.new('Not Found')
+      @picks = []
+      render 'single_user'
     else
       authorize! :view_user_picks, pm[0]
       @picks = @user.get_picks_by_tournament(@pool.tournament)
@@ -76,7 +77,7 @@ class PoolsController < ApplicationController
           new_users += 1
         end
         already_users += 1
-        unless u.all_pool_memberships.include? @pool
+        unless u.all_pools.include? @pool
           pm = PoolMembership.new({:user_id => u.id, :pool_id => @pool.id, :active => false, :inviter_id => current_user.id})
           already_users -= 1
           existing_users += 1 if t_exist

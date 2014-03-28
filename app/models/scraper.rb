@@ -19,4 +19,10 @@ class Scraper < ActiveRecord::Base
   attr_accessible :endtime, :frequency, :label, :pause, :post_to, :starttime, :url, :user_id
   
   belongs_to :user
+  
+  after_initialize :init
+  
+  def init
+    self.post_to = "http://localhost:6001"
+  end
 end

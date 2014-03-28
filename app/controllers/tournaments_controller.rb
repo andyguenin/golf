@@ -8,6 +8,15 @@ class TournamentsController < ApplicationController
     render 'show'
   end
   
+  def current
+    @tournament = Tournament.last
+    @players = @tournament.players.includes(:tplayers => :rounds).all.sort_by do |t|
+      u = t.get_tplayer(@tournament)
+      [u.status, u.score, -u.hole, t.last_name]
+    end
+    render 'show'     
+  end
+  
   def show
     @tournament = Tournament.find_by_slug(params[:id], :include => :players)
     @players = @tournament.players.includes(:tplayers => :rounds).all.sort_by do |t| 

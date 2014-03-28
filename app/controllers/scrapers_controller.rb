@@ -1,5 +1,6 @@
 class ScrapersController < ApplicationController
   authorize_resource :class => false
+        
 
   def index
     @scrapers = Scraper.all
@@ -11,6 +12,11 @@ class ScrapersController < ApplicationController
   
   def create
     @scraper = Scraper.new(params[:scraper])
+    if @scraper.save
+      redirect_to scrapers_path
+    else
+      render 'new'
+    end      
   end
   
   def edit

@@ -2,6 +2,10 @@ require 'resque/server'
 Spool::Application.routes.draw do
 
 
+  get "invites/index"
+
+  get "invites/show"
+
   mount Resque::Server.new, at: "/resque"
   post "insert" => "api#is"
   get "logout" => "sessions#destroy", :as => "logout"
@@ -12,17 +16,20 @@ Spool::Application.routes.draw do
   root :to => "pages#index"
   get "about" => "pages#about"
 
-
+  get "tournaments/current" => "tournaments#current", :as => "current_tournament"
   resources :tournaments
   get "tournaments/:id/:player" => "tournaments#player", :as => "t_player"
 
+  get "invites" => "invites#index"
+
   get "users/activate" => "users#activate", :as => "user_activate"
   resources :users, :except => :index
+  get "invites" => "invites#show"
   resources :sessions
   resources :players, :except => :index
   resources :scrapers, :except => :show
 
-  get "pools/:id/user/:username" => "pools#userpicks", :as => "user_picks"
+  get "pools/:pool_id/user/:id" => "pools#userpicks", :as => "user_picks"
   get "pools/:pool_id/picks/:id/approve" => "picks#approve", :as => "approve_pick"
   get "pools/:pool_id/picks/:id/reject" => "picks#reject", :as => "reject_pick"
   resources :pools do

@@ -8,6 +8,7 @@ class UsersController < ApplicationController
 
   def create
     @user = nil
+    nmi = nil
     if not session[:activate_email].nil?
       nmis = NonmemberInvitee.includes(:user).where("users.email = ? and activation_key = ?", session[:activate_email], session[:activate_activation])
       if nmis.empty?
@@ -23,6 +24,9 @@ class UsersController < ApplicationController
     if @user.save
       if not session[:activate_email].nil? and  params[:user][:email] != session[:activate_email] 
         session[:activate_email] = params[:user][:email]
+      end
+      if not nmi.nil?
+        nmi.destroy
       end
       redirect_to login_url, :flash => {:success => "Signed up! Please log in."}
     else
@@ -51,8 +55,11 @@ class UsersController < ApplicationController
         session[:activate_activation] = code
         redirect_to signup_path, :flash => {:info => "You must first create an account. You will then be prompted to sign in and then redirected to your pool."}
       else
-        nmi.pool.user_join(nmi.user)
-        redirect_to pool_path(nmi.pool), :flash => {:success => "You have joined the pool. Enter your picks before the tournament starts!"}
+        if can? :accept, nmi and nmi.pool.user_join(nmi.user)
+          redirect_to pool_path(nmi.pool), :flash => {:success => "You have joined the pool. Enter your picks before the tournament starts!"}
+        else
+          redirect_to root_path, :flash => {:danger => "Pool has been locked or expired. You cannot join."}
+        end
         nmi.delete
       end
     end
@@ -82,7 +89,7 @@ class UsersController < ApplicationController
   private
   def require_logged_out
     if current_user
-      redirect_to root_path, :alert => "Cannot perform that action while logged in"
+      redirect_to root_path, :flash => {:alert => "Cannot perform that action while logged in"}
     end
   end
   

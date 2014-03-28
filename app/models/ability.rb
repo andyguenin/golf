@@ -17,6 +17,13 @@ class Ability
       can?(:read, pick.pool) and (pick.pool.tournament.locked or user.picks.include? pick)
     end
     
+    can :be_invited, User do |u|
+      not u.password_hash.nil?
+    end
+    
+    can :accept, NonmemberInvitee do |nmi|
+      nmi.user == user and nmi.pool.tournament.locked = false
+    end
   end
 
 
@@ -40,7 +47,7 @@ class Ability
     end
 
     can :join, Pool do |pool|
-      not user.pools.include? pool and can? :read, pool
+      not user.pools.include? pool and can? :read, pool and not pool.tournament.locked
     end
 
     can :leave, Pool do |pool|

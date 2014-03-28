@@ -65,6 +65,7 @@ GEM
     coffee-script-source (1.7.0)
     erubis (2.7.0)
     execjs (2.0.2)
+    god (0.13.4)
     hike (1.2.3)
     i18n (0.6.1)
     journey (1.0.4)
@@ -132,6 +133,12 @@ GEM
       redis (~> 3.0.4)
       resque (~> 1.25.1)
       rufus-scheduler (~> 2.0.24)
+    resque-web (0.0.5)
+      coffee-rails
+      jquery-rails
+      resque
+      sass-rails
+      twitter-bootstrap-rails
     rufus-scheduler (2.0.24)
       tzinfo (>= 0.3.22)
     sass (3.3.4)
@@ -165,6 +172,11 @@ GEM
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
+    twitter-bootstrap-rails (2.2.8)
+      actionpack (>= 3.1)
+      execjs
+      rails (>= 3.1)
+      railties (>= 3.1)
     tzinfo (0.3.39)
     uglifier (2.5.0)
       execjs (>= 0.3.0)
@@ -186,6 +198,7 @@ DEPENDENCIES
   capistrano-rails
   capistrano-rvm
   coffee-rails (~> 3.2.1)
+  god
   jquery-rails
   jquery-ui-rails
   net-scp
@@ -195,6 +208,7 @@ DEPENDENCIES
   rails_12factor
   resque
   resque-scheduler
+  resque-web
   sass-rails (~> 3.2.3)
   seed_dump
   sprockets
