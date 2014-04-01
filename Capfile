@@ -20,6 +20,7 @@ require 'capistrano/rvm'
 # require 'capistrano/bundler'
 require 'capistrano/rails'
 require 'capistrano/rails/assets'
+require 'capistrano/foreman'
 # require 'capistrano/rails/migrations'
 
 # load 'deploy/assets'

@@ -56,6 +56,7 @@ gem 'resque-web', require: 'resque_web'
 gem 'net-scp'
 gem 'net-ssh'
 
+gem 'capistrano3-foreman', '~> 0.2.5'
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
