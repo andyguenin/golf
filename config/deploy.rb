@@ -52,3 +52,28 @@ namespace :deploy do
     #end
 end
 
+namespace :foreman do
+  desc "Export the Procfile to Ubuntu's upstart scripts"
+  task :export, :roles => :app do
+    run "cd #{deploy_to} && sudo bundle exec foreman export upstart /etc/init -a golf-scraper -u deploy -l #{deploy_to}/log"
+  end
+  
+  desc "Start the application services"
+  task :start, :roles => :app do
+    sudo "start golf-scraper"
+  end
+ 
+  desc "Stop the application services"
+  task :stop, :roles => :app do
+    sudo "stop golf-scraper"
+  end
+ 
+  desc "Restart the application services"
+  task :restart, :roles => :app do
+    run "sudo start golf-scraper || sudo restart golf-scraper"
+  end
+end
+ 
+after "deploy:update", "foreman:export"
+after "deploy:update", "foreman:restart"
+

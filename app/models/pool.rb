@@ -13,6 +13,11 @@
 #  nonadmin_invite  :boolean
 #  require_approval :boolean
 #  slug             :string(255)
+#  q_answer_id1     :integer
+#  q_answer_id2     :integer
+#  q_answer_id3     :integer
+#  q_answer_id4     :integer
+#  q_answer_id5     :integer
 #  q1               :string(255)
 #  q2               :string(255)
 #  q3               :string(255)

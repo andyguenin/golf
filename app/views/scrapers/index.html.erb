@@ -3,27 +3,28 @@
 			<%= link_to "New Scraper", new_scraper_path, :class => "btn btn-primary"%>
 	</div>
 	<br><br>
-	<table class="table table-condensed">
-		<tr>
-			<td>Label</td>
-		  <td>Url</td>
-		  <td>Post</td>
-		  <td>Frequency (seconds between runs)</td>
-		  <td>Start</td>
-		  <td>End</td>
-      <td>Creator</td>
-		</tr>
-		
-		<% @scrapers.each do |s|%>
-			<tr>
-				<td><%= s.label %></td>
-				<td><%= s.url %></td>
-				<td><%= s.post_to %></td>
-				<td><%= s.frequency %></td>
-				<td><%= s.starttime %></td>
-				<td><%= s.endtime %></td>
-				<td><%= s.user.name %></td>
-      </tr>
-		<%end%>
-	</table>
+	
+	<% @scrapers.each do |s| %>
+		<div class="row">
+			<div class="col-md-4">
+					<h3><%= s.label %></h3>
+					<p>Creator: <%= s.user.name%></p>
+					<div class="btn-group">
+							<%= link_to s.pause ? "Play" : "Pause", s.pause ? scraper_play_path(s) : scraper_pause_path(s), :class => "btn btn-success"%>
+							<%= link_to "Run Once", scraper_run_once_path(s), :class => "btn btn-success" if s.pause%>
+					</div>
+			</div>
+			<div class="col-md-8">
+				<table class="table table-condensed">
+					<tr><td>Url</td><td><a href="<%= s.url %>"><%= s.url %></a></td></tr>
+					<tr><td>Post to</td><td><%= s.post_to%></td></tr>
+					<tr><td>Frequency</td><td>Once every <b><%= s.frequency%></b> seconds</td></tr>
+					<tr><td>Start time (no effect)</td><td><%= s.starttime%></td></tr>
+					<tr><td>End time (no effect)</td><td><%= s.endtime %></td></tr>
+					<tr><td>Run status</td><td><%= s.running ? "Running" : "Paused"%></td></tr>
+					<tr><td>Last Run</td><td><%= s.last_run%></td></tr>
+				</table>			
+			</div>
+		</div>	
+	<% end %>
 	

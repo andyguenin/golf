@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140327030005) do
+ActiveRecord::Schema.define(:version => 20140330003258) do
 
   create_table "courses", :force => true do |t|
     t.integer  "tournament_id"
@@ -113,6 +113,11 @@ ActiveRecord::Schema.define(:version => 20140327030005) do
     t.boolean  "nonadmin_invite"
     t.boolean  "require_approval"
     t.string   "slug"
+    t.integer  "q_answer_id1"
+    t.integer  "q_answer_id2"
+    t.integer  "q_answer_id3"
+    t.integer  "q_answer_id4"
+    t.integer  "q_answer_id5"
     t.string   "q1"
     t.string   "q2"
     t.string   "q3"
@@ -179,6 +184,8 @@ ActiveRecord::Schema.define(:version => 20140327030005) do
     t.boolean  "pause"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.datetime "last_run"
+    t.boolean  "running"
   end
 
   create_table "tournaments", :force => true do |t|
