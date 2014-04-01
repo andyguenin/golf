@@ -53,12 +53,12 @@ class Player < ActiveRecord::Base
     end
     unless score_structure.length == 1
       existing_rounds = tplayer.rounds
-      if existing_rounds.length != score_structure.length-3
-        (score_structure.length-existing_rounds.length-3).times do |r|
-          c_round = r + 1
-          Round.create_round(score_structure[c_round], c_round, tplayer)
+      (score_structure.length-3).times do |r|
+        if((r) < existing_rounds.length)
+          tplayer.get_round(r+1).update_strokes(score_structure[r+1])
+        else
+          Round.create_round(score_structure[r+1], r+1, tplayer)
         end
-        existing_rounds = tplayer.rounds
       end
       tplayer.update_score(score_structure[-1])
       tourn.update_attribute(:round, [[0,((Time.now - tourn.starttime)/60/60/24).floor].max + 1,4].min)   

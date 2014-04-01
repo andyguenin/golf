@@ -13,6 +13,8 @@
 #  pause      :boolean
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  last_run   :datetime
+#  running    :boolean
 #
 
 require 'test_helper'

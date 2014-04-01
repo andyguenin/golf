@@ -5,7 +5,6 @@ class T
       Player.all.each {|p| p.delete}
       Tplayer.all.each {|p| p.delete}
       Tournament.all.each {|p| p.delete}
-      Score.all.each {|p| p.delete}
       QAnswer.all.each {|p| p.delete}
       Hole.all.each {|p| p.delete}
       Pick.all.each {|p| p.delete}

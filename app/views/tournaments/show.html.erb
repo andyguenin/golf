@@ -34,7 +34,7 @@
 <% @players.each do |p| %>
 <div class="player-label collapse-group" data-toggle="collapse" href="#demo<%= counter %>" class="accordion-toggle">
   <% t = p.get_tplayer(@tournament)%>
-  <% sum = @tournament.round*18%>
+  <% sum = 72%>
   <div class="col-md-1 players-rank text-center">
     <%= t.rank if t.status <= 1%>
 	</div>
