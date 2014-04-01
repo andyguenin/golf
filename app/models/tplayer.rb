@@ -112,7 +112,7 @@ class Tplayer< ActiveRecord::Base
     end
     self.update_attributes!({
                               :status => upd_status,
-                              :score => sc.map{|t| t[0] - t[1]}.sum,
+                              :score => sc.map{|t| t.length == 2 ? t[0] - t[1] : 0}.sum,
                               :deagle => stats[0],
                               :eagle => stats[0],
                               :birdie => stats[1],

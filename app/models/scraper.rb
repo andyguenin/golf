@@ -13,16 +13,29 @@
 #  pause      :boolean
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  last_run   :datetime
+#  running    :boolean
 #
 
 class Scraper < ActiveRecord::Base
-  attr_accessible :endtime, :frequency, :label, :pause, :post_to, :starttime, :url, :user_id
+  attr_accessible :endtime, :frequency, :label, :pause, :post_to, :starttime, :url, :user_id, :running, :last_run
+  
+  validates_presence_of :endtime, :frequency, :label, :pause, :post_to, :starttime, :url, :user_id
   
   belongs_to :user
   
-  after_initialize :init
+#  after_initialize :init
   
-  def init
-    self.post_to = "http://localhost:6001"
+  def play_s
+    self.update_attribute(:pause, false)
+    scrape
+  end
+  
+  def pause_s
+    self.update_attribute(:pause, true)
+  end
+  
+  def scrape
+    Resque.enqueue(ScraperRunner, self.id)
   end
 end

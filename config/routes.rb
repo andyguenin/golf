@@ -7,7 +7,9 @@ Spool::Application.routes.draw do
   get "invites/show"
 
   mount Resque::Server.new, at: "/resque"
+  
   post "insert" => "api#is"
+  post "ins" => "api#is_test"
   get "logout" => "sessions#destroy", :as => "logout"
   get "login" => "sessions#new", :as => "login"
   get "forgot" => "users#forgot_password", :as => "forgot_password"
@@ -28,6 +30,9 @@ Spool::Application.routes.draw do
   resources :sessions
   resources :players, :except => :index
   resources :scrapers, :except => :show
+  get "scrapers/:id/play" => "scrapers#play", :as => "scraper_play"
+  get "scrapers/:id/pause" => "scrapers#pause", :as => "scraper_pause"
+  get "scrapers/:id/run_once" => "scrapers#run_once", :as => "scraper_run_once"
 
   get "pools/:pool_id/user/:id" => "pools#userpicks", :as => "user_picks"
   get "pools/:pool_id/picks/:id/approve" => "picks#approve", :as => "approve_pick"
@@ -42,8 +47,6 @@ Spool::Application.routes.draw do
   get "pools/:id/edit/admins" => "pools#admins", :as => "edit_admins_pool"
   put "pools/:id/edit/admins" => "pools#admins_update", :as => "update_admins_pool"
   match "pools/:id/invite" => "pools#invite", :as => "invite_pool", :via => [:get, :post]
-  
-  get "score" => "api#insert_score"
   
   unless Rails.env.production?
     get "insert_t" => "api#is_test"

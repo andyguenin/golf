@@ -66,7 +66,7 @@ var scrape = function(scrape_url, log_scores, send_callback, url) {
 	    re.push(scores);
 			re.push(complete);
 	    send_callback(btoa(JSON.stringify(re)), url);
-	}, 50000);
+	}, 55000);
     });
 };
 
@@ -173,7 +173,7 @@ function send_to_ruby(str, url)
 }
 var args = require('system').args;
 scrape_site = 'http://espn.go.com/golf/leaderboard';
-target = "http://localhost:6001/scores";
+target = "http://localhost:3000/ins";
 if(args.length === 2)
 {
 	scrape_site = args[1];

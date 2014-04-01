@@ -1,0 +1,5 @@
+every_1_minute:
+  cron: "* * * * *"
+  class: ScraperRunner
+  queue: scraper
+  description: Tasks to perform every minute

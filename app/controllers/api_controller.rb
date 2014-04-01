@@ -14,7 +14,7 @@ class ApiController < ApplicationController
   end
   
   def is_test
-    is_decrypt(params[:scores])
+    is_decrypt(Base64.decode64(params[:payload]))
   end
   
   def is_decrypt(message)
@@ -31,7 +31,9 @@ class ApiController < ApplicationController
     @t = Tournament.where("slug = ? and starttime = ?", slug, start_time)[0]
     
     location_info = /(.*)\s-\s(.*)/.match(t_location)
-    course = Course.where("name = ? and location = ?", location_info[1], location_info[2])[0]
+    c_name = location_info[1]
+    c_location = location_info[2]
+    course = Course.where("name = ? and location = ?", c_name, c_location)[0]
 
     new_tournament = false
 
@@ -71,10 +73,6 @@ class ApiController < ApplicationController
     #update all players' scores
     ds[1][1].each do |player|
       Player.update_score_from_scraper(player, @t)
-    end
-    
-    if ds[2] == 1 and (t.low_score.nil? or t.low_score == 0)
-      @t.update_attribute(:low_score, @t.scores.select("SUM(scores.strokes) as strokes").where("scores.round = 1").group("player_id").map{|s| s.strokes}.min)
     end
     
     if not @t.locked and locked
