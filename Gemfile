@@ -56,9 +56,6 @@ gem 'resque-web', require: 'resque_web'
 gem 'net-scp'
 gem 'net-ssh'
 
-gem 'rake', '~> 0.9'
-gem 'magentify'
-
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
