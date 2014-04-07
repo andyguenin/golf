@@ -20,18 +20,13 @@
 					<li <%= print_menu_active(:tournament) %>><%= link_to "Golf Leaderboard", current_tournament_path %></li>
 					<li><%= link_to "Invites", invites_path if can? :be_invited, current_user and current_user.admin?%></li>
 					<li><%= link_to "Scrapers", scrapers_path if can? :admin, Scraper %></li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="#">The Rules</a></li>
-							<li><a href="#">Credits</a></li>
-						</ul>
-					</li>
+					<li><%= link_to "My Account", edit_user_path(current_user) unless current_user.nil? %></li>
+					<li><%= link_to "How it Works", works_path %></li>
 				</ul>
 				<div class="navbar-right">
 					<div class ="navbar-text">
 						<% if current_user %>
-							Logged in as: <%= current_user.username %>
+							Logged in as: <%= link_to current_user.username, edit_user_path(current_user) %>
 							<%= link_to "Log out", logout_path, :class=>"navbar-link" %>
 						<% else %>
 							<%= link_to "Sign up", new_user_path, "data-toggle"=>"modal", :class=>"navbar-link" %> or

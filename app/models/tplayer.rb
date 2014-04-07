@@ -58,7 +58,8 @@ class Tplayer< ActiveRecord::Base
     if self.id.nil?
       [[[]]]
     else
-      player.scores_by_tournament(tournament).map do |s|
+      a = player.scores_by_tournament(tournament).reverse
+      a.drop(a.size < 4 ? 0 : a.size - 4).map do |s|
         s.zip(tournament.pars)
       end
     end

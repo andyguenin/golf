@@ -1,13 +1,41 @@
 <h1 class="title">Invite players</h1>
-
 <div id="confirm_box" <%= raw("class=\"hide\"") unless params[:emails] %>>
 <h2>
-Here is a list of the emails extracted from your text. Please confirm:</h2><br />
-<% @emails.each do |t|%>
-<%= t %><br />
-<%end %>
+Review the following:</h2><br />
+<div class="row email-message">
+	<div class="col-md-1">
+		<b>To: </b>
+	</div>
+	<div class="col-md-11">
+		<% @emails.each do |t|%>
+			<%= t %>;
+		<%end %>
+	</div>
+</div>
+<div class="row email-message">
+	<div class="col-md-1">
+		<b>Subject: </b>
+	</div>
+	<div class="col-md-11">
+		You have been invited to join a pool at The Golf Tourney
+	</div>
+</div>
+<div class="row email-message">
+	<div class="col-md-1">
+		<b>Message: </b>
+	</div>
+	<div class="col-md-11">
+		<%= simple_format(@message) unless @message.nil?%>
+		<br>
+		To accept this invitation, please follow the link below:<br>
+		<br>
+		[link inserted here for each individual user]<br>
+	</div>
+</div>
+
 <%= form_tag do %>
 <%= hidden_field_tag :emails, @emails.join("\r\n")%>
+<%= hidden_field_tag :message, @message %>
 <%= hidden_field_tag :confirm, true %>
 <div class="btn-group pull-right">
 	<%= link_to "No, there's a mistake", "#", :class => "btn btn-danger", :id => "email_mistake" %>
@@ -19,7 +47,11 @@ Here is a list of the emails extracted from your text. Please confirm:</h2><br /
 <%= form_tag do%>
 <p>
 	<%= label_tag :emails, "Copy and paste emails here. You can copy from an Outlook email and it should extract the emails. Don't worry about duplicates or emails who are already members of the site: it will ignore duplicates and will not create a new account for existing players."%>
-	<%= text_area_tag(:emails, @emails.join("\r\n"), :rows => "20", :class => "field span12")%>
+	<%= text_area_tag(:emails, @emails.join("\r\n"), :rows => "10", :class => "field span12")%>
+</p>
+<p>
+	<%= label_tag :message, "Type the message here."%>
+	<%= text_area_tag(:message, @message, :rows => "10", :class => "field span12")%>
 </p>
 <div class="pull-right">
 <%= submit_tag "Next", :class =>"btn btn-success"%>

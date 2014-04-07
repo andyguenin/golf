@@ -10,11 +10,15 @@ class TournamentsController < ApplicationController
   
   def current
     @tournament = Tournament.last
-    @players = @tournament.players.includes(:tplayers => :rounds).all.sort_by do |t|
-      u = t.get_tplayer(@tournament)
-      [u.status, u.score, -u.hole, t.last_name]
+    if @tournament.nil?
+      redirect_to root_path
+    else
+      @players = @tournament.players.includes(:tplayers => :rounds).all.sort_by do |t|
+        u = t.get_tplayer(@tournament)
+        [u.status, u.score, -u.hole, t.last_name]
+      end
+      render 'show'     
     end
-    render 'show'     
   end
   
   def show

@@ -1,5 +1,7 @@
+<% cache(@tournament) do %>
 <h1 class="no-bottom title"><%= @tournament.name %></h1>
 <h3 class="no-bottom lighten subtitle">From <%= @tournament.formatted_start %> to <%= @tournament.formatted_end%></h3>
+<i>Last updated: <%= @tournament.updated_at %></i>
 <div class="pull-right btn-group">
   <%= link_to "Edit Tournament", edit_tournament_path(@tournament), :class => "btn btn-warning" if can? :edit, @tournament%>
 </div><br /><br />
@@ -107,3 +109,4 @@
 </div>
 <div class="row">
   <div class="col-md-12">
+<%end%>

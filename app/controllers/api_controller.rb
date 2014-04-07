@@ -103,6 +103,7 @@ class ApiController < ApplicationController
       Player.update_pga_rankings
       @t.auto_bucket
     end
+    @t.touch
     render :text => "success"
   end
   

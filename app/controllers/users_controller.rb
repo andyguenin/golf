@@ -37,8 +37,21 @@ class UsersController < ApplicationController
       flash.now[:danger] = message
       render "new"
     end
-
-
+  end
+  
+  def edit
+    @user = User.find_by_username(params[:id])
+    authorize! :edit, @user
+  end
+  
+  def update
+    @user = User.find_by_username(params[:id])
+    authorize! :edit, @user
+    if @user.update_attributes(params[:user])
+      redirect_to root_path, flash: {success: "Updated!"}
+    else
+      render 'edit'
+    end    
   end
   
   def activate
@@ -64,26 +77,52 @@ class UsersController < ApplicationController
       end
     end
   end
-
+  
   def forgot_password
   end
 
   def send_forgotten_password
-    u = User.find_by_username(params[:login])
-    if(u.nil?)
-      u = User.find_by_email(params[:login])
-    end
+    u = User.find_by_username(params[:login]) || User.find_by_email(params[:login])
     characters = ('a'..'z').to_a + ('A'..'Z').to_a + ('0'..'9').to_a
     key = (0..58).map{characters.sample}.join
     unless u.nil?
       u.update_attribute(:forgot_password, key)
-      InviteMailer.forgot_password(u).deliver
+      UserMailer.forgot_password(u).deliver
     end
     f = {:success => "An email has been sent to that user."}
     if not flash[:danger].nil?
       f = {:danger => flash[:danger]}
     end
     redirect_to root_path, :flash => f
+  end
+  
+  def reset
+    @user = User.find_by_username(params[:username])
+    unless @user.nil?
+      unless @user.forgot_password == params[:key]
+        redirect_to root_path
+      end
+    else
+      redirect_to root_path
+    end
+  end
+  
+  def fix_password
+    @user = User.find_by_username(params[:username])
+    unless @user.nil?
+      if @user.forgot_password == params[:key]
+        if @user.reset_password({:password => params[:password], :password_confirmation => params[:password_confirmation]})
+          redirect_to login_path, flash: {success: "Your password has successfully been reset. Please sign in!"}
+        else
+          @user.reload
+          render 'reset'
+        end        
+      else
+        redirect_to root_path
+      end
+    else
+      redirect_to root_path
+    end
   end
         
   private

@@ -49,7 +49,7 @@ class Tournament < ActiveRecord::Base
     score_freq.keys.sort.each do |score|
       freq = score_freq[score]
       self.tplayers.where("score = ?", score).each do |t|
-        place = (freq != 1 && cur_place == 1) ? "T#{cur_place}" : "#{cur_place}"
+        place = (freq != 1 && cur_place == 1 && t.status == 0) ? (cur_place = cur_place + 1; 1) : cur_place
         t.update_attribute(:rank, place)
       end
       cur_place = cur_place + freq

@@ -101,6 +101,14 @@ class User < ActiveRecord::Base
     end
   end
   
+  def reset_password(hsh)
+    self.password = hsh[:password]
+    self.password_confirmation = hsh[:password_confirmation]
+    self.forgot_password = nil
+    self.locked = false
+    self.save
+  end
+  
   private
   
   def check_password

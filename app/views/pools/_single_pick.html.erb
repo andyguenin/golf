@@ -1,4 +1,9 @@
 <div class="row">
+	<div class="col-md-12">
+		<h3>Players</h3>
+	</div>
+</div>
+<div class="row">
   <% first = 1 %>
   <% pick.players.each do |p| %>
   <div class="col-md-2 <%= "col-md-offset-1" if first == 1%> pick-player-name">
@@ -6,4 +11,29 @@
         <%= p.name %>
   </div>
   <% end %>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<h3>Questions</h3>
+	</div>
+</div>
+<% 5.times do |t| %>
+	<div class="row">
+		<div class="col-md-8">
+			<%= pick.pool["q#{t+1}"]%>
+		</div>
+		<div class="col-md-4">
+			<%= pick["q#{t+1}"] ? "yes" : "no"%>
+		</div>
+	</div>
+<%end%>
+<div class="row">
+	<div class="col-md-12">
+		<h3>Tiebreak</h3>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<%= pick.tiebreak%>
+	</div>
 </div>

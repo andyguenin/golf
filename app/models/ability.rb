@@ -24,6 +24,10 @@ class Ability
     can :accept, NonmemberInvitee do |nmi|
       nmi.user == user and nmi.pool.tournament.locked = false
     end
+    
+    can :preview, Pick do |pick|
+      user.picks.include? pick
+    end
   end
 
 
@@ -69,6 +73,7 @@ class Ability
     can :create, Pool do |pool|
       not user.id.nil? and user.admin
     end
+
     
     # These are to prevent admin from performing illegal actions
     cannot :leave, Pool do |pool|

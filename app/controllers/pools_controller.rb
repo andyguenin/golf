@@ -62,6 +62,7 @@ class PoolsController < ApplicationController
     existing_users = 0
     already_users = 0
     @emails = params[:emails] ? params[:emails].split("\n").join(" ").split("\r").join(" ").scan(/([a-zA-Z]\S*@[a-zA-Z0-9\.-]*)/).map {|t| t[0]}.uniq : []
+    @message = params[:message]
     if(params[:confirm] && params[:confirm] == "true")
       characters = ('a'..'z').to_a + ('A'..'Z').to_a + ('0'..'9').to_a
       @emails.each do |e|
@@ -73,7 +74,7 @@ class PoolsController < ApplicationController
           t_exist = true
         else
           invite = NonmemberInvitee.create!({:inviter_id => current_user.id, :user_id => u.id, :pool_id => @pool.id, :activation_key => (0..58).map{characters.sample}.join})
-          InviteMailer.invite(u, invite).deliver
+          UserMailer.invite(u, invite, @message).deliver
           new_users += 1
         end
         already_users += 1

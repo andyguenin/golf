@@ -51,7 +51,7 @@
 		
 	<% @pool.pending_picks.each do |p| %>
 		<tr>
-				<td><%= p.name %></td>
+				<td><%= link_to(p.name, pool_pick_path(p.pool, p.slug)) if can? :preview, p %></td>
 				<td><%= p.user.name %></td>
 				<td><%= p.cost %></td>
 				<td><%= p.received_unit %></td>
@@ -60,6 +60,23 @@
 		</tr>
 	<% end %>
 	</table>
+<% else %>
+<br>
+ <h3>My Pending Picks</h3>
+<table class="table table-condensed table-hover table-striped">
+  <tr>
+    <td>Pick Name</td>
+    <td>Total Unit Cost</td>
+		<td>Total Unit Paid</td>
+  </tr>
+<% @pool.all_picks.includes(:user).where("users.id = ? and picks.approved = ?", current_user.id, false).each do |p| %>
+	<tr>
+			<td><%= link_to(p.name, pool_pick_path(p.pool, p.slug)) if can? :preview, p %></td>
+			<td><%= p.cost %></td>
+			<td><%= p.received_unit %></td>
+	</tr>
+<% end %>
+</table>
 <% end %>
 <br>
 <h3>Active Picks</h3>

@@ -1,13 +1,15 @@
 require 'resque/server'
 Spool::Application.routes.draw do
 
-
   get "invites/index"
 
   get "invites/show"
 
   mount Resque::Server.new, at: "/resque"
   
+  match "404" => "errors#not_found"
+  match "422" => "errors#unacceptable"
+  match "500" => "errors#internal_error"
   post "insert" => "api#is"
   post "ins" => "api#is_test"
   get "logout" => "sessions#destroy", :as => "logout"
@@ -16,8 +18,10 @@ Spool::Application.routes.draw do
   get "send_reset" => "users#send_forgotten_password", :as => "send_reset"
   get "signup" => "users#new", :as => "signup"
   root :to => "pages#index"
-  get "about" => "pages#about"
+  get "works" => "pages#works"
 
+  get "reset/:key/:username" => "users#reset", :as => "reset_path"
+  post "reset/:key/:username" => "users#fix_password", :as => "reset_path"
   get "tournaments/current" => "tournaments#current", :as => "current_tournament"
   resources :tournaments
   get "tournaments/:id/:player" => "tournaments#player", :as => "t_player"

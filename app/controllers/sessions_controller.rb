@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
     begin
       user = User.authenticate(params[:login], params[:password])
     rescue SecurityError
-      redirect_to send_reset_path, :login => :params["email"], :flash => {:danger => "Your account has been locked, Please check your email for instructions on resetting your password."}
+      redirect_to send_reset_path(login: params[:login]), :flash => {:danger => "Your account has been locked. Please check your email for instructions on resetting your password."}
     else      
       if user
         redirect_path = root_url

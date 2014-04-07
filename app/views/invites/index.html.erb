@@ -1,2 +1,33 @@
-<h1>Invites#index</h1>
-<p>Find me in app/views/invites/index.html.erb</p>
+<h1 class="title">Invites</h1>
+<% if @invites.count > 0 %>
+<table class="table table-condensed">
+	<thead>
+		<tr>
+			<td>Invitee</td>
+			<td>Invitee email</td>
+			<td>Pool invited to</td>
+			<td>Inviter</td>
+		</tr>
+	</thead>
+	<tbody>
+	<% @invites.each do |i| %>
+		<tr>
+			<td>
+				<%= i.user.name%>
+			</td>
+			<td>
+				<%= i.user.email%>
+			</td>
+			<td>
+				<%=i.pool.name%>
+			</td>
+			<td>
+				<%=i.inviter.name%>
+			</td>
+		</tr>
+	<%end%>
+	</tbody>
+</table>
+<% else %>
+No invites
+<% end %>

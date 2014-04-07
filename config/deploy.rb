@@ -8,12 +8,13 @@ set :scm, :git
 set :repo_url, 'git@github.com:andyguenin/golf.git'
 
 
-set :rbenv_ruby, '2.1.1p76'
-set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
-set :rbenv_map_bins, %w{rake gem bundle ruby rails}
-
 set :keep_releases, 5
 
+set :rvm_ruby_string, :local               # use the same ruby as used 
+set :rvm_autolibs_flag, "read-only"        # more info: rvm help autolibs
+
+
+set :use_sudo, true
 
 after "deploy:publishing", "deploy:restart"
 #after "deploy:restart", "deploy:restart_workers"
@@ -43,11 +44,37 @@ namespace :deploy do
       end
       #start
     end
-
-    
-
-    #desc "Restart Resque Workers"
-    #task :restart_workers, :roles => :worker do
-    #  run_remote_rake "resque:restart_workers"
-    #end
 end
+
+namespace :foreman do
+  desc "Export the Procfile to Ubuntu's upstart scripts"
+  task :export do
+     on roles(:all) do
+       execute "cd #{deploy_to} && sudo bundle exec foreman export upstart /etc/init -a golf-scraper -u deploy -l #{deploy_to}/log"
+     end
+  end
+  
+  desc "Start the application services"
+  task :start do
+    on roles(:all) do
+      execute "sudo start golf-scraper"
+    end
+  end
+ 
+  desc "Stop the application services"
+  task :stop do
+    on roles(:all) do
+      execute "sudo stop golf-scraper"
+    end
+  end
+ 
+  desc "Restart the application services"
+  task :restart do
+    on roles(:all) do
+      execute "sudo start golf-scraper || sudo restart golf-scraper"
+    end
+  end
+end
+ 
+#after "deploy:update", "foreman:export"
+#after "deploy:update", "foreman:restart"

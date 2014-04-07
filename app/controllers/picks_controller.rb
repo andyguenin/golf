@@ -6,7 +6,7 @@ class PicksController < ApplicationController
   
   def show
     @pool = Pool.find_by_slug(params[:pool_id])
-    @pick = @pool.picks.where("slug = ?", params[:id])[0]
+    @pick = @pool.all_picks.where("slug = ?", params[:id])[0]
   end
   
   def edit
