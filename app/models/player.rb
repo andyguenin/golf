@@ -49,7 +49,7 @@ class Player < ActiveRecord::Base
 
     tplayer = player.get_tplayer(tourn)
     if tplayer.nil?
-      tplayer = player.tplayers.create!({:tournament => tourn, :bucket => 0, :score => 0, :status => 5})
+      tplayer = player.tplayers.create!({:tournament => tourn, :bucket => 0, :score => 0, :status => 6})
     end
     unless score_structure.length == 1
       existing_rounds = tplayer.rounds

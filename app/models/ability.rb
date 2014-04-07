@@ -28,6 +28,10 @@ class Ability
     can :preview, Pick do |pick|
       user.picks.include? pick
     end
+    
+    can :edit, User do |u|
+      u == user
+    end
   end
 
 
