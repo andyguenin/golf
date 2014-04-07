@@ -1,6 +1,6 @@
 class RemoveRoundsFromTplayer < ActiveRecord::Migration
   def up
-    remove_column :tplayers, :round
+    #remove_column :tplayers, :round
     remove_column :tplayers, :rank
     remove_column :tplayers, :hole
   end
