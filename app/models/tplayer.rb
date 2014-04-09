@@ -19,6 +19,10 @@
 #  tbogey        :integer
 #  current_round :integer
 #  rank          :integer
+#  r1_bonus      :integer
+#  r2_bonus      :integer
+#  r3_bonus      :integer
+#  r4_bonus      :integer
 #
 
 class Tplayer< ActiveRecord::Base
@@ -61,7 +65,7 @@ class Tplayer< ActiveRecord::Base
       a = player.scores_by_tournament(tournament).reverse
       a.drop(a.size < 4 ? 0 : a.size - 4).map do |s|
         s.zip(tournament.pars)
-      end
+      end.reverse
     end
   end
 
@@ -73,7 +77,15 @@ class Tplayer< ActiveRecord::Base
   def get_round(r)
     rounds.where("round = ?", r).first
   end
-
+  
+  def score_through(r)
+    scores.slice(0,r).map{|r| r.map{|t| t.length == 2 and t[0] != 0 ? t[0] - t[1] : 0}.sum}.sum
+  end
+  
+  def completed_rounds
+    a = scores
+    a.length > 0 ? a.length - (a.last.map{|p| p[0]}.select{|p| p!= 0}.count < 18 ? 1 : 0) : 0
+  end
 
   def update_score(status)
     sc = scores.flatten(1).select do |h| 

@@ -85,16 +85,33 @@ class Pick < ActiveRecord::Base
       a[0] == a[1] and not a[0].nil?
     end.length
   end
+  
+  def rounds_bonus
+    tps = [tp1,tp2,tp3,tp4,tp5]
+    [1,2,3,4].map do |r|
+      tps.map{|t| t["r#{r}_bonus".to_sym].nil? ? 0 : t["r#{r}_bonus"] }.sum != 0 ? (r == 4 ? 2 : 1) : 0
+    end.sum
+  end
+  
+  def cut_bonus(tourn)
+    num_active_players = players.map do |p| 
+      status = p.get_tplayer(tournament).status
+      status <=1
+    end.length == 5 and tourn.round >= 2 ? 3 : 0
+  end
 
   def update_score
     s = player_subscore
-    s -= correct_questions
-    num_active_players = players.map do |p| 
-      status = p.get_tplayer(tournament).status
-      status <=1 or status == 5
-    end.length
-    s -= num_active_players == 5 ? 3 : 0
-    self.update_attributes!({:score => s, :bonus => num_active_players == 5 ? -3 : 0, :active_players => num_active_players})
+    cc = correct_questions 
+    s -= cc
+
+    rb = rounds_bonus
+    s -= rb
+    
+    cb = cut_bonus(tournament)
+    s -= cb
+    
+    self.update_attributes!({:score => s, :bonus => -1*(correct_questions + rb + cb), :active_players => cc})
   end
   
   def players

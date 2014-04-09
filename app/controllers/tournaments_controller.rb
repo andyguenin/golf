@@ -43,6 +43,7 @@ class TournamentsController < ApplicationController
       t.update_attribute(:bucket, tp[1])
     end
     if @tournament.update_attributes(params[:tournament])
+      @tournament.touch
       redirect_to @tournament
     else
       render 'edit'

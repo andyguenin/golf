@@ -1,4 +1,4 @@
-<% cache(@tournament) do %>
+
 <h1 class="no-bottom title"><%= @tournament.name %></h1>
 <h3 class="no-bottom lighten subtitle">From <%= @tournament.formatted_start %> to <%= @tournament.formatted_end%></h3>
 <i>Last updated: <%= @tournament.updated_at %></i>
@@ -28,6 +28,8 @@
     Score
   </div>
 </div>
+
+<% cache(@tournament) do %>
 <% counter = 1 %>
 
 

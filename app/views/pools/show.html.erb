@@ -12,9 +12,6 @@
 			<tr><td>Number of Members</td><td><%= @pool.users.count %></td></tr>
 			<tr><td>Number of Approved Picks</td><td><%= @pool.picks.count %></td></tr>
 			<tr><td>Number of Pending Picks</td><td><%= @pool.pending_picks.count %></td></tr>
-			<tr><td>Total Purse</td><td><%= @pool.all_picks.map{|p| p.cost}.sum %></td></tr>
-			<tr><td>Total Purse Collected</td><td><%= @pool.all_picks.map{|p| p.received_unit}.sum unless @pool.all_picks.empty?%></td></tr>
-			<tr><td>Outstanding payment</td><td><%= @pool.pending_picks.map{|p| p.cost - p.received_unit}.sum unless @pool.pending_picks.empty?%></td></tr>
 		</table>
 		<% end %>
 	</div>
@@ -43,8 +40,6 @@
 	  <tr>
 	    <td>Pick Name</td>
 	    <td>User</td>
-	    <td>Total Unit Cost</td>
-			<td>Total Unit Received</td>
 	    <td> </td>
 	    <td> </td>
 	  </tr>
@@ -53,30 +48,26 @@
 		<tr>
 				<td><%= link_to(p.name, pool_pick_path(p.pool, p.slug)) if can? :preview, p %></td>
 				<td><%= p.user.name %></td>
-				<td><%= p.cost %></td>
-				<td><%= p.received_unit %></td>
 				<td><%= link_to "Reject", reject_pick_path(@pool, p), :class => "btn btn-danger", :confirm => "Are you sure? This will delete this pick from the system."%></td>
 				<td><%= link_to "Approve", approve_pick_path(@pool, p), :class => "btn btn-success"%></td>
 		</tr>
 	<% end %>
 	</table>
 <% else %>
+<% unless @pending_picks.empty? %>
 <br>
  <h3>My Pending Picks</h3>
 <table class="table table-condensed table-hover table-striped">
   <tr>
     <td>Pick Name</td>
-    <td>Total Unit Cost</td>
-		<td>Total Unit Paid</td>
   </tr>
-<% @pool.all_picks.includes(:user).where("users.id = ? and picks.approved = ?", current_user.id, false).each do |p| %>
+<% @pending_picks.each do |p| %>
 	<tr>
 			<td><%= link_to(p.name, pool_pick_path(p.pool, p.slug)) if can? :preview, p %></td>
-			<td><%= p.cost %></td>
-			<td><%= p.received_unit %></td>
 	</tr>
 <% end %>
 </table>
+<% end %>
 <% end %>
 <br>
 <h3>Active Picks</h3>

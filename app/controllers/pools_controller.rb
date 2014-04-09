@@ -79,7 +79,7 @@ class PoolsController < ApplicationController
         end
         already_users += 1
         unless u.all_pools.include? @pool
-          pm = PoolMembership.new({:user_id => u.id, :pool_id => @pool.id, :active => false, :inviter_id => current_user.id})
+          pm = PoolMembership.create({:user_id => u.id, :pool_id => @pool.id, :active => false, :inviter_id => current_user.id})
           already_users -= 1
           existing_users += 1 if t_exist
         end
@@ -117,11 +117,8 @@ class PoolsController < ApplicationController
     @pool = Pool.find_by_slug(params[:id], :include => :tournament)
     authorize! :read, @pool
     @questions = @pool.q_answers
-    if can? :read, @pool
-      @picks = @pool.picks.order("score asc, #{ "ABS(picks.tiebreak - " + @pool.tournament.low_score.to_s + ") asc," if @pool.tournament.low_score} id asc")
-    else
-      @picks = []
-    end
+    @picks = @pool.picks.order("score asc, #{ "ABS(picks.tiebreak - " + @pool.tournament.low_score.to_s + ") asc," if @pool.tournament.low_score} id asc")
+    @pending_picks = current_user.nil? ? [] : @pool.all_picks.includes(:user).where("users.id = ? and picks.approved = ?", current_user.id, false)
   end  
 
   def new

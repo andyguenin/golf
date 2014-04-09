@@ -6,7 +6,7 @@ class UserMailer < ActionMailer::Base
     @inviter = invite.inviter.name
     @link = "http://thegolftourney.com/users/activate/?activation=#{invite.activation_key}&email=#{user.email}"
     @message = message
-    mail(:to => user.email, :subject => "You have been invited to join a pool at The Golf Tourney")
+    mail(:to => user.email, :subject => "#{@inviter} has invited you to join a pool at The Golf Tourney")
   end
   
   def forgot_password(user)

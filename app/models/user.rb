@@ -37,8 +37,9 @@ class User < ActiveRecord::Base
   validates_presence_of :password, :on => :create, :if => :active?
   validate :check_password, :on => :update
   validates_presence_of :email
-  validates_presence_of :name, :if => :active?
-  validates_uniqueness_of :email, :username
+  validates_presence_of :name, :username, :if => :active?
+  validates_uniqueness_of :email
+  validates_uniqueness_of :username, :if => :active?
   
   def to_param
     self.username

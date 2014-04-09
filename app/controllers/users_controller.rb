@@ -25,10 +25,8 @@ class UsersController < ApplicationController
       if not session[:activate_email].nil? and  params[:user][:email] != session[:activate_email] 
         session[:activate_email] = params[:user][:email]
       end
-      if not nmi.nil?
-        nmi.destroy
-      end
-      redirect_to login_url, :flash => {:success => "Signed up! Please log in."}
+      session[:user_id] = @user.id
+      redirect_to user_activate_path
     else
       message = "Please fix the errors below."
       if params[:user][:password] != params[:user][:password_confirmation]
@@ -66,14 +64,20 @@ class UsersController < ApplicationController
       if not nmi.user.active
         session[:activate_email] = email
         session[:activate_activation] = code
-        redirect_to signup_path, :flash => {:info => "You must first create an account. You will then be prompted to sign in and then redirected to your pool."}
+        redirect_to signup_path, :flash => {:info => "You must first create an account. You will then be redirected to your pool."}
       else
         if can? :accept, nmi and nmi.pool.user_join(nmi.user)
           redirect_to pool_path(nmi.pool), :flash => {:success => "You have joined the pool. Enter your picks before the tournament starts!"}
         else
           redirect_to root_path, :flash => {:danger => "Pool has been locked or expired. You cannot join."}
         end
-        nmi.delete
+        uid = session[:user_id]
+        reset_session
+        session[:user_id] = uid
+        nmi.pool.user_join(nmi.user)
+        puts nmi.user
+        puts nmi.user.name
+        nmi.destroy
       end
     end
   end

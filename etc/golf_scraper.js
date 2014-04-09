@@ -172,7 +172,7 @@ function send_to_ruby(str, url)
     });
 }
 var args = require('system').args;
-scrape_site = 'http://espn.go.com/golf/leaderboard';
+scrape_site = 'http://espn.go.com/golf/leaderboard?tournamentId=1317';
 target = "http://localhost:3000/ins";
 if(args.length === 2)
 {

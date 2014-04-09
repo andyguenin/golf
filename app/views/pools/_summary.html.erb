@@ -3,7 +3,7 @@
   <td><%= link_to pick.name, pool_pick_path(pick.pool, pick.slug) %></td>
   <td><%= pick.score %></td>
   <td><%= pick.player_subscore %></td>
-  <td><%= pick.bonus %></td>
+  <td><%= pick.bonus + pick.correct_questions%></td>
   <td><%= pick.correct_questions * -1 %></td>
   <td><%= pick.tiebreak %></td>
   <td><%= link_to raw("<span class=\"glyphicon glyphicon-pencil\"></span>"), edit_pool_pick_path(@pool, pick) if can? :edit, pick%></td>

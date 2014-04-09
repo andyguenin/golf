@@ -31,6 +31,20 @@ class Tournament < ActiveRecord::Base
   has_many :players, :through => :tplayers
   has_many :picks, :through => :pools
   
+  def update_bonuses
+    active_players = self.tplayers.where("status <= ?", 1)
+    completed_rounds = active_players.map{|p| p.completed_rounds}.min
+    if self.round != completed_rounds
+      self.update_attribute(:round, completed_rounds)
+      scores_through = active_players.map{|t| [t.id, t.score_through(completed_rounds)] }
+      min_score = scores_through.map{|t| t[1]}.min
+      self.tplayers.each {|tp| tp.update_attribute("r#{self.round}_bonus".to_sym, 0 )}
+      scores_through.select{|p| p[1] == min_score}.each do |tp|
+        Tplayer.find(tp[0]).update_attribute("r#{self.round}_bonus".to_sym, -1)
+      end      
+    end
+  end
+  
   def formatted_start
     self.starttime.strftime("%A, %B %d, %Y")
   end

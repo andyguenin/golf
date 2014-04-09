@@ -32,6 +32,7 @@ class Ability
     can :edit, User do |u|
       u == user
     end
+    
   end
 
 
@@ -39,7 +40,7 @@ class Ability
   def initialize_pool(user)
 
     can :view_user_picks, PoolMembership do |pm|
-      pm.pool.published? or pm.user == user
+      (pm.pool.published? and pm.pool.tournament.locked) or pm.user == user
     end
 
     can :manage, Pool do |pool|
@@ -47,7 +48,7 @@ class Ability
     end
     
     can :read, Pool do |pool|
-      (pool.published and (not pool.private or user.pools.include?(pool))) or can? :manage, pool
+      (pool.published and (not pool.private or user.all_pools.include?(pool))) or can? :manage, pool
     end
     
     can :read_others, Pool do |pool|

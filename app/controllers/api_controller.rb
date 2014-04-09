@@ -104,6 +104,8 @@ class ApiController < ApplicationController
       @t.auto_bucket
     end
     @t.touch
+    
+
     render :text => "success"
   end
   

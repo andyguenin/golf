@@ -61,7 +61,6 @@ class Player < ActiveRecord::Base
         end
       end
       tplayer.update_score(score_structure[-1])
-      tourn.update_attribute(:round, [[0,((Time.now - tourn.starttime)/60/60/24).floor].max + 1,4].min)   
     end
   end
 

@@ -19,6 +19,10 @@
 #  tbogey        :integer
 #  current_round :integer
 #  rank          :integer
+#  r1_bonus      :integer
+#  r2_bonus      :integer
+#  r3_bonus      :integer
+#  r4_bonus      :integer
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
