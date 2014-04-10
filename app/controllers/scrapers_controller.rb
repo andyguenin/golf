@@ -11,7 +11,7 @@ class ScrapersController < ApplicationController
   end
   
   def create
-    @scraper = Scraper.new(params[:scraper].merge({:user_id => current_user.id}))
+    @scraper = Scraper.new(params[:scraper].merge({:user_id => current_user.id, :pause => true}))
     authorize! :create, @scraper
     if @scraper.save
       redirect_to scrapers_path

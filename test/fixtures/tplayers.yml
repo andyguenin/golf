@@ -23,6 +23,8 @@
 #  r2_bonus      :integer
 #  r3_bonus      :integer
 #  r4_bonus      :integer
+#  a             :boolean
+#  x             :boolean
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html

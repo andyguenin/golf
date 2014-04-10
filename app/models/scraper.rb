@@ -23,8 +23,7 @@ class Scraper < ActiveRecord::Base
   validates_presence_of :endtime, :frequency, :label, :pause, :post_to, :starttime, :url, :user_id
   
   belongs_to :user
-  
-#  after_initialize :init
+
   
   def play_s
     self.update_attribute(:pause, false)

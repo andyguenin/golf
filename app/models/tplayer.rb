@@ -23,6 +23,8 @@
 #  r2_bonus      :integer
 #  r3_bonus      :integer
 #  r4_bonus      :integer
+#  a             :boolean
+#  x             :boolean
 #
 
 class Tplayer< ActiveRecord::Base

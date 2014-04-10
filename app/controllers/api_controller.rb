@@ -64,7 +64,7 @@ class ApiController < ApplicationController
     
     locked = false
     #if there are any players scores, the tournament has begun, so lock down the tournament
-    if ds[1][1].map {|p| p.length - 3}.sort.last > 0
+    if ds[1][1].map {|p| p.length - 3}.sort.last > 0 and Time.new(2014,04,10,15,0,0) < Time.now
       locked = true
     end
 
