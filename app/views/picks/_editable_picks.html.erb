@@ -21,7 +21,7 @@
 		  <% @tplayers.each do |tp| %>
 		  <%if tp.bucket == d+1 %>
 		  <div id="player-<%= tp.id %>" class="player-pick btn btn-primary full-width">
-		    <%= tp.player["name"] %>
+		    <%= tp.name_and_labels %>
 		  </div>
 		  <%end %>
 		  <% end%>

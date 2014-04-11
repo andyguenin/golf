@@ -5,10 +5,11 @@
 </div>
 <div class="row">
   <% first = 1 %>
-  <% pick.players.each do |p| %>
+  <% pick.tplayers.each do |p| %>
   <div class="col-md-2 <%= "col-md-offset-1" if first == 1%> pick-player-name">
     <% first = 0 %>
-        <%= p.name %>
+        <%= p.player.name %><br>
+				<b><%= p.score %></b>
   </div>
   <% end %>
 </div>

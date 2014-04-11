@@ -118,6 +118,10 @@ class Pick < ActiveRecord::Base
     [pick1, pick2, pick3, pick4, pick5]
   end
   
+  def tplayers
+    [tp1, tp2, tp3, tp4, tp5]
+  end
+  
   def approve(approver)
     self.approver = approver
     self.approved = true
@@ -139,12 +143,14 @@ class Pick < ActiveRecord::Base
   end
   
   def create_slug
-    slugs = pool.picks.map {|p| p.slug}
-    s = self.name.downcase.gsub(/[^a-z0-9\s]/,'').gsub(" ","-")
-    while slugs.include? s
-      s += "-0"
+    if self.slug.nil?
+      slugs = pool.picks.map {|p| p.slug}
+      s = self.name.downcase.gsub(/[^a-z0-9\s]/,'').gsub(" ","-")
+      while slugs.include? s
+        s += "-0"
+      end
+      self.slug = s
     end
-    self.slug = s
   end
 
   def validate_name_uniqueness

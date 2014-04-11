@@ -38,10 +38,12 @@ textarea {
 
 .yes {
   color: green;
+	       font-weight: bold;
 }
 
 .no {
   color: red;
+	       font-weight: bold;
 }
 
 .yes-background {
@@ -82,6 +84,9 @@ textarea {
 .player-label {
 	border-top: 1px dashed #ccc;
 	padding-top: 10px;
+	:hover {
+	    cursor: pointer;
+		}
 	
 }
 .player-pick {

@@ -66,7 +66,7 @@ var scrape = function(scrape_url, log_scores, send_callback, url) {
 	    re.push(scores);
 			re.push(complete);
 	    send_callback(btoa(JSON.stringify(re)), url);
-	}, 55000);
+	}, 95000);
     });
 };
 

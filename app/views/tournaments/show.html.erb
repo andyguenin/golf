@@ -91,7 +91,11 @@
           <% scores.length.times do |round| %>
           <tr><td>Round <%= round+1 %></td>
             <% (1..18).each do |hole|%>
-            <td><%= scores[round][hole-1][0] == 0 ? "-" : scores[round][hole-1][0]%></td>
+						<% pa = scores[round][hole-1][1] %>
+						<% sc = scores[round][hole-1][0] %>
+            <td <%= pa < sc ? raw("class='no'") : pa > sc ? raw("class='yes'") : "" %>>
+							<%= sc == 0 ? "-" : sc%>
+						</td>
             <% end %>
             <td>
 	      <%= scores[round].select{|h| h[0] != 0}.map{|h| h[0] - h[1]}.sum %>

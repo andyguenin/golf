@@ -33,10 +33,6 @@ class Player < ActiveRecord::Base
     slug
   end
 
-  def name
-    "#{first_name} #{last_name}"
-  end
-
   def self.update_score_from_scraper(score_structure, tourn)
     name_regex = /^(.*)\s(\S+)$/
     match = name_regex.match(score_structure[0])

@@ -44,7 +44,7 @@ class ApiController < ApplicationController
       @t.starttime = start_time
       @t.endtime = end_time
       @t.slug = slug
-      @t.round = 1
+      @t.round = 0
       @t.locked = false
       @t.course = course
       @t.save!
@@ -64,7 +64,7 @@ class ApiController < ApplicationController
     
     locked = false
     #if there are any players scores, the tournament has begun, so lock down the tournament
-    if ds[1][1].map {|p| p.length - 3}.sort.last > 0 and Time.new(2014,04,10,15,0,0) < Time.now
+    if ds[1][1].map {|p| p.length - 3}.sort.last
       locked = true
     end
 
@@ -97,7 +97,10 @@ class ApiController < ApplicationController
     end
         
     @t.rank_players
+    @t.update_bonuses
     @t.picks.each {|p| p.update_score}
+
+    
     
     if new_tournament
       Player.update_pga_rankings

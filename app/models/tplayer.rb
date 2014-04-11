@@ -52,6 +52,10 @@ class Tplayer< ActiveRecord::Base
   has_many :rounds, :order => "round asc"
   has_many :player_premia
 
+  def name_and_labels
+    player.name + (self.a ? " [A]" : "") + (self.x ? " [EX]" : "")
+  end
+  
   def hole
     if rounds.size != 0
       18

@@ -35,6 +35,6 @@ class Scraper < ActiveRecord::Base
   end
   
   def scrape
-    Resque.enqueue(ScraperRunner, self.id)
+    Resque.enqueue(ScraperRunner)
   end
 end
