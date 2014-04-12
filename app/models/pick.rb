@@ -25,6 +25,7 @@
 #  name               :string(255)
 #  slug               :string(255)
 #  received_unit      :integer
+#  cut                :boolean
 #
 
 class Pick < ActiveRecord::Base
@@ -93,14 +94,24 @@ class Pick < ActiveRecord::Base
     end.sum
   end
   
-  def cut_bonus(tourn)
-    num_active_players = players.map do |p| 
-      status = p.get_tplayer(tournament).status
-      status <=1
-    end.length == 5 and tourn.round >= 2 ? 3 : 0
+  def active_players
+    players.select do |p| 
+      p.get_tplayer(tournament).status <= 1
+    end
+  end
+  
+  def cut_bonus
+    active_players.length == 5 and tournament.round >= 2 ? 3 : 0
   end
 
+
   def update_score
+    if active_players.count < 4
+      unless self.cut
+        self.update_attribute(:cut, true)
+      end
+      return
+    end
     s = player_subscore
     cc = correct_questions 
     s -= cc
@@ -108,7 +119,7 @@ class Pick < ActiveRecord::Base
     rb = rounds_bonus
     s -= rb
     
-    cb = cut_bonus(tournament)
+    cb = cut_bonus
     s -= cb
     
     self.update_attributes!({:score => s, :bonus => -1*(correct_questions + rb + cb), :active_players => cc})

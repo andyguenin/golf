@@ -1,4 +1,4 @@
-<tr>
+<tr <%= raw("class='strikeout'") if pick.cut %>>
   <% if can? :view, pick %>
   <td><%= link_to pick.name, pool_pick_path(pick.pool, pick.slug) %></td>
   <td><%= pick.score %></td>

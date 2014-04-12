@@ -4,6 +4,14 @@
 $dark-grey: #606060;
 $dark-green: #243729;
 
+tr.strikeout td { position:relative        } /* Setup a new coordinate system   */
+tr.strikeout td:before {                     /* Create a new element that       */
+  content: " ";                              /* …has no text content            */
+  position: absolute;                        /* …is absolutely positioned       */
+  left: 0; top: 50%; width: 100%;            /* …with the top across the middle */
+  border-bottom: 1px solid #999;             /* …and with a border on the top   */
+}   
+
 body {
   background-color: $dark-green; 
   color: #666666;

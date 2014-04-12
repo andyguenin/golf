@@ -25,6 +25,7 @@
 #  name               :string(255)
 #  slug               :string(255)
 #  received_unit      :integer
+#  cut                :boolean
 #
 
 require 'test_helper'

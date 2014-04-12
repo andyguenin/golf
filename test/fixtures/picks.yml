@@ -25,6 +25,7 @@
 #  name               :string(255)
 #  slug               :string(255)
 #  received_unit      :integer
+#  cut                :boolean
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
