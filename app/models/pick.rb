@@ -101,7 +101,7 @@ class Pick < ActiveRecord::Base
   end
   
   def cut_bonus
-    active_players.length == 5 and tournament.round >= 2 ? 3 : 0
+    (active_players.length == 5 and tournament.round >= 2) ? 3 : 0
   end
 
 
