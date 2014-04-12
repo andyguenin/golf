@@ -117,7 +117,7 @@ class PoolsController < ApplicationController
     @pool = Pool.find_by_slug(params[:id], :include => :tournament)
     authorize! :read, @pool
     @questions = @pool.q_answers
-    @picks = @pool.picks.order("cut asc, score asc, #{ "ABS(picks.tiebreak - " + @pool.tournament.low_score.to_s + ") asc," if @pool.tournament.low_score} id asc")
+    @picks = @pool.picks.order("cut desc, score asc, #{ "ABS(picks.tiebreak - " + @pool.tournament.low_score.to_s + ") asc," if @pool.tournament.low_score} id asc")
     @pending_picks = current_user.nil? ? [] : @pool.all_picks.includes(:user).where("users.id = ? and picks.approved = ?", current_user.id, false)
   end  
 
